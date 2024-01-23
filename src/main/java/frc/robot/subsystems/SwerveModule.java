@@ -59,8 +59,8 @@ public class SwerveModule extends SubsystemBase {
   /**
    * The PID controller for the velocity of the drive motor.
    */
-  private final PIDController m_driveVelocityController = new PIDController(
-      PIDConstants.kPModuleDriveVelocity, PIDConstants.kIModuleDriveVelocity, PIDConstants.kDModuleDriveVelocity);
+  // private final PIDController m_driveVelocityController = new PIDController(
+  //     PIDConstants.kPModuleDriveVelocity, PIDConstants.kIModuleDriveVelocity, PIDConstants.kDModuleDriveVelocity);
 
   /**
    * The PID controller for the position of the turn motor.
@@ -74,9 +74,12 @@ public class SwerveModule extends SubsystemBase {
    * @param driveMotorID       the device ID of the drive motor
    * @param turnMotorID        the device ID of the turn motor
    * @param cancoderID         the device ID of the CANcoder
-   * @param driveMotorInverted <code>true</code> if 
-   * @param turnMotorInverted
-   * @param turnEncoderOffset
+   * @param driveMotorInverted <code>true</code> if the drive motor should be
+   *                           inverted; <code>false</code> otherwise
+   * @param turnMotorInverted  <code>true</code> if the turn motor should be
+   *                           inverted; <code>false</code> otherwise
+   * @param turnEncoderOffset  the value of the CANcoder when the wheel is facing
+   *                           forward
    */
   public SwerveModule(int driveMotorID, int turnMotorID, int cancoderID, boolean driveMotorInverted,
       boolean turnMotorInverted, double turnEncoderOffset) {
@@ -106,20 +109,33 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor.setInverted(driveMotorInverted);
     m_turnMotor.setInverted(turnMotorInverted);
 
-    // Set idle mode to break
+    // Set idle mode to brake
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_turnMotor.setIdleMode(IdleMode.kBrake);
 
-    // The default unit of the encoders is RPM... need to convert this to meters and
-    // meters per second for the drive encoder
     m_driveEncoder = m_driveMotor.getEncoder();
-    m_driveEncoder.setPositionConversionFactor(DrivetrainConstants.kDriveMetersPerEncoderRev);
-    m_driveEncoder.setVelocityConversionFactor(DrivetrainConstants.kDriveMetersPerEncoderRev / 60);
+
+    // NOTE: the following code was commented because the conversion factors are
+    // buggy, at least in simulation. Please use the following methods instead:
+    // getDriveEncoderPositionM, getDriveEncoderPositionMPS
+
+    // The default unit of the encoders is RPM... need to convert this to meters and
+    // meters per second for the drive encoder. This is done using the conversion
+    // factors.
+    // m_driveEncoder.setPositionConversionFactor(DrivetrainConstants.kDriveMetersPerEncoderRev);
+    // m_driveEncoder.setVelocityConversionFactor(DrivetrainConstants.kDriveMetersPerEncoderRev
+    // / 60);
+
+    m_turnEncoder = m_turnMotor.getEncoder();
+
+    // NOTE: the following code was commented because the conversion factors are
+    // buggy, at least in simulation. Please use the following methods instead:
+    // getTurnEncoderPositionD, getTurnEncoderPositionDPS
 
     // Need to convert RPM to degrees and degrees per second for the turn encoder
-    m_turnEncoder = m_turnMotor.getEncoder();
-    m_turnEncoder.setPositionConversionFactor(DrivetrainConstants.kTurnDegreesPerEncoderRev);
-    m_turnEncoder.setVelocityConversionFactor(DrivetrainConstants.kTurnDegreesPerEncoderRev / 60);
+    // m_turnEncoder.setPositionConversionFactor(DrivetrainConstants.kTurnDegreesPerEncoderRev);
+    // m_turnEncoder.setVelocityConversionFactor(DrivetrainConstants.kTurnDegreesPerEncoderRev
+    // / 60);
 
     // Need to use continuous input for turn PID controller because -180 degrees =
     // 180 degrees
@@ -162,7 +178,57 @@ public class SwerveModule extends SubsystemBase {
     REVPhysicsSim.getInstance().run();
   }
 
-  // Use the absolute encoder to set the initial value of the relative encoder
+  /**
+   * Returns the position of the drive motor's encoder in meters.
+   * <p>
+   * This is necessary to use instead of the conversion factor because it appears
+   * the conversion factor doesn't always work properly, at least in simulation.
+   * 
+   * @return the encoder's position in meters
+   */
+  private double getDriveEncoderPositionM() {
+    return m_driveEncoder.getPosition() * DrivetrainConstants.kDriveMetersPerEncoderRev;
+  }
+
+  /**
+   * Returns the velocity of the drive motor's encoder in meters per second.
+   * <p>
+   * This is necessary to use instead of the conversion factor because it appears
+   * the conversion factor doesn't always work properly, at least in simulation.
+   * 
+   * @return the encoder's velocity in meters per second
+   */
+  private double getDriveEncoderVelocityMPS() {
+    return m_driveEncoder.getVelocity() * (DrivetrainConstants.kDriveMetersPerEncoderRev / 60);
+  }
+
+  /**
+   * Returns the position of the turn motor's encoder in degrees.
+   * <p>
+   * This is necessary to use instead of the conversion factor because it appears
+   * the conversion factor doesn't always work properly, at least in simulation.
+   * 
+   * @return the encoder's position in degrees
+   */
+  private double getTurnEncoderPositionD() {
+    return m_turnEncoder.getPosition() * DrivetrainConstants.kTurnDegreesPerEncoderRev;
+  }
+
+  /**
+   * Returns the velocity of the turn motor's encoder in degrees per second.
+   * <p>
+   * This is necessary to use instead of the conversion factor because it appears
+   * the conversion factor doesn't always work properly, at least in simulation.
+   * 
+   * @return the encoder's velocity in degrees per second
+   */
+  private double getTurnEncoderVelocityDPS() {
+    return m_turnEncoder.getVelocity() * (DrivetrainConstants.kTurnDegreesPerEncoderRev / 60);
+  }
+
+  /**
+   * Initializes the relative turn encoder using the value from the CANcoder.
+   */
   public void initTurnRelativeEncoder() {
     // Use absolute encoder only if running on the robot; this removes need to
     // simulate absolute encoder on the sim.
@@ -170,23 +236,43 @@ public class SwerveModule extends SubsystemBase {
       // TODO: Not sure if this is necessary. Uncomment if necessary.
       // m_turnCANcoder.getAbsolutePosition().waitForUpdate(10);
 
-      // Convert absolute encoder value to degrees then add encoder offset
+      // Converts absolute encoder value to degrees then subtracts encoder offset
       m_turnEncoder.setPosition((m_turnCANcoder.getAbsolutePosition().getValue() * 360) - m_turnEncoderOffset);
     } else {
+      // If using a simulation, just assumes that the wheels are facing forward.
       m_turnEncoder.setPosition(0);
     }
   }
 
+  /**
+   * Gets the position (position of the drive encoder and angle of the turn motor)
+   * of the swerve module.
+   * 
+   * @return the swerve module's position
+   */
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(m_driveEncoder.getPosition(), Rotation2d.fromDegrees(m_turnEncoder.getPosition()));
+    return new SwerveModulePosition(getDriveEncoderPositionM(), Rotation2d.fromDegrees(getTurnEncoderPositionD()));
   }
 
+  /**
+   * Gets the state (velocity of the drive motor and angle of the turn motor) of
+   * the swerve module.
+   * 
+   * @return the swerve module's state
+   */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveEncoder.getVelocity(), Rotation2d.fromDegrees(m_turnEncoder.getPosition()));
+    // TODO: for some reason applying the conversion factor manually is necessary
+    // for simulation?
+    return new SwerveModuleState(getDriveEncoderVelocityMPS(), Rotation2d.fromDegrees(getTurnEncoderPositionD()));
   }
 
+  /**
+   * Gets the angle the module is currently facing using the turn encoder.
+   * 
+   * @return the angle the module is facing, in degrees
+   */
   public double getTurnAngle() {
-    return m_turnEncoder.getPosition();
+    return getTurnEncoderPositionD();
   }
 
   // TODO: is this necessary? equivalent of placeInAppropriate0To360Scope
@@ -194,35 +280,77 @@ public class SwerveModule extends SubsystemBase {
    * Returns the closest "equivalent" desired angle to currentAngle.
    * For example, if currentAngle is 20 and desiredAngle is 350, it returns -10
    * (which is equivalent to 350 deg).
-   * This makes it easier to do PID stuff as the target
+   * This basically calculates the target of the PID controller for the turn
+   * motor.
    * 
    * @param currentAngle the current encoder value of the turn encoder
    * @param desiredAngle the desired angle, usually calculated using
    *                     toSwerveModuleStates from kinematics
    * @return the equivalent angle
    */
-  // private double findNearestEquivalent(double currentAngle, double
-  // desiredAngle) {
+  private double findNearestEquivalent(double currentAngle, double desiredAngle) {
+    // idek how this works lol
 
-  // }
-
-  // private SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d
-  // currentAngle) {
-
-  // }
+    double lowerBound;
+    double upperBound;
+    double lowerOffset = currentAngle % 360;
+    if (lowerOffset >= 0) {
+      lowerBound = currentAngle - lowerOffset;
+      upperBound = currentAngle + (360 - lowerOffset);
+    } else {
+      upperBound = currentAngle - lowerOffset;
+      lowerBound = currentAngle - (360 + lowerOffset);
+    }
+    while (desiredAngle < lowerBound) {
+      desiredAngle += 360;
+    }
+    while (desiredAngle > upperBound) {
+      desiredAngle -= 360;
+    }
+    if (desiredAngle - currentAngle > 180) {
+      desiredAngle -= 360;
+    } else if (desiredAngle - currentAngle < -180) {
+      desiredAngle += 360;
+    }
+    return desiredAngle;
+  }
 
   /**
-   * Sets the desired state of the module, which is the target of the PID
-   * controllers.
+   * Find the closest module state to the current angle that's equivalent to the
+   * desired state. This is because it's sometimes faster for a wheel to turn and
+   * go backwards than to go forwards, and SwerveDriveKinematics always looks for
+   * a way to achieve the given chassis speeds with drive motors going forward.
    * 
-   * @param desiredState Desired state with drive speed and angle.
+   * @param desiredState the state returned by SwerveDriveKinematics
+   * @param currentAngle the current angle of the swerve module
+   * @return the "optimized" (i.e., closer to current state) desired module state
+   */
+  private SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
+    double targetAngle = findNearestEquivalent(currentAngle.getDegrees(), desiredState.angle.getDegrees());
+    double targetSpeed = desiredState.speedMetersPerSecond;
+    double delta = targetAngle - currentAngle.getDegrees();
+    if (Math.abs(delta) > 90) {
+      targetSpeed = -targetSpeed;
+      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+    }
+    return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
+  }
+
+  /**
+   * Sets the desired state of the module, which is the used as the target of the
+   * PID controllers.
+   * 
+   * @param desiredState desired state with drive speed and angle.
    */
   public void drive(SwerveModuleState desiredState) {
-    // TODO: make this actually complex
+    SwerveModuleState optimizedDesiredState = optimize(desiredState, Rotation2d.fromDegrees(getTurnAngle()));
+
+    // TODO: make this actually complex using feedforward and stuff
+
     m_driveMotor.setVoltage(
         RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed);
     m_turnMotor.setVoltage(RobotController.getBatteryVoltage()
-        * m_turnPositionController.calculate(getTurnAngle(), desiredState.angle.getDegrees()) / 1000);
+        * m_turnPositionController.calculate(getTurnAngle(), desiredState.angle.getDegrees()));
     // m_turnMotor.setVoltage(0);
   }
 

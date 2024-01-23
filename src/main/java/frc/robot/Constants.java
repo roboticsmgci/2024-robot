@@ -20,9 +20,16 @@ public final class Constants {
   }
 
   public static class DriverConstants {
-    // This should be the number of degrees CCW the robot starts away from being "forwards"
-    // For example, if the robot starts rotated 45 degrees CCW, this should be equal to 45.
+    /**
+     * The number of degrees CCW the robot starts away from being "forwards".
+     * <p>
+     * For example, if the robot starts rotated 45 degrees CCW, this should be equal to 45.
+     */
     public static final double kFieldOrientedOffset = 0;
+
+    /**
+     * Whether the driving should be done field oriented.
+     */
     public static final boolean kIsFieldOriented = true;
   }
 
@@ -91,18 +98,19 @@ public final class Constants {
     public static final boolean kBackRightTurnMotorInverted = false;
     public static final double kBackRightTurnEncoderOffset = 254.18;
     
-    // Maximum drive speed in meters per second.
+    /**
+     * The maximum drive speed in meters per second.
+     * <p>
+     * TODO: this must be determined experimentally
+     */
     public static final double kMaxDriveSpeed = 3.25;
 
   }
 
   public final static class PIDConstants {
 
-    public static final double kPModuleDriveVelocity = 1.3e-6;
-    public static final double kIModuleDriveVelocity = 0;
-    public static final double kDModuleDriveVelocity = 0;
-
-    public static final double kPModuleTurnPosition = .004;
+    // public static final double kPModuleTurnPosition = .004;
+    public static final double kPModuleTurnPosition = .000004;
     public static final double kIModuleTurnPosition = 0;
     public static final double kDModuleTurnPosition = 0;
 
