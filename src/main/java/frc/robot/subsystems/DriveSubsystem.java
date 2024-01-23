@@ -147,6 +147,9 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeftModule.getPosition(),
         m_backRightModule.getPosition()
     });
+
+    // Sys ID log stuff
+    // m_frontLeftModule.logSysID();
   }
 
   @Override
@@ -161,7 +164,8 @@ public class DriveSubsystem extends SubsystemBase {
             m_backRightModule.getState()
         });
     
-    System.out.println("Actual: " + m_frontLeftModule.getState());
+    // this is useful to test out the accuracy of feedforward
+    // System.out.println("actual:  " + m_frontLeftModule.getState());
 
     // navX simulation stuff; the angle needs to be updated manually
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
@@ -230,8 +234,10 @@ public class DriveSubsystem extends SubsystemBase {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed));
     }
-
-    System.out.println("Desired: " + desiredSwerveModuleStates[0]);
+    
+    // this is useful to test out the accuracy of feedforward
+    //System.out.println("desired: " + desiredSwerveModuleStates[0]);
+    
     m_frontLeftModule.drive(desiredSwerveModuleStates[0]);
     m_frontRightModule.drive(desiredSwerveModuleStates[1]);
     m_backLeftModule.drive(desiredSwerveModuleStates[2]);

@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -67,6 +68,18 @@ public class SwerveModule extends SubsystemBase {
    */
   private final PIDController m_turnPositionController = new PIDController(
       PIDConstants.kPModuleTurnPosition, PIDConstants.kIModuleTurnPosition, PIDConstants.kDModuleTurnPosition);
+  
+  /**
+   * The feedforward to use for the simulation.
+   */
+  private final SimpleMotorFeedforward m_simFeedforward = new SimpleMotorFeedforward(0, 0.26967587043, 0.00566318889);
+
+  /**
+   * The feedforward to use for the real robot.
+   * 
+   * TODO: update this with proper values
+   */
+  private final SimpleMotorFeedforward m_realFeedforward = new SimpleMotorFeedforward(0, 0.26967587043, 0.00566318889);
 
   /**
    * Constructs a <code>SwerveModule</code>.
@@ -173,6 +186,22 @@ public class SwerveModule extends SubsystemBase {
     }
   }
 
+  // private double m_lastVelocity;
+  // private long m_lastTime = 0;
+  // private double m_voltage = 0;
+  // public void logSysID() {
+  //   long currentTime = System.currentTimeMillis();
+  //   double currentVelocity = getDriveEncoderVelocityMPS();
+
+  //   if (m_lastTime != 0) {
+  //     double acceleration = (currentVelocity - m_lastVelocity) / (currentTime - m_lastTime) * 1000;
+  //     System.out.println(m_voltage + " " + currentVelocity + " " + acceleration);
+  //   }
+  //   m_lastTime = currentTime;
+  //   m_lastVelocity = currentVelocity;
+  //   // for example, for simulation, s = 0, v = 0.26967587043, a = 0.00566318889
+  // }
+
   @Override
   public void simulationPeriodic() {
     REVPhysicsSim.getInstance().run();
@@ -261,8 +290,6 @@ public class SwerveModule extends SubsystemBase {
    * @return the swerve module's state
    */
   public SwerveModuleState getState() {
-    // TODO: for some reason applying the conversion factor manually is necessary
-    // for simulation?
     return new SwerveModuleState(getDriveEncoderVelocityMPS(), Rotation2d.fromDegrees(getTurnEncoderPositionD()));
   }
 
@@ -344,11 +371,16 @@ public class SwerveModule extends SubsystemBase {
    */
   public void drive(SwerveModuleState desiredState) {
     SwerveModuleState optimizedDesiredState = optimize(desiredState, Rotation2d.fromDegrees(getTurnAngle()));
-
-    // TODO: make this actually complex using feedforward and stuff
-
-    m_driveMotor.setVoltage(
-        RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed);
+    // can remove this if not using logsysid
+    // m_voltage = RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed;
+    
+    // m_driveMotor.setVoltage(
+    //     RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed);
+    if (RobotBase.isReal()) {
+      m_driveMotor.setVoltage(m_realFeedforward.calculate(desiredState.speedMetersPerSecond));
+    } else {
+      m_driveMotor.setVoltage(m_simFeedforward.calculate(desiredState.speedMetersPerSecond));
+    }
     m_turnMotor.setVoltage(RobotController.getBatteryVoltage()
         * m_turnPositionController.calculate(getTurnAngle(), desiredState.angle.getDegrees()));
     // m_turnMotor.setVoltage(0);

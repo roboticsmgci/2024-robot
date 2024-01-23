@@ -36,8 +36,8 @@ public class RobotContainer {
 
     m_drive.setDefaultCommand(new SwerveDrive(
       m_drive,
-      () -> m_driverController.getLeftY() * 5,
-      () -> -m_driverController.getLeftX() * 5,
+      () -> m_driverController.getLeftY() * 3,
+      () -> -m_driverController.getLeftX() * 3,
       () -> m_driverController.getRightX() * 5
     ));
   }
