@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
@@ -12,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -136,6 +141,33 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     m_gyro.reset();
     SmartDashboard.putData("Field", m_field);
+
+    // Setup PathPlanner
+    AutoBuilder.configureHolonomic(
+      m_poseEstimator::getEstimatedPosition,
+      this::resetPose,
+      this::getRobotRelativeSpeeds,
+      this::driveRobotRelative,
+      new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+        DrivetrainConstants.kMaxDriveSpeed, // Max module speed, in m/s
+        DrivetrainConstants.kTrackWidth, // Drive base radius in meters. Distance from robot center to furthest module.
+        new ReplanningConfig() // Default path replanning config. See the API for the options here
+      ),
+      () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+      },
+      this
+    );
   }
 
   @Override
@@ -156,16 +188,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // Calculates what the velocities of the robot should be based on the current
     // velocities and angles of the swerve modules.
-    ChassisSpeeds chassisSpeeds = m_kinematics.toChassisSpeeds(
-        new SwerveModuleState[] {
-            m_frontLeftModule.getState(),
-            m_frontRightModule.getState(),
-            m_backLeftModule.getState(),
-            m_backRightModule.getState()
-        });
-    
+    ChassisSpeeds chassisSpeeds = getRobotRelativeSpeeds();
+
     // this is useful to test out the accuracy of feedforward
-    // System.out.println("actual:  " + m_frontLeftModule.getState());
+    // System.out.println("actual: " + m_frontLeftModule.getState());
 
     // navX simulation stuff; the angle needs to be updated manually
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
@@ -179,6 +205,7 @@ public class DriveSubsystem extends SubsystemBase {
     angle.set(previousAngle - changeInRotation);
 
     // Updates the robot's position on the virtual field.
+    // TODO: consider moving this to periodic()
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
     // TODO: potentially uncomment this to replace above line
@@ -234,14 +261,62 @@ public class DriveSubsystem extends SubsystemBase {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed));
     }
-    
+
     // this is useful to test out the accuracy of feedforward
-    //System.out.println("desired: " + desiredSwerveModuleStates[0]);
-    
+    // System.out.println("desired: " + desiredSwerveModuleStates[0]);
+
     m_frontLeftModule.drive(desiredSwerveModuleStates[0]);
     m_frontRightModule.drive(desiredSwerveModuleStates[1]);
     m_backLeftModule.drive(desiredSwerveModuleStates[2]);
     m_backRightModule.drive(desiredSwerveModuleStates[3]);
+  }
+
+  /**
+   * Sets the robot motors to drive in the specified robot-relative direction.
+   * 
+   * @param robotRelativeSpeeds the robot-relative <code>ChassisSpeeds</code>
+   */
+  private void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    SwerveModuleState[] desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(robotRelativeSpeeds);
+
+    m_frontLeftModule.drive(desiredSwerveModuleStates[0]);
+    m_frontRightModule.drive(desiredSwerveModuleStates[1]);
+    m_backLeftModule.drive(desiredSwerveModuleStates[2]);
+    m_backRightModule.drive(desiredSwerveModuleStates[3]);
+  }
+
+  /**
+   * Resets the robot's pose to the given pose.
+   * 
+   * @param pose the given pose
+   */
+  private void resetPose(Pose2d pose) {
+    // TODO: not sure what to set the SwerveModulePositions to
+    m_poseEstimator.resetPosition(Rotation2d.fromDegrees(0), new SwerveModulePosition[] {
+        m_frontLeftModule.getPosition(),
+        m_frontRightModule.getPosition(),
+        m_backLeftModule.getPosition(),
+        m_backRightModule.getPosition()
+    }, pose);
+    // TODO: not sure if this is necessary
+    m_gyro.reset();
+  }
+
+  /**
+   * Gets the speed of the robot, relative to the robot.
+   * 
+   * @return the robot relative <code>ChassisSpeeds</code>
+   */
+  private ChassisSpeeds getRobotRelativeSpeeds() {
+    // Calculates what the velocities of the robot should be based on the current
+    // velocities and angles of the swerve modules.
+    return m_kinematics.toChassisSpeeds(
+        new SwerveModuleState[] {
+            m_frontLeftModule.getState(),
+            m_frontRightModule.getState(),
+            m_backLeftModule.getState(),
+            m_backRightModule.getState()
+        });
   }
 
 }
