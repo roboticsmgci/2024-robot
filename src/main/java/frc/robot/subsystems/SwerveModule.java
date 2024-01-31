@@ -61,14 +61,15 @@ public class SwerveModule extends SubsystemBase {
    * The PID controller for the velocity of the drive motor.
    */
   // private final PIDController m_driveVelocityController = new PIDController(
-  //     PIDConstants.kPModuleDriveVelocity, PIDConstants.kIModuleDriveVelocity, PIDConstants.kDModuleDriveVelocity);
+  // PIDConstants.kPModuleDriveVelocity, PIDConstants.kIModuleDriveVelocity,
+  // PIDConstants.kDModuleDriveVelocity);
 
   /**
    * The PID controller for the position of the turn motor.
    */
   private final PIDController m_turnPositionController = new PIDController(
       PIDConstants.kPModuleTurnPosition, PIDConstants.kIModuleTurnPosition, PIDConstants.kDModuleTurnPosition);
-  
+
   /**
    * The feedforward to use for the simulation.
    */
@@ -190,16 +191,17 @@ public class SwerveModule extends SubsystemBase {
   // private long m_lastTime = 0;
   // private double m_voltage = 0;
   // public void logSysID() {
-  //   long currentTime = System.currentTimeMillis();
-  //   double currentVelocity = getDriveEncoderVelocityMPS();
+  // long currentTime = System.currentTimeMillis();
+  // double currentVelocity = getDriveEncoderVelocityMPS();
 
-  //   if (m_lastTime != 0) {
-  //     double acceleration = (currentVelocity - m_lastVelocity) / (currentTime - m_lastTime) * 1000;
-  //     System.out.println(m_voltage + " " + currentVelocity + " " + acceleration);
-  //   }
-  //   m_lastTime = currentTime;
-  //   m_lastVelocity = currentVelocity;
-  //   // for example, for simulation, s = 0, v = 0.26967587043, a = 0.00566318889
+  // if (m_lastTime != 0) {
+  // double acceleration = (currentVelocity - m_lastVelocity) / (currentTime -
+  // m_lastTime) * 1000;
+  // System.out.println(m_voltage + " " + currentVelocity + " " + acceleration);
+  // }
+  // m_lastTime = currentTime;
+  // m_lastVelocity = currentVelocity;
+  // // for example, for simulation, s = 0, v = 0.26967587043, a = 0.00566318889
   // }
 
   @Override
@@ -316,6 +318,8 @@ public class SwerveModule extends SubsystemBase {
    * @return the equivalent angle
    */
   private double findNearestEquivalent(double currentAngle, double desiredAngle) {
+    // TODO: optimize this; surely there's a better way than
+    // incrementing/decrementing until finding the angle
     // idek how this works lol
 
     double lowerBound;
@@ -373,10 +377,12 @@ public class SwerveModule extends SubsystemBase {
     SwerveModuleState optimizedDesiredState = optimize(desiredState, Rotation2d.fromDegrees(getTurnAngle()));
     // System.out.println(desiredState + " " + optimizedDesiredState);
     // can remove this if not using logsysid
-    // m_voltage = RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed;
-    
+    // m_voltage = RobotController.getBatteryVoltage() *
+    // desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed;
+
     // m_driveMotor.setVoltage(
-    //     RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed);
+    // RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond /
+    // DrivetrainConstants.kMaxDriveSpeed);
     if (RobotBase.isReal()) {
       m_driveMotor.setVoltage(m_realFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond));
     } else {

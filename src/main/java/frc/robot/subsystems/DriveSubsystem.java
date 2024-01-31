@@ -136,38 +136,54 @@ public class DriveSubsystem extends SubsystemBase {
   ); // TODO: consider using SwerveDrivePoseEstimator with more constructors
 
   /**
+   * Whether the drive should be field oriented. <code>true</code> if it is field
+   * oriented; <code>false</code> otherwise.
+   */
+  private boolean m_isFieldOriented = DriverConstants.kStartFieldOriented;
+
+  /**
+   * The gyro offset subtracted from the gyro's sensor actual reading.
+   * <p>
+   * This is used to "reset" the gyro by setting this value to the current gyro
+   * value.
+   */
+  private double m_gyroOffset = 0;
+
+  /**
    * Constructs a <code>DriveSubsystem</code>.
    */
   public DriveSubsystem() {
+    // Note: do not replace this with resetGyro()
     m_gyro.reset();
     SmartDashboard.putData("Field", m_field);
 
     // Setup PathPlanner
     AutoBuilder.configureHolonomic(
-      m_poseEstimator::getEstimatedPosition,
-      this::resetPose,
-      this::getRobotRelativeSpeeds,
-      this::driveRobotRelative,
-      new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-        DrivetrainConstants.kMaxDriveSpeed, // Max module speed, in m/s
-        DrivetrainConstants.kTrackWidth, // Drive base radius in meters. Distance from robot center to furthest module.
-        new ReplanningConfig() // Default path replanning config. See the API for the options here
-      ),
-      () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
+        m_poseEstimator::getEstimatedPosition,
+        this::resetPose,
+        this::getRobotRelativeSpeeds,
+        this::driveRobotRelative,
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            DrivetrainConstants.kMaxDriveSpeed, // Max module speed, in m/s
+            DrivetrainConstants.kTrackWidth, // Drive base radius in meters. Distance from robot center to furthest
+                                             // module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
+            return alliance.get() == DriverStation.Alliance.Red;
           }
           return false;
-      },
-      this
-    );
+        },
+        this);
   }
 
   @Override
@@ -230,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double getRobotHeadingDegrees() {
     // Convert gyro angle to increase going CCW (instead of increase going CW) and
     // put between (-180, 180]
-    return -Math.IEEEremainder(m_gyro.getAngle(), 360);
+    return -Math.IEEEremainder(m_gyro.getAngle() - m_gyroOffset, 360);
   }
 
   /**
@@ -240,7 +256,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's field heading
    */
   private double getFieldHeadingDegrees() {
-    return -Math.IEEEremainder(m_gyro.getAngle() + DriverConstants.kFieldOrientedOffset, 360);
+    return -Math.IEEEremainder(m_gyro.getAngle() + DriverConstants.kFieldOrientedOffset - m_gyroOffset, 360);
   }
 
   /**
@@ -253,7 +269,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rotationSpeed) {
     SwerveModuleState[] desiredSwerveModuleStates;
 
-    if (DriverConstants.kIsFieldOriented) {
+    if (m_isFieldOriented) {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotationSpeed,
               Rotation2d.fromDegrees(getFieldHeadingDegrees())));
@@ -298,8 +314,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeftModule.getPosition(),
         m_backRightModule.getPosition()
     }, pose);
-    // TODO: not sure if this is necessary
-    m_gyro.reset();
+    // TODO: not sure if this is necessary (it shouldn't be)
+    // m_gyro.reset();
   }
 
   /**
@@ -317,6 +333,37 @@ public class DriveSubsystem extends SubsystemBase {
             m_backLeftModule.getState(),
             m_backRightModule.getState()
         });
+  }
+
+  /**
+   * Returns whether the drive is field oriented.
+   * 
+   * @return <code>true</code> if the drive is field oriented; <code>false</code>
+   *         if it is robot oriented.
+   */
+  public boolean getIsFieldOriented() {
+    return m_isFieldOriented;
+  }
+
+  /**
+   * Sets whether the drive is field oriented.
+   * 
+   * @param isFieldOriented <code>true</code> to set the drive to field oriented;
+   *                        <code>false</code> to set it to robot oriented.
+   */
+  public void setIsFieldOriented(boolean isFieldOriented) {
+    m_isFieldOriented = isFieldOriented;
+  }
+
+  /**
+   * Resets the gyro sensor by updating the offset.
+   * <p>
+   * This is needed because the simulation uses the gyro sensor reading for the
+   * rotation of the robot; resetting with m_gyro.reset() would cause the
+   * simulated robot to rotate to be facing forwards.
+   */
+  public void resetGyro() {
+    m_gyroOffset = m_gyro.getAngle();
   }
 
 }

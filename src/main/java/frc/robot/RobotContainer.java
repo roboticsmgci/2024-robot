@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ResetGyro;
 import frc.robot.commands.SwerveDrive;
+import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
@@ -69,6 +71,11 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+    m_driverController.a().onTrue(new ToggleFieldOriented(m_drive));
+
+    // TODO: change this to something harder to accidentally click
+    m_driverController.x().onTrue(new ResetGyro(m_drive));
   }
 
   /**
