@@ -358,7 +358,7 @@ public class SwerveModule extends SubsystemBase {
     double delta = targetAngle - currentAngle.getDegrees();
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
-      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+      targetAngle = delta > 90 ? (targetAngle - 180) : (targetAngle + 180);
     }
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
@@ -371,18 +371,19 @@ public class SwerveModule extends SubsystemBase {
    */
   public void drive(SwerveModuleState desiredState) {
     SwerveModuleState optimizedDesiredState = optimize(desiredState, Rotation2d.fromDegrees(getTurnAngle()));
+    // System.out.println(desiredState + " " + optimizedDesiredState);
     // can remove this if not using logsysid
     // m_voltage = RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed;
     
     // m_driveMotor.setVoltage(
     //     RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond / DrivetrainConstants.kMaxDriveSpeed);
     if (RobotBase.isReal()) {
-      m_driveMotor.setVoltage(m_realFeedforward.calculate(desiredState.speedMetersPerSecond));
+      m_driveMotor.setVoltage(m_realFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond));
     } else {
-      m_driveMotor.setVoltage(m_simFeedforward.calculate(desiredState.speedMetersPerSecond));
+      m_driveMotor.setVoltage(m_simFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond));
     }
     m_turnMotor.setVoltage(RobotController.getBatteryVoltage()
-        * m_turnPositionController.calculate(getTurnAngle(), desiredState.angle.getDegrees()));
+        * m_turnPositionController.calculate(getTurnAngle(), optimizedDesiredState.angle.getDegrees()));
     // m_turnMotor.setVoltage(0);
   }
 
