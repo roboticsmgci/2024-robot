@@ -166,7 +166,7 @@ public class DriveSubsystem extends SubsystemBase {
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            DrivetrainConstants.kMaxDriveSpeed, // Max module speed, in m/s
+            DrivetrainConstants.kMaxDriveMotorSpeed, // Max module speed, in m/s
             DrivetrainConstants.kTrackWidth, // Drive base radius in meters. Distance from robot center to furthest
                                              // module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -262,9 +262,9 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Sets the robot motors to drive in the specified direction.
    * 
-   * @param xSpeed        Forward velocity.
-   * @param ySpeed        Sideways velocity.
-   * @param rotationSpeed Angular velocity.
+   * @param xSpeed        Forward velocity, in meters per second.
+   * @param ySpeed        Sideways velocity, in meters per second.
+   * @param rotationSpeed Angular velocity, in radians per second.
    */
   public void drive(double xSpeed, double ySpeed, double rotationSpeed) {
     SwerveModuleState[] desiredSwerveModuleStates;

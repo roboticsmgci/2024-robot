@@ -41,6 +41,25 @@ public final class Constants {
      * as robot oriented.
      */
     public static final boolean kStartFieldOriented = true;
+
+    /**
+     * The deadzone to apply to the controller.
+     */
+    public static final double kControllerDeadzone = 0.1;
+
+    /**
+     * The maximum horizontal speed to move the robot, in meters per second.
+     * <p>
+     * Used for the default swerve drive command.
+     */
+    public static final double kMaxHorizontalSpeed = 3;
+
+    /**
+     * The maximum rotational speed to move the robot, in radians per second.
+     * <p>
+     * Used for the default swerve drive command.
+     */
+    public static final double kMaxRotationalSpeed = 2;
   }
 
   public static class DrivetrainConstants {
@@ -130,11 +149,11 @@ public final class Constants {
     public static final double kBackRightTurnEncoderOffset = 254.18;
 
     /**
-     * The maximum drive speed in meters per second.
+     * The maximum speed of a swerve module's drive motor in meters per second.
      * <p>
      * TODO: this must be determined experimentally
      */
-    public static final double kMaxDriveSpeed = 3.25;
+    public static final double kMaxDriveMotorSpeed = 3.25;
 
   }
 
