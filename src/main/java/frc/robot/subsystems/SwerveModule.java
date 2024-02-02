@@ -65,9 +65,15 @@ public class SwerveModule extends SubsystemBase {
   // PIDConstants.kDModuleDriveVelocity);
 
   /**
+   * The PID controller for the velocity of the drive motor.
+   */
+  private final PIDController m_driveVelocityPID = new PIDController(PIDConstants.kPModuleDriveVelocity,
+      PIDConstants.kIModuleDriveVelocity, PIDConstants.kDModuleDriveVelocity);
+
+  /**
    * The PID controller for the position of the turn motor.
    */
-  private final PIDController m_turnPositionController = new PIDController(
+  private final PIDController m_turnPositionPID = new PIDController(
       PIDConstants.kPModuleTurnPosition, PIDConstants.kIModuleTurnPosition, PIDConstants.kDModuleTurnPosition);
 
   /**
@@ -153,7 +159,7 @@ public class SwerveModule extends SubsystemBase {
 
     // Need to use continuous input for turn PID controller because -180 degrees =
     // 180 degrees
-    m_turnPositionController.enableContinuousInput(-180, 180);
+    m_turnPositionPID.enableContinuousInput(-180, 180);
 
     // TODO: I don't think this is necessary, but in case data from the motor is not
     // working properly, uncomment this
@@ -384,12 +390,14 @@ public class SwerveModule extends SubsystemBase {
     // RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond /
     // DrivetrainConstants.kMaxDriveSpeed);
     if (RobotBase.isReal()) {
-      m_driveMotor.setVoltage(m_realFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond));
+      m_driveMotor.setVoltage(m_realFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond)
+          + m_driveVelocityPID.calculate(getDriveEncoderVelocityMPS(), optimizedDesiredState.speedMetersPerSecond));
     } else {
-      m_driveMotor.setVoltage(m_simFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond));
+      m_driveMotor.setVoltage(m_simFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond)
+          + m_driveVelocityPID.calculate(getDriveEncoderVelocityMPS(), optimizedDesiredState.speedMetersPerSecond));
     }
     m_turnMotor.setVoltage(RobotController.getBatteryVoltage()
-        * m_turnPositionController.calculate(getTurnAngle(), optimizedDesiredState.angle.getDegrees()));
+        * m_turnPositionPID.calculate(getTurnAngle(), optimizedDesiredState.angle.getDegrees()));
     // m_turnMotor.setVoltage(0);
   }
 

@@ -59,7 +59,7 @@ public final class Constants {
      * <p>
      * Used for the default swerve drive command.
      */
-    public static final double kMaxRotationalSpeed = 2;
+    public static final double kMaxRotationalSpeed = 2.5;
   }
 
   public static class DrivetrainConstants {
@@ -163,6 +163,10 @@ public final class Constants {
     public static final double kPModuleTurnPosition = .000004;
     public static final double kIModuleTurnPosition = 0;
     public static final double kDModuleTurnPosition = 0;
+
+    public static final double kPModuleDriveVelocity = .000004;
+    public static final double kIModuleDriveVelocity = 0;
+    public static final double kDModuleDriveVelocity = 0;
 
   }
 }
