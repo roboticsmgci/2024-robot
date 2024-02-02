@@ -60,6 +60,20 @@ public final class Constants {
      * Used for the default swerve drive command.
      */
     public static final double kMaxRotationalSpeed = 2.5;
+
+    /**
+     * The rate limit for the x and y control for the robot's drive.
+     * <p>
+     * Used for the slew rate limiter for the robot's drive.
+     */
+    public static final double kHorizontalRateLimit = 4;
+
+    /**
+     * The rate limit for the rotational control for the robot's drive.
+     * <p>
+     * Used for the slew rate limiter for the robot's drive.
+     */
+    public static final double kRotationalRateLimit = 6;
   }
 
   public static class DrivetrainConstants {

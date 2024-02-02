@@ -11,9 +11,9 @@ public class SwerveDrive extends Command {
 
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_xControl, m_yControl, m_rotControl;
-  private final SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(4);
-  private final SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(4);
-  private final SlewRateLimiter m_rotSlewRateLimiter = new SlewRateLimiter(6);
+  private final SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(DriverConstants.kHorizontalRateLimit);
+  private final SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(DriverConstants.kHorizontalRateLimit);
+  private final SlewRateLimiter m_rotSlewRateLimiter = new SlewRateLimiter(DriverConstants.kRotationalRateLimit);
 
   /**
    * Constructs a <code>SwerveDrive</code> command.
