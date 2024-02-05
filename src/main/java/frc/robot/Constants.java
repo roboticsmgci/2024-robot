@@ -106,11 +106,14 @@ public final class Constants {
     // TODO: potentially update volt compensation
     public static final double kVoltCompensation = 12.6;
 
-    // TODO: potentially update value
-    // Source for gear ratios:
-    // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
-    // Turn ratios are the same for the MK4i no matter if L1, L2, L3
+    /**
+     * The turn gear ratio for the MK4i module. This is the same regardless of the
+     * configuration (L1, L2, L3) being used.
+     * <p>
+     * Source: https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+     */
     public static final double kTurnGearRatio = 1.0 / (150.0 / 7.0);
+
     // MK4i L1
     // public static final double kDriveGearRatio = 1.0 / ((14.0 / 50.0) * (25.0 /
     // 19.0) * (15.0 / 45.0));
@@ -118,19 +121,60 @@ public final class Constants {
     // public static final double kDriveGearRatio = 1 / ((14.0 / 50.0) * (27.0 /
     // 17.0) * (15.0 / 45.0));
     // MK4i L3
+    /**
+     * The drive gear ratio for the MK4i module, using the L3 configuration.
+     * <p>
+     * Source: Source:
+     * https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+     */
     public static final double kDriveGearRatio = 1 / ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0));
 
-    // Circumference divided by gear ratio
-    public static final double kDriveMetersPerEncoderRev = (kWheelDiameter * Math.PI) / kDriveGearRatio;
-
     // Multiply by degrees, divide by gear ratio
+    /**
+     * The number of degrees turned per revolution of the turn motor. This can be
+     * used to convert the encoder value (which is in number of revolutions by
+     * default) into degrees.
+     * <p>
+     * This is calculated by dividing 360 by the gear ratio.
+     */
     public static final double kTurnDegreesPerEncoderRev = 360.0 / kTurnGearRatio;
 
-    // Source for these values: https://www.revrobotics.com/rev-21-1650/
-    public static final float kTurnMotorStallTorque = 2.6f; // in Nm
-    public static final int kTurnMotorFreeSpeed = 5676; // in RPM
-    public static final float kDriveMotorStallTorque = 2.6f; // in Nm
-    public static final int kDriveMotorFreeSpeed = 5676; // in RPM
+    /**
+     * The number of meters driven per revolution of the drive motor. This can be
+     * used to convert the encoder value (which is in number of revolutions
+     * by default) into meters.
+     * <p>
+     * This is calculated by dividing the wheel circumference by the gear ratio.
+     */
+    public static final double kDriveMetersPerEncoderRev = (kWheelDiameter * Math.PI) / kDriveGearRatio;
+
+    /**
+     * The stall torque of the turn motor in Newton-meters.
+     * <p>
+     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     */
+    public static final float kTurnMotorStallTorque = 2.6f;
+
+    /**
+     * The free speed of the turn motor in RPM.
+     * <p>
+     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     */
+    public static final int kTurnMotorFreeSpeed = 5676;
+
+    /**
+     * The stall torque of the drive motor in Newton-meters.
+     * <p>
+     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     */
+    public static final float kDriveMotorStallTorque = 2.6f;
+
+    /**
+     * The free speed of the drive motor in RPM.
+     * <p>
+     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     */
+    public static final int kDriveMotorFreeSpeed = 5676;
 
     // TODO: update motor IDs
     public static final int kFrontLeftDriveMotorID = 4;
@@ -165,7 +209,7 @@ public final class Constants {
     /**
      * The maximum speed of a swerve module's drive motor in meters per second.
      * <p>
-     * TODO: this must be determined experimentally
+     * TODO: this must be determined experimentally. An underestimation is fine.
      */
     public static final double kMaxDriveMotorSpeed = 3.25;
 

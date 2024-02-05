@@ -273,8 +273,10 @@ public class SwerveModule extends SubsystemBase {
       // TODO: Not sure if this is necessary. Uncomment if necessary.
       // m_turnCANcoder.getAbsolutePosition().waitForUpdate(10);
 
-      // Converts absolute encoder value to degrees then subtracts encoder offset
-      m_turnEncoder.setPosition((m_turnCANcoder.getAbsolutePosition().getValue() * 360) - m_turnEncoderOffset);
+      // Converts absolute encoder value to degrees then subtracts encoder offset then
+      // converts back to revolutions.
+      m_turnEncoder.setPosition(((m_turnCANcoder.getAbsolutePosition().getValue() * 360) - m_turnEncoderOffset)
+          / DrivetrainConstants.kTurnDegreesPerEncoderRev);
     } else {
       // If using a simulation, just assumes that the wheels are facing forward.
       m_turnEncoder.setPosition(0);
@@ -310,7 +312,6 @@ public class SwerveModule extends SubsystemBase {
     return getTurnEncoderPositionD();
   }
 
-  // TODO: is this necessary? equivalent of placeInAppropriate0To360Scope
   /**
    * Returns the closest "equivalent" desired angle to currentAngle.
    * For example, if currentAngle is 20 and desiredAngle is 350, it returns -10

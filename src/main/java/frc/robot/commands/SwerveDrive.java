@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
+/**
+ * The default drive command.
+ */
 public class SwerveDrive extends Command {
 
   private final DriveSubsystem m_drive;
@@ -50,7 +53,7 @@ public class SwerveDrive extends Command {
    * 
    * @param controlValue the controller value; should be in [-1, 1]
    * @param maxSpeed     the maximum speed
-   * @return
+   * @return             the speed corresponding to the controller value
    */
   private double controlToSpeed(double controlValue, double maxSpeed) {
     if (Math.abs(controlValue) <= DriverConstants.kControllerDeadzone) {

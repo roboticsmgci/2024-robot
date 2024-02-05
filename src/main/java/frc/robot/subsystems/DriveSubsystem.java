@@ -198,6 +198,12 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Sys ID log stuff
     // m_frontLeftModule.logSysID();
+
+    // TODO: uncomment this to find the turn encoder offsets to put in Constants
+    // System.out.println("FL: " + m_frontLeftModule.getPosition().angle.getDegrees() +
+    //                    ", FR: " + m_frontRightModule.getPosition().angle.getDegrees() +
+    //                    ", BL: " + m_backLeftModule.getPosition().angle.getDegrees() +
+    //                    ", BR: " + m_backRightModule.getPosition().angle.getDegrees());
   }
 
   @Override
@@ -219,14 +225,15 @@ public class DriveSubsystem extends SubsystemBase {
     // Minus sign because chassisSpeeds has increasing angles going CCW while gyro
     // has increasing angles going CW
     angle.set(previousAngle - changeInRotation);
+    // TODO: potentially uncomment this to replace above line
+    // NavX expects clockwise positive, but sim outputs clockwise negative
+    // angle.set(Math.IEEEremainder(-drivetrainSim.getHeading().getDegrees(), 360));
 
     // Updates the robot's position on the virtual field.
     // TODO: consider moving this to periodic()
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
-    // TODO: potentially uncomment this to replace above line
-    // NavX expects clockwise positive, but sim outputs clockwise negative
-    // angle.set(Math.IEEEremainder(-drivetrainSim.getHeading().getDegrees(), 360));
+    
   }
 
   /**
@@ -307,7 +314,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose the given pose
    */
   private void resetPose(Pose2d pose) {
-    // TODO: not sure what to set the SwerveModulePositions to
     m_poseEstimator.resetPosition(Rotation2d.fromDegrees(0), new SwerveModulePosition[] {
         m_frontLeftModule.getPosition(),
         m_frontRightModule.getPosition(),
