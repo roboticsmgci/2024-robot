@@ -6,12 +6,11 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.subsystems.DriveSubsystem;
-
 /**
  * The default drive command.
  */
 public class SwerveDrive extends Command {
-
+  public static double slowFactor = 1;
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_xControl, m_yControl, m_rotControl;
   private final SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(DriverConstants.kHorizontalRateLimit);
@@ -42,9 +41,9 @@ public class SwerveDrive extends Command {
   @Override
   public void execute() {
     m_drive.drive(
-        controlToSpeed(m_xSlewRateLimiter.calculate(m_xControl.getAsDouble()), DriverConstants.kMaxHorizontalSpeed),
-        controlToSpeed(m_ySlewRateLimiter.calculate(m_yControl.getAsDouble()), DriverConstants.kMaxHorizontalSpeed),
-        controlToSpeed(m_rotSlewRateLimiter.calculate(m_rotControl.getAsDouble()),
+        controlToSpeed(m_xSlewRateLimiter.calculate(m_xControl.getAsDouble()*slowFactor), DriverConstants.kMaxHorizontalSpeed),
+        controlToSpeed(m_ySlewRateLimiter.calculate(m_yControl.getAsDouble()*slowFactor), DriverConstants.kMaxHorizontalSpeed),
+        controlToSpeed(m_rotSlewRateLimiter.calculate(m_rotControl.getAsDouble()*slowFactor),
             DriverConstants.kMaxRotationalSpeed));
   }
 
