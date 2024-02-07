@@ -16,6 +16,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LockToTarget;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.SlowDown;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.DriveSubsystem;
@@ -93,6 +94,8 @@ public class RobotContainer {
     m_driverController.a().onTrue(new ToggleFieldOriented(m_drive));
     
     m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
+
+    m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(new SlowDown(m_drive));
   }
 
   /**
