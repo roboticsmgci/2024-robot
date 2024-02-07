@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.LockToTarget;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.commands.ToggleFieldOriented;
@@ -54,6 +56,12 @@ public class RobotContainer {
         () -> -m_driverController.getLeftY(),
         () -> -m_driverController.getLeftX(),
         () -> -m_driverController.getRightX()));
+    
+    // m_drive.setDefaultCommand(new LockToTarget(
+    //   m_drive,
+    //   new Translation2d(0, 0),
+    //   () -> -m_driverController.getLeftY(),
+    //   () -> -m_driverController.getLeftX()));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

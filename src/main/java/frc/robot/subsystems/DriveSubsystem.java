@@ -231,9 +231,12 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Updates the robot's position on the virtual field.
     // TODO: consider moving this to periodic()
-    m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
-
+    m_field.setRobotPose(getPose());
     
+  }
+
+  public Pose2d getPose() {
+    return m_poseEstimator.getEstimatedPosition();
   }
 
   /**

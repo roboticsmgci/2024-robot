@@ -226,5 +226,9 @@ public final class Constants {
     public static final double kIModuleDriveVelocity = 0;
     public static final double kDModuleDriveVelocity = 0;
 
+    public static final double kPLockTargetRotSpeed = .1;
+    public static final double kILockTargetRotSpeed = 0;
+    public static final double kDLockTargetRotSpeed = 0;
+
   }
 }
