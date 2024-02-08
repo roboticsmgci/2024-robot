@@ -7,14 +7,17 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.LockToTarget;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.SlowDown;
 import frc.robot.commands.SwerveDrive;
@@ -46,23 +49,28 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto");
 
   /**
+   * The default swerve drive command.
+   */
+  private final SwerveDrive m_swerveDriveCommand = new SwerveDrive(
+      m_drive,
+      () -> -m_driverController.getLeftY(),
+      () -> -m_driverController.getLeftX(),
+      () -> -m_driverController.getRightX());
+
+  /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
 
-    m_drive.setDefaultCommand(new SwerveDrive(
-        m_drive,
-        () -> -m_driverController.getLeftY(),
-        () -> -m_driverController.getLeftX(),
-        () -> -m_driverController.getRightX()));
-    
+    m_drive.setDefaultCommand(m_swerveDriveCommand);
+
     // m_drive.setDefaultCommand(new LockToTarget(
-    //   m_drive,
-    //   new Translation2d(0, 0),
-    //   () -> -m_driverController.getLeftY(),
-    //   () -> -m_driverController.getLeftX()));
+    // m_drive,
+    // new Translation2d(0, 0),
+    // () -> -m_driverController.getLeftY(),
+    // () -> -m_driverController.getLeftX()));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -92,10 +100,19 @@ public class RobotContainer {
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     m_driverController.a().onTrue(new ToggleFieldOriented(m_drive));
-    
+
     m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
 
     m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(new SlowDown(m_drive));
+
+    // Forces the robot to face a speaker while the right stick is pressed.
+    m_driverController.rightStick()
+        .onTrue(Commands.runOnce(() -> m_swerveDriveCommand
+            .setTarget(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+                ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
+                : new Translation2d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY)),
+            m_drive))
+        .onFalse(Commands.runOnce(() -> m_swerveDriveCommand.setTarget(null), m_drive));
   }
 
   /**

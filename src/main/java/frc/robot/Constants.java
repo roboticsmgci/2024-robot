@@ -231,4 +231,27 @@ public final class Constants {
     public static final double kDLockTargetRotSpeed = 0;
 
   }
+
+  public final static class FieldConstants {
+    /**
+     * The x-coordinate of the center of the blue speaker.
+     */
+    public static final double kBlueSpeakerX = Units.inchesToMeters(9);
+    
+    /**
+     * The y-coordinate of the center of the blue speaker.
+     */
+    public static final double kBlueSpeakerY = Units.inchesToMeters(218.64);
+
+    /**
+     * The x-coordinate of the center of the red speaker.
+     */
+    public static final double kRedSpeakerX = Units.inchesToMeters(642.25);
+
+    /**
+     * The y-coordinate of the center of the red speaker.
+     */
+    public static final double kRedSpeakerY = Units.inchesToMeters(218.64);
+
+  }
 }
