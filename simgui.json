@@ -19,16 +19,6 @@
       }
     }
   },
-  "NetworkTables": {
-    "transitory": {
-      "SmartDashboard": {
-        "Auto Chooser": {
-          "open": true
-        },
-        "open": true
-      }
-    }
-  },
   "NetworkTables Info": {
     "visible": true
   }
