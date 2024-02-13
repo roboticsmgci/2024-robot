@@ -100,12 +100,18 @@ public class RobotContainer {
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     m_driverController.a().onTrue(new ToggleFieldOriented(m_drive));
+    //m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
+    //m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(()->m_drive.resetGyro()));
 
     m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(new SlowDown(m_drive));
+    // m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(Commands.runOnce(()->SwerveDrive.slowFactor=0.5)).
+    // onFalse(Commands.runOnce(()->SwerveDrive.slowFactor=0.5));
+    //for toggle use conditionalcommand
 
-    // Forces the robot to face a speaker while the right stick is pressed.
+    // Forces the robot to face a speaker while the right stick is pressed. 
+    //(use down button since stick is easy to release accidentally)
     m_driverController.rightStick()
         .onTrue(Commands.runOnce(() -> m_swerveDriveCommand
             .setTarget(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red

@@ -4,34 +4,45 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Arm extends SubsystemBase {
 
-  private final CANSparkMax joint1;
-  private final CANSparkMax joint2;
-  private final RelativeEncoder encoder1;
-  private final RelativeEncoder encoder2;
+  private final CANSparkMax joint1 = new CANSparkMax(2, MotorType.kBrushless);
+  private final CANSparkMax joint2 = new CANSparkMax(5, MotorType.kBrushless);
+  private final RelativeEncoder encoder1 = joint1.getEncoder();
+  private final RelativeEncoder encoder2 = joint2.getEncoder();
   
   private final Translation2d base = new Translation2d(0, 0);
   private final double arm1 = 1;
   // private final double arm2 = 1;
   /** Creates a new ExampleSubsystem. */
   public Arm() {
-    joint1 = new CANSparkMax(9, MotorType.kBrushless);
-    joint2 = new CANSparkMax(10, MotorType.kBrushless);
-    encoder1 = joint1.getEncoder();
     encoder1.setPositionConversionFactor(1*2*Math.PI);
     encoder1.setPosition(0);
-    encoder2 = joint2.getEncoder();
     encoder2.setPositionConversionFactor(1*2*Math.PI);
     encoder2.setPosition(0);
   }
@@ -61,12 +72,12 @@ public class Arm extends SubsystemBase {
    *
    * @return a command
    */
-  public Command exampleMethodCommand() {
+  public Command drive(DoubleSupplier joint1, DoubleSupplier joint2) {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
+    return run(
         () -> {
-          /* one-time action goes here */
+          // set the speed of the arm joints
         });
   }
 
@@ -89,4 +100,46 @@ public class Arm extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+
+  // Create a new SysId routine for characterizing the drive.
+  private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          new SysIdRoutine.Config(),
+          new SysIdRoutine.Mechanism(
+              // Tell SysId how to plumb the driving voltage to the motors.
+              (Measure<Voltage> volts) -> {
+                joint1.setVoltage(volts.in(Volts));
+              },
+              // Tell SysId how to record a frame of data for each motor on the mechanism being
+              // characterized.
+              log -> {
+                // Record a frame for the left motors.  Since these share an encoder, we consider
+                // the entire group to be one motor.
+                log.motor("drive-left")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            joint1.get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(encoder1.getPosition(), Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(encoder1.getVelocity(), MetersPerSecond));
+              },
+              // Tell SysId to make generated commands require this subsystem, suffix test state in
+              // WPILog with this subsystem's name ("drive")
+              this));
+
+              public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+                return m_sysIdRoutine.quasistatic(direction);
+              }
+            
+              public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+                return m_sysIdRoutine.dynamic(direction);
+              } 
 }
