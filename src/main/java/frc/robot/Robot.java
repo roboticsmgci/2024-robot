@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import VisionConfiguration;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -15,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static Thread visionProcess;
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -25,9 +29,36 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    if(VisionConfiguration.VISION_INTEGRATED){
+      visionProcess = new Thread(){
+        public void run(){
+          try {
+            /*
+             * Note: this is a blocking operation, thus requires separate thread
+             * disconnection happens when either side ends connection
+             */
+            Socket socket = new Socket(VisionConfiguration.COPROCESSOR_IP, VisionConfiguration.COPROCESSOR_PORT);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      
+            String socketData;
+            while ((socketData = in.readLine()) != null) {
+              // TODO amplify, parse JSON
+              SmartDashboard.putString(VisionConfiguration.SDASHBOARD_KEY, socketData);
+            }
+      
+          } catch (Exception e) {
+            /*
+             * include current time to distinguish different errors 
+             */
+            SmartDashboard.putString(VisionConfiguration.SDASHBOARD_ERR, LocalDateTime.now().toString() + " : " + e.toString());
+            SmartDashboard.putString(VisionConfiguration.SDASHBOARD_ERR_TRACE, e.getStackTrace().toString());
+          }
+        }
+      };
+      visionProcess.start();
+    }
   }
 
   /**
