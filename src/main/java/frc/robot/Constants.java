@@ -28,10 +28,11 @@ public final class Constants {
 
   public static class DriverConstants {
     /**
-     * The number of degrees CCW the robot starts away from being "forwards".
+     * The number of degrees CW the robot starts away from being "forwards".
      * <p>
-     * For example, if the robot starts rotated 45 degrees CCW, this should be equal
-     * to 45.
+     * For example, if the robot starts rotated 45 degrees CW, this should be equal
+     * to 45. Note that this is overridden by the initial position specified in
+     * PathPlanner.
      */
     public static final double kFieldOrientedOffset = 0;
 
@@ -151,28 +152,32 @@ public final class Constants {
     /**
      * The stall torque of the turn motor in Newton-meters.
      * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     * This value is for the NEO Brushless Motor V1.1. Source:
+     * https://www.revrobotics.com/rev-21-1650/
      */
     public static final float kTurnMotorStallTorque = 2.6f;
 
     /**
      * The free speed of the turn motor in RPM.
      * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     * This value is for the NEO Brushless Motor V1.1. Source:
+     * https://www.revrobotics.com/rev-21-1650/
      */
     public static final int kTurnMotorFreeSpeed = 5676;
 
     /**
      * The stall torque of the drive motor in Newton-meters.
      * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     * This value is for the NEO Brushless Motor V1.1. Source:
+     * https://www.revrobotics.com/rev-21-1650/
      */
     public static final float kDriveMotorStallTorque = 2.6f;
 
     /**
      * The free speed of the drive motor in RPM.
      * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source: https://www.revrobotics.com/rev-21-1650/
+     * This value is for the NEO Brushless Motor V1.1. Source:
+     * https://www.revrobotics.com/rev-21-1650/
      */
     public static final int kDriveMotorFreeSpeed = 5676;
 
@@ -237,7 +242,7 @@ public final class Constants {
      * The x-coordinate of the center of the blue speaker.
      */
     public static final double kBlueSpeakerX = Units.inchesToMeters(9);
-    
+
     /**
      * The y-coordinate of the center of the blue speaker.
      */
