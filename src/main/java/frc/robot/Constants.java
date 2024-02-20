@@ -82,11 +82,11 @@ public final class Constants {
     /**
      * The width of the robot, left to right, in meters.
      */
-    public static final double kTrackWidth = Units.inchesToMeters(22); // Distance left-right
+    public static final double kTrackWidth = Units.inchesToMeters(25.27559); // Distance left-right
     /**
      * The length of the robot, front to back, in meters.
      */
-    public static final double kWheelBase = Units.inchesToMeters(27); // Distance forwards-backwards
+    public static final double kWheelBase = Units.inchesToMeters(25.27559); // Distance forwards-backwards
     /**
      * The diameter of the robot's wheels, in meters.
      */
