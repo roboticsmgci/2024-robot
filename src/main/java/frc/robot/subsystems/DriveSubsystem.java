@@ -127,7 +127,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
       m_kinematics,
-      m_gyro.getRotation2d(),
+      Rotation2d.fromDegrees(getRobotHeadingDegrees()),
       new SwerveModulePosition[] {
           m_frontLeftModule.getPosition(),
           m_frontRightModule.getPosition(),
@@ -149,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
    * This is used to "reset" the gyro by setting this value to the current gyro
    * value.
    */
-  private double m_gyroOffset = 0;
+  private double m_gyroOffset = -DriverConstants.kFieldOrientedOffset;
 
   /**
    * Constructs a <code>DriveSubsystem</code>.
@@ -191,7 +191,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Updates odometry.
-    m_poseEstimator.update(m_gyro.getRotation2d(), new SwerveModulePosition[] {
+    m_poseEstimator.update(Rotation2d.fromDegrees(getRobotHeadingDegrees()), new SwerveModulePosition[] {
         m_frontLeftModule.getPosition(),
         m_frontRightModule.getPosition(),
         m_backLeftModule.getPosition(),
@@ -262,16 +262,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Gets the current heading of the robot between (-180, 180], taking the field
-   * oriented offset (i.e., the robot's starting angle) into consideration.
-   * 
-   * @return the robot's field heading
-   */
-  private double getFieldHeadingDegrees() {
-    return -Math.IEEEremainder(m_gyro.getAngle() + DriverConstants.kFieldOrientedOffset - m_gyroOffset, 360);
-  }
-
-  /**
    * Sets the robot motors to drive in the specified direction.
    * 
    * @param xSpeed        Forward velocity, in meters per second.
@@ -284,7 +274,7 @@ public class DriveSubsystem extends SubsystemBase {
     if (m_isFieldOriented) {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotationSpeed,
-              Rotation2d.fromDegrees(getFieldHeadingDegrees())));
+              Rotation2d.fromDegrees(getRobotHeadingDegrees())));
     } else {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed));
@@ -319,7 +309,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose the given pose
    */
   private void resetPose(Pose2d pose) {
-    m_poseEstimator.resetPosition(Rotation2d.fromDegrees(0), new SwerveModulePosition[] {
+    m_poseEstimator.resetPosition(Rotation2d.fromDegrees(getRobotHeadingDegrees()), new SwerveModulePosition[] {
         m_frontLeftModule.getPosition(),
         m_frontRightModule.getPosition(),
         m_backLeftModule.getPosition(),
