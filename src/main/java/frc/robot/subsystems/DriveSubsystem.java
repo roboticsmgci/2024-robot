@@ -143,6 +143,8 @@ public class DriveSubsystem extends SubsystemBase {
    */
   private boolean m_isFieldOriented = DriverConstants.kStartFieldOriented;
 
+  public boolean momentum = false;
+
   /**
    * The gyro offset subtracted from the gyro's sensor actual reading.
    * <p>
@@ -378,6 +380,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double targetHelper(double shooterSpeed, double shooterAngle, double targetAngle){
+    targetAngle = 
     double bestAngle = targetAngle;
 
     for(double i=-1800.0; i<1800; i++){

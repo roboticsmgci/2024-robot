@@ -97,9 +97,10 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
-    m_driverController.a().onTrue(new ToggleFieldOriented(m_drive));
+    m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
     //m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
