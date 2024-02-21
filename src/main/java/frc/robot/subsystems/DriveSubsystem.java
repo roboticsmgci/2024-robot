@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -125,7 +127,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
       m_kinematics,
-      Rotation2d.fromDegrees(getRobotHeadingDegrees()),
+      m_gyro.getRotation2d(),
       new SwerveModulePosition[] {
           m_frontLeftModule.getPosition(),
           m_frontRightModule.getPosition(),
@@ -147,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
    * This is used to "reset" the gyro by setting this value to the current gyro
    * value.
    */
-  private double m_gyroOffset = -DriverConstants.kFieldOrientedOffset;
+  private double m_gyroOffset = 0;
 
   /**
    * Constructs a <code>DriveSubsystem</code>.
@@ -189,7 +191,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Updates odometry.
-    m_poseEstimator.update(Rotation2d.fromDegrees(getRobotHeadingDegrees()), new SwerveModulePosition[] {
+    m_poseEstimator.update(m_gyro.getRotation2d(), new SwerveModulePosition[] {
         m_frontLeftModule.getPosition(),
         m_frontRightModule.getPosition(),
         m_backLeftModule.getPosition(),
@@ -260,6 +262,16 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Gets the current heading of the robot between (-180, 180], taking the field
+   * oriented offset (i.e., the robot's starting angle) into consideration.
+   * 
+   * @return the robot's field heading
+   */
+  private double getFieldHeadingDegrees() {
+    return -Math.IEEEremainder(m_gyro.getAngle() + DriverConstants.kFieldOrientedOffset - m_gyroOffset, 360);
+  }
+
+  /**
    * Sets the robot motors to drive in the specified direction.
    * 
    * @param xSpeed        Forward velocity, in meters per second.
@@ -272,7 +284,7 @@ public class DriveSubsystem extends SubsystemBase {
     if (m_isFieldOriented) {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotationSpeed,
-              Rotation2d.fromDegrees(getRobotHeadingDegrees())));
+              Rotation2d.fromDegrees(getFieldHeadingDegrees())));
     } else {
       desiredSwerveModuleStates = m_kinematics.toSwerveModuleStates(
           new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed));
@@ -307,7 +319,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose the given pose
    */
   private void resetPose(Pose2d pose) {
-    m_poseEstimator.resetPosition(Rotation2d.fromDegrees(getRobotHeadingDegrees()), new SwerveModulePosition[] {
+    m_poseEstimator.resetPosition(Rotation2d.fromDegrees(0), new SwerveModulePosition[] {
         m_frontLeftModule.getPosition(),
         m_frontRightModule.getPosition(),
         m_backLeftModule.getPosition(),
@@ -363,6 +375,41 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetGyro() {
     m_gyroOffset = m_gyro.getAngle();
+  }
+
+  public double targetHelper(double shooterSpeed, double shooterAngle, double targetAngle){
+    double bestAngle = targetAngle;
+
+    for(double i=-1800.0; i<1800; i++){
+      //angle = i/10 ; 0.1 degree accuracy
+      if(Math.abs(targetAngle-calculateTarget(shooterSpeed, shooterAngle, Math.toRadians(i/10)))<
+          Math.abs(targetAngle-calculateTarget(shooterSpeed, shooterAngle, Math.toRadians(bestAngle)))){
+        bestAngle = i/10;
+      }
+    }
+    System.out.println(bestAngle);
+    return bestAngle;
+  }
+
+  private double calculateTarget(double shooterSpeed, double shooterAngle, double robotAngle){
+    ChassisSpeeds s = getRobotRelativeSpeeds();
+    
+    return Math.atan2(
+      //Robot y velocity
+      -s.vyMetersPerSecond*Math.sin(robotAngle)+s.vxMetersPerSecond*Math.cos(robotAngle)
+      //Shooter launch y velocity
+      +shooterSpeed*Math.cos(shooterAngle)*Math.cos(robotAngle)
+      //Shooter rotational y velocity
+      //-shooterradius*s.omegaRadiansPerSecond*Math.sin(robotAngle)
+      , 
+      //Robot x velocity
+      -s.vyMetersPerSecond*Math.cos(robotAngle)-s.vxMetersPerSecond*Math.sin(robotAngle)
+      //Shooter launch x velocity
+      -shooterSpeed*Math.cos(shooterAngle)*Math.sin(robotAngle)
+      //Shooter rotational x velocity
+      //shooterradius*s.omegaRadiansPerSecond*Math.cos(robotAngle)
+      );
+      
   }
 
 }

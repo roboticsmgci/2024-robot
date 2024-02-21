@@ -19,28 +19,7 @@
       }
     }
   },
-  "NetworkTables": {
-    "retained": {
-      "SmartDashboard": {
-        "Auto Chooser": {
-          "open": true
-        },
-        "open": true
-      }
-    },
-    "transitory": {
-      "SmartDashboard": {
-        "Auto Chooser": {
-          "open": true,
-          "string[]##v_/SmartDashboard/Auto Chooser/options": {
-            "open": true
-          }
-        },
-        "open": true
-      }
-    }
-  },
-  "NetworkTables Info": {
-    "visible": true
+  "NetworkTables View": {
+    "visible": false
   }
 }
