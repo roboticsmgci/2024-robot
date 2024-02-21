@@ -112,7 +112,7 @@ public class RobotContainer {
 
     // Forces the robot to face a speaker while the right stick is pressed. 
     //(use down button since stick is easy to release accidentally)
-    m_driverController.rightStick()
+    m_driverController.a()
         .onTrue(Commands.runOnce(() -> m_swerveDriveCommand
             .setTarget(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
                 ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
