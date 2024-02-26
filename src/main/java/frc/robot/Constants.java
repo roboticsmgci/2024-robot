@@ -105,7 +105,7 @@ public final class Constants {
     public static final int kDriveMotorSmartLimit = 20;
 
     // TODO: potentially update volt compensation
-    public static final double kVoltCompensation = 12.6;
+    public static final double kVoltCompensation = 8;
 
     /**
      * The turn gear ratio for the MK4i module. This is the same regardless of the
@@ -182,34 +182,34 @@ public final class Constants {
     public static final int kDriveMotorFreeSpeed = 5676;
 
     // TODO: update motor IDs
-    public static final int kFrontLeftDriveMotorID = 4;
-    public static final int kFrontLeftTurnMotorID = 5;
-    public static final int kFrontLeftCANcoderID = 6;
+    public static final int kFrontLeftDriveMotorID = 3;
+    public static final int kFrontLeftTurnMotorID = 4;
+    public static final int kFrontLeftCANcoderID = 9;
     public static final boolean kFrontLeftDriveMotorInverted = false;
     public static final boolean kFrontLeftTurnMotorInverted = false;
-    public static final double kFrontLeftTurnEncoderOffset = 231.24; // TODO: should be the value of the encoder when
+    public static final double kFrontLeftTurnEncoderOffset = 348.2226; // TODO: should be the value of the encoder when
                                                                      // the wheel is facing forward
 
-    public static final int kFrontRightDriveMotorID = 7;
-    public static final int kFrontRightTurnMotorID = 8;
-    public static final int kFrontRightCANcoderID = 9;
+    public static final int kFrontRightDriveMotorID = 5;
+    public static final int kFrontRightTurnMotorID = 6;
+    public static final int kFrontRightCANcoderID = 10;
     public static final boolean kFrontRightDriveMotorInverted = false;
     public static final boolean kFrontRightTurnMotorInverted = false;
-    public static final double kFrontRightTurnEncoderOffset = 317.725;
+    public static final double kFrontRightTurnEncoderOffset = 63.8964;
 
-    public static final int kBackLeftDriveMotorID = 10;
-    public static final int kBackLeftTurnMotorID = 11;
-    public static final int kBackLeftCANcoderID = 12;
+    public static final int kBackLeftDriveMotorID = 1;
+    public static final int kBackLeftTurnMotorID = 2;
+    public static final int kBackLeftCANcoderID = 11;
     public static final boolean kBackLeftDriveMotorInverted = false;
     public static final boolean kBackLeftTurnMotorInverted = false;
-    public static final double kBackLeftTurnEncoderOffset = 182.28;
+    public static final double kBackLeftTurnEncoderOffset = 246.79692;
 
-    public static final int kBackRightDriveMotorID = 13;
-    public static final int kBackRightTurnMotorID = 14;
-    public static final int kBackRightCANcoderID = 15;
+    public static final int kBackRightDriveMotorID = 7;
+    public static final int kBackRightTurnMotorID = 8;
+    public static final int kBackRightCANcoderID = 12;
     public static final boolean kBackRightDriveMotorInverted = false;
     public static final boolean kBackRightTurnMotorInverted = false;
-    public static final double kBackRightTurnEncoderOffset = 254.18;
+    public static final double kBackRightTurnEncoderOffset = 205.40052;
 
     /**
      * The maximum speed of a swerve module's drive motor in meters per second.

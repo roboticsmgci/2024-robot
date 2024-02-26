@@ -271,7 +271,7 @@ public class SwerveModule extends SubsystemBase {
     // simulate absolute encoder on the sim.
     if (RobotBase.isReal()) {
       // TODO: Not sure if this is necessary. Uncomment if necessary.
-      // m_turnCANcoder.getAbsolutePosition().waitForUpdate(10);
+      m_turnCANcoder.getAbsolutePosition().waitForUpdate(10);
 
       // Converts absolute encoder value to degrees then subtracts encoder offset then
       // converts back to revolutions.
