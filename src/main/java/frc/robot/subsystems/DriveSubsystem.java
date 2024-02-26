@@ -369,20 +369,20 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyroOffset = m_gyro.getAngle();
   }
 
-  public double targetHelper(double shooterSpeed, double shooterAngle, double targetAngle){
-    targetAngle = 
-    double bestAngle = targetAngle;
+  // public double targetHelper(double shooterSpeed, double shooterAngle, double targetAngle){
+  //   targetAngle = 
+  //   double bestAngle = targetAngle;
 
-    for(double i=-1800.0; i<1800; i++){
-      //angle = i/10 ; 0.1 degree accuracy
-      if(Math.abs(targetAngle-calculateTarget(shooterSpeed, shooterAngle, Math.toRadians(i/10)))<
-          Math.abs(targetAngle-calculateTarget(shooterSpeed, shooterAngle, Math.toRadians(bestAngle)))){
-        bestAngle = i/10;
-      }
-    }
-    System.out.println(bestAngle);
-    return bestAngle;
-  }
+  //   for(double i=-1800.0; i<1800; i++){
+  //     //angle = i/10 ; 0.1 degree accuracy
+  //     if(Math.abs(targetAngle-calculateTarget(shooterSpeed, shooterAngle, Math.toRadians(i/10)))<
+  //         Math.abs(targetAngle-calculateTarget(shooterSpeed, shooterAngle, Math.toRadians(bestAngle)))){
+  //       bestAngle = i/10;
+  //     }
+  //   }
+  //   System.out.println(bestAngle);
+  //   return bestAngle;
+  // }
 
   private double calculateTarget(double shooterSpeed, double shooterAngle, double robotAngle){
     ChassisSpeeds s = getRobotRelativeSpeeds();

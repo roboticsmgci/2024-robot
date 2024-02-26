@@ -116,10 +116,10 @@ public class SwerveDrive extends Command {
    * @return the heading the robot should face
    */
   private double getDesiredHeading(Pose2d currentPose, Translation2d targetLocation) {
-    if(m_drive.momentum){
-      return m_drive.targetHelper(5, 0, 
-      Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
-    }
+    // if(m_drive.momentum){
+    //   return m_drive.targetHelper(5, 0, 
+    //   Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
+    // }
     return Math.toDegrees(
         Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
     
