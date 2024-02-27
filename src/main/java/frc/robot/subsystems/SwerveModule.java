@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.PIDValues;
 
 /**
  * Represents a swerve module.
@@ -67,14 +67,14 @@ public class SwerveModule extends SubsystemBase {
   /**
    * The PID controller for the velocity of the drive motor.
    */
-  private final PIDController m_driveVelocityPID = new PIDController(PIDConstants.kPModuleDriveVelocity,
-      PIDConstants.kIModuleDriveVelocity, PIDConstants.kDModuleDriveVelocity);
+  private final PIDController m_driveVelocityPID = new PIDController(PIDValues.kPModuleDriveVelocity,
+      PIDValues.kIModuleDriveVelocity, PIDValues.kDModuleDriveVelocity);
 
   /**
    * The PID controller for the position of the turn motor.
    */
   private final PIDController m_turnPositionPID = new PIDController(
-      PIDConstants.kPModuleTurnPosition, PIDConstants.kIModuleTurnPosition, PIDConstants.kDModuleTurnPosition);
+      PIDValues.kPModuleTurnPosition, PIDValues.kIModuleTurnPosition, PIDValues.kDModuleTurnPosition);
 
   /**
    * The feedforward to use for the simulation.

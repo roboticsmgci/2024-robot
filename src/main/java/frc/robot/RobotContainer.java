@@ -12,18 +12,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.SlowDown;
-import frc.robot.commands.SwerveDrive;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,7 +37,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final DriveSubsystem m_drive = new DriveSubsystem();
+  private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -51,11 +51,15 @@ public class RobotContainer {
   /**
    * The default swerve drive command.
    */
-  private final SwerveDrive m_swerveDriveCommand = new SwerveDrive(
+  private final DefaultDrive m_swerveDriveCommand = new DefaultDrive(
       m_drive,
       () -> -m_driverController.getLeftY(),
       () -> -m_driverController.getLeftX(),
-      () -> -m_driverController.getRightX());
+      () -> -m_driverController.getRightX(),
+      () -> false,
+      () -> false,
+      () -> false,
+      () -> false);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,12 +102,12 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
+    // m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
     //m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
-    m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
+    // m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
     //m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(()->m_drive.resetGyro()));
 
     m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(new SlowDown(m_drive));
@@ -113,13 +117,13 @@ public class RobotContainer {
 
     // Forces the robot to face a speaker while the right stick is pressed. 
     //(use down button since stick is easy to release accidentally)
-    m_driverController.a()
-        .onTrue(Commands.runOnce(() -> m_swerveDriveCommand
-            .setTarget(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
-                ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
-                : new Translation2d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY)),
-            m_drive))
-        .onFalse(Commands.runOnce(() -> m_swerveDriveCommand.setTarget(null), m_drive));
+    // m_driverController.a()
+    //     .onTrue(Commands.runOnce(() -> m_swerveDriveCommand
+    //         .setTarget(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+    //             ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
+    //             : new Translation2d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY)),
+    //         m_drive))
+    //     .onFalse(Commands.runOnce(() -> m_swerveDriveCommand.setTarget(null), m_drive));
   }
 
   /**
