@@ -113,7 +113,7 @@ public final class Constants {
      * <p>
      * Source: https://www.swervedrivespecialties.com/products/mk4i-swerve-module
      */
-    public static final double kTurnGearRatio = 1.0 / (150.0 / 7.0);
+    public static final double kTurnGearRatio = (150.0 / 7.0);
 
     // MK4i L1
     // public static final double kDriveGearRatio = 1.0 / ((14.0 / 50.0) * (25.0 /
@@ -187,7 +187,7 @@ public final class Constants {
     public static final int kFrontLeftCANcoderID = 9;
     public static final boolean kFrontLeftDriveMotorInverted = false;
     public static final boolean kFrontLeftTurnMotorInverted = false;
-    public static final double kFrontLeftTurnEncoderOffset = 348.2226; // TODO: should be the value of the encoder when
+    public static final double kFrontLeftTurnEncoderOffset = 213.2226; // TODO: should be the value of the encoder when
                                                                      // the wheel is facing forward
 
     public static final int kFrontRightDriveMotorID = 5;
@@ -195,7 +195,7 @@ public final class Constants {
     public static final int kFrontRightCANcoderID = 10;
     public static final boolean kFrontRightDriveMotorInverted = false;
     public static final boolean kFrontRightTurnMotorInverted = false;
-    public static final double kFrontRightTurnEncoderOffset = 63.8964;
+    public static final double kFrontRightTurnEncoderOffset = 153.8964;
 
     public static final int kBackLeftDriveMotorID = 1;
     public static final int kBackLeftTurnMotorID = 2;
@@ -209,7 +209,7 @@ public final class Constants {
     public static final int kBackRightCANcoderID = 12;
     public static final boolean kBackRightDriveMotorInverted = false;
     public static final boolean kBackRightTurnMotorInverted = false;
-    public static final double kBackRightTurnEncoderOffset = 205.40052;
+    public static final double kBackRightTurnEncoderOffset = 190.40052;
 
     /**
      * The maximum speed of a swerve module's drive motor in meters per second.
@@ -223,7 +223,7 @@ public final class Constants {
   public final static class PIDConstants {
 
     // public static final double kPModuleTurnPosition = .004;
-    public static final double kPModuleTurnPosition = .000004;
+    public static final double kPModuleTurnPosition = .004;
     public static final double kIModuleTurnPosition = 0;
     public static final double kDModuleTurnPosition = 0;
 

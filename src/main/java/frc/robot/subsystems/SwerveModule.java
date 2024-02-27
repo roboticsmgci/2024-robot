@@ -87,7 +87,7 @@ public class SwerveModule extends SubsystemBase {
    * TODO: update this with proper values
    */
   private final SimpleMotorFeedforward m_realFeedforward = new SimpleMotorFeedforward(0, 0.26967587043, 0.00566318889);
-
+  private int test;
   /**
    * Constructs a <code>SwerveModule</code>.
    * 
@@ -103,6 +103,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public SwerveModule(int driveMotorID, int turnMotorID, int cancoderID, boolean driveMotorInverted,
       boolean turnMotorInverted, double turnEncoderOffset) {
+    test = driveMotorID;
     // Set up motors
     // TODO: configure Alternate Encoder Mode if brushless maybe?
     // https://docs.revrobotics.com/sparkmax/operating-modes/using-encoders
@@ -169,7 +170,7 @@ public class SwerveModule extends SubsystemBase {
     // m_turnMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
     // m_turnMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
     // m_turnMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
-
+    initTurnRelativeEncoder();
     // TODO: consider moving this to simulationInit in Robot.java
     if (RobotBase.isSimulation()) {
       // Source for stall torque and free speed:
@@ -272,7 +273,7 @@ public class SwerveModule extends SubsystemBase {
     if (RobotBase.isReal()) {
       // TODO: Not sure if this is necessary. Uncomment if necessary.
       m_turnCANcoder.getAbsolutePosition().waitForUpdate(10);
-
+      System.out.println(m_turnCANcoder.getAbsolutePosition().getValue());
       // Converts absolute encoder value to degrees then subtracts encoder offset then
       // converts back to revolutions.
       m_turnEncoder.setPosition(((m_turnCANcoder.getAbsolutePosition().getValue() * 360) - m_turnEncoderOffset)
@@ -390,6 +391,9 @@ public class SwerveModule extends SubsystemBase {
     // m_driveMotor.setVoltage(
     // RobotController.getBatteryVoltage() * desiredState.speedMetersPerSecond /
     // DrivetrainConstants.kMaxDriveSpeed);
+    if (test == 3) {
+    System.out.println(getTurnAngle() + " " + optimizedDesiredState.angle.getDegrees());
+    }
     if (RobotBase.isReal()) {
       m_driveMotor.setVoltage(m_realFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond)
           + m_driveVelocityPID.calculate(getDriveEncoderVelocityMPS(), optimizedDesiredState.speedMetersPerSecond));
