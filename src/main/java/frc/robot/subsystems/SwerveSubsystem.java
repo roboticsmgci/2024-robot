@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -40,10 +41,6 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
-  /**
-   * Maximum speed of the robot in meters per second, used to limit acceleration.
-   */
-  public double m_maximumSpeed = Units.feetToMeters(14.5);
 
   /**
    * The swerve drive object.
@@ -69,7 +66,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
     try {
-      m_swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(m_maximumSpeed);
+      m_swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(DrivetrainConstants.kMaximumSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON
       // files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed,
@@ -77,11 +74,13 @@ public class SwerveSubsystem extends SubsystemBase {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    m_swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via
-    // angle.
-    m_swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for
-    // simulations since it causes discrepancies
+
+    // Heading correction should only be used while controlling the robot via angle.
+    m_swerveDrive.setHeadingCorrection(false);
+    // Disables cosine compensation for simulations since it causes discrepancies
     // not seen in real life.
+    m_swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation);
+
     setupPathPlanner();
   }
 
@@ -92,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param controllerCfg Swerve Controller.
    */
   public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
-    m_swerveDrive = new SwerveDrive(driveCfg, controllerCfg, m_maximumSpeed);
+    m_swerveDrive = new SwerveDrive(driveCfg, controllerCfg, DrivetrainConstants.kMaximumSpeed);
   }
 
   /**
@@ -105,17 +104,16 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            AutonConstants.TRANSLATION_PID,
             // Translation PID constants
-            AutonConstants.ANGLE_PID,
+            AutonConstants.kTranslationPID,
             // Rotation PID constants
-            4.5,
+            AutonConstants.kAnglePID,
             // Max module speed, in m/s
-            m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+            4.5,
             // Drive base radius in meters. Distance from robot center to furthest module.
-            new ReplanningConfig()
-        // Default path replanning config. See the API for the options here
-        ),
+            m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+            // Default path replanning config. See the API for the options here
+            new ReplanningConfig()),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
@@ -413,7 +411,7 @@ public class SwerveSubsystem extends SubsystemBase {
         headingX,
         headingY,
         getHeading().getRadians(),
-        m_maximumSpeed);
+        DrivetrainConstants.kMaximumSpeed);
   }
 
   /**
@@ -432,7 +430,7 @@ public class SwerveSubsystem extends SubsystemBase {
         yInput,
         angle.getRadians(),
         getHeading().getRadians(),
-        m_maximumSpeed);
+        DrivetrainConstants.kMaximumSpeed);
   }
 
   /**

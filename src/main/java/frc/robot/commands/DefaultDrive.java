@@ -132,7 +132,7 @@ public class DefaultDrive extends Command {
     // Make the robot move
     if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0) {
       resetHeading = true;
-      swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
+      swerve.drive(translation, (Constants.OperatorConstants.kTurnConstant * -headingAdjust.getAsDouble()), true);
     } else {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
     }

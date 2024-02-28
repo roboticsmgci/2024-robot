@@ -33,7 +33,7 @@ public final class Constants {
      * The port index on the Driver Station that the controller is plugged into.
      */
     public static final int kDriverControllerPort = 0;
-    public static final double TURN_CONSTANT    = 6;
+    public static final double kTurnConstant = 6;
   }
 
   public static class DriverConstants {
@@ -57,20 +57,6 @@ public final class Constants {
      * The deadzone to apply to the controller.
      */
     public static final double kControllerDeadzone = 0.1;
-
-    /**
-     * The maximum horizontal speed to move the robot, in meters per second.
-     * <p>
-     * Used for the default swerve drive command.
-     */
-    public static final double kMaxHorizontalSpeed = 3;
-
-    /**
-     * The maximum rotational speed to move the robot, in radians per second.
-     * <p>
-     * Used for the default swerve drive command.
-     */
-    public static final double kMaxRotationalSpeed = 2.5;
 
     /**
      * The rate limit for the x and y control for the robot's drive.
@@ -228,6 +214,8 @@ public final class Constants {
      */
     public static final double kMaxDriveMotorSpeed = 3.25;
 
+    public static final double kMaximumSpeed = Units.feetToMeters(14.5);
+
   }
 
   public final static class PIDValues {
@@ -272,7 +260,7 @@ public final class Constants {
 
   public static final class AutonConstants {
 
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
+    public static final PIDConstants kTranslationPID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants kAnglePID = new PIDConstants(0.4, 0, 0.01);
   }
 }
