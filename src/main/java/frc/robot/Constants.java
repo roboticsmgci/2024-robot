@@ -33,10 +33,6 @@ public final class Constants {
      * The port index on the Driver Station that the controller is plugged into.
      */
     public static final int kDriverControllerPort = 0;
-
-    public static final double LEFT_X_DEADBAND  = 0.1;
-    public static final double LEFT_Y_DEADBAND  = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
 

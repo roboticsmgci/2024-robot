@@ -6,11 +6,13 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
@@ -47,9 +49,9 @@ public class RobotContainer {
    */
   private final DefaultDrive m_swerveDriveCommand = new DefaultDrive(
       m_drive,
-      () -> -m_driverController.getLeftY(),
-      () -> -m_driverController.getLeftX(),
-      () -> -m_driverController.getRightX(),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
+      () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone),
       () -> false,
       () -> false,
       () -> false,
