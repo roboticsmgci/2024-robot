@@ -272,17 +272,15 @@ public class SwerveSubsystem extends SubsystemBase {
    * how the translation vector is used.
    *
    * @param translation   {@link Translation2d} that is the commanded linear
-   *                      velocity of the robot, in meters per
-   *                      second. In robot-relative mode, positive x is torwards
-   *                      the bow (front) and positive y is
-   *                      torwards port (left). In field-relative mode, positive x
-   *                      is away from the alliance wall
-   *                      (field North) and positive y is torwards the left wall
-   *                      when looking through the driver station
+   *                      velocity of the robot, in meters per second. In
+   *                      robot-relative mode, positive x is torwards the bow
+   *                      (front) and positive y is torwards port (left). In
+   *                      field-relative mode, positive x is away from the
+   *                      alliance wall (field North) and positive y is torwards
+   *                      the left wall when looking through the driver station
    *                      glass (field West).
    * @param rotation      Robot angular rate, in radians per second. CCW positive.
-   *                      Unaffected by field/robot
-   *                      relativity.
+   *                      Unaffected by field/robot relativity.
    * @param fieldRelative Drive mode. True for field-relative, false for
    *                      robot-relative.
    */
@@ -313,6 +311,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
   }
 
   @Override
@@ -330,10 +329,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Resets odometry to the given pose. Gyro angle and module positions do not
-   * need to be reset when calling this
-   * method. However, if either gyro angle or module position is reset, this must
-   * be called in order for odometry to
-   * keep working.
+   * need to be reset when calling this method. However, if either gyro angle or
+   * module position is reset, this must be called in order for odometry to keep
+   * working.
    *
    * @param initialHolonomicPose The pose to set the odometry to
    */
@@ -388,9 +386,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Gets the current yaw angle of the robot, as reported by the swerve pose
-   * estimator in the underlying drivebase.
-   * Note, this is not the raw gyro reading, this may be corrected from calls to
-   * resetOdometry().
+   * estimator in the underlying drivebase. Note, this is not the raw gyro
+   * reading, this may be corrected from calls to resetOdometry().
    *
    * @return The yaw angle
    */
@@ -400,8 +397,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Get the chassis speeds based on controller input of 2 joysticks. One for
-   * speeds in which direction. The other for
-   * the angle of the robot.
+   * speeds in which direction. The other for the angle of the robot.
    *
    * @param xInput   X joystick input for the robot to move in the X direction.
    * @param yInput   Y joystick input for the robot to move in the Y direction.
@@ -422,8 +418,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Get the chassis speeds based on controller input of 1 joystick and one angle.
-   * Control the robot at an offset of
-   * 90deg.
+   * Control the robot at an offset of 90deg.
    *
    * @param xInput X joystick input for the robot to move in the X direction.
    * @param yInput Y joystick input for the robot to move in the Y direction.

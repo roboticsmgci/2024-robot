@@ -64,7 +64,11 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    m_drive.setDefaultCommand(m_swerveDriveCommand);
+    // m_drive.setDefaultCommand(m_swerveDriveCommand);
+    m_drive.setDefaultCommand(m_drive.driveCommand(
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
+      () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone)));
 
     // m_drive.setDefaultCommand(new LockToTarget(
     // m_drive,
