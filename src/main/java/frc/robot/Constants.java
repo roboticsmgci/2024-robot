@@ -81,23 +81,6 @@ public final class Constants {
 
   }
 
-  public final static class PIDValues {
-
-    // public static final double kPModuleTurnPosition = .004;
-    public static final double kPModuleTurnPosition = .004;
-    public static final double kIModuleTurnPosition = 0;
-    public static final double kDModuleTurnPosition = 0;
-
-    public static final double kPModuleDriveVelocity = .000004;
-    public static final double kIModuleDriveVelocity = 0;
-    public static final double kDModuleDriveVelocity = 0;
-
-    public static final double kPLockTargetRotSpeed = .1;
-    public static final double kILockTargetRotSpeed = 0;
-    public static final double kDLockTargetRotSpeed = 0;
-
-  }
-
   public final static class FieldConstants {
     /**
      * The x-coordinate of the center of the blue speaker.
