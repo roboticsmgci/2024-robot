@@ -84,7 +84,7 @@ public final class Constants {
   public final static class PIDValues {
 
     // public static final double kPModuleTurnPosition = .004;
-    public static final double kPModuleTurnPosition = .000004;
+    public static final double kPModuleTurnPosition = .004;
     public static final double kIModuleTurnPosition = 0;
     public static final double kDModuleTurnPosition = 0;
 
