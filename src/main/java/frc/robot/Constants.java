@@ -57,12 +57,14 @@ public final class Constants {
     public static final double kControllerDeadzone = 0.1;
 
     /**
-     * The multiplier for the default driving speed, between 0-1. 1 means maximum speed.
+     * The multiplier for the default driving speed, between 0-1. 1 means maximum
+     * speed.
      */
     public static final double kDefaultSpeed = 0.75;
 
     /**
-     * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum speed.
+     * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum
+     * speed.
      */
     public static final double kSlowSpeed = 0.25;
   }
@@ -70,9 +72,12 @@ public final class Constants {
   public static class DrivetrainConstants {
 
     /**
-     * The maximum speed of the robot, in meters per second. This must be measured empirically.
+     * The maximum speed of the robot, in meters per second. This ideally should be
+     * measured empirically.
+     * <p>
+     * Currently it's based on the free speed specified in the MK4i docs.
      */
-    public static final double kMaximumSpeed = 4.1 / 3.11 * 4;
+    public static final double kMaximumSpeed = Units.feetToMeters(16.6);
 
     /**
      * The total mass of the robot, in kilograms.
@@ -80,14 +85,16 @@ public final class Constants {
     public static final double kRobotMass = Units.lbsToKilograms(40);
 
     /**
-     * A list of {@link Matter} objects that represent the robot chassis's various parts.
+     * A list of {@link Matter} objects that represent the robot chassis's various
+     * parts.
      */
-    public static final List<Matter> kChassis = List.of(new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), kRobotMass));
-    
+    public static final List<Matter> kChassis = List
+        .of(new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), kRobotMass));
+
     /**
      * The time it takes for the velocity of the robot to be updated, in seconds.
      */
-    public static final double kLoopTime = 0.13; //s, 20ms + 110ms sprk max velocity lag
+    public static final double kLoopTime = 0.13; // s, 20ms + 110ms sprk max velocity lag
 
   }
 
@@ -121,8 +128,8 @@ public final class Constants {
   }
 
   public static final class PIDValues {
-    public static final double kPLockTargetRotSpeed = 0.1;
+    public static final double kPLockTargetRotSpeed = 0.5;
     public static final double kILockTargetRotSpeed = 0;
-    public static final double kDLockTargetRotSpeed = 0.0001;
+    public static final double kDLockTargetRotSpeed = 0;
   }
 }

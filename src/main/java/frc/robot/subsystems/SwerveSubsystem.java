@@ -214,9 +214,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
       DoubleSupplier angularRotationX) {
     return run(() -> {
-      double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
-      double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
-
       if (m_target == null) {
         // Make the robot move
         m_swerveDrive.drive(
@@ -226,7 +223,6 @@ public class SwerveSubsystem extends SubsystemBase {
             true,
             false);
       } else {
-        System.out.println(getHeading().getDegrees() + " " + getDesiredHeading(getPose(), m_target));
         m_swerveDrive.drive(
             new Translation2d(Math.pow(translationX.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
                 Math.pow(translationY.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
