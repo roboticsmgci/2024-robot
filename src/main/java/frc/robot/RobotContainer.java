@@ -7,8 +7,10 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,14 +41,16 @@ public class RobotContainer {
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(
+  public final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
+    private final Controller m_controller = new Controller(m_driverController);
 
   /**
    * The PathPlanner auto command chooser.
    */
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto");
 
+  private double crad = 0;
   /**
    * The default swerve drive command.
    */
@@ -60,18 +64,28 @@ public class RobotContainer {
       () -> false,
       () -> false);
 
+
+    public void log(){
+        crad=Math.max(Math.hypot(m_controller.getRawAxis(0), m_controller.getRawAxis(1)),crad);
+    SmartDashboard.putNumber("controller radius", crad);
+    SmartDashboard.putNumber("pose x", m_drive.getPose().getX());
+    SmartDashboard.putNumber("pose y", m_drive.getPose().getY());
+    }
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    m_drive.resetOdometry(new Pose2d());
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(
-        () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
-        () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
-        () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone)));
+        () -> m_controller.getAxis(0), () -> m_controller.getAxis(1), () -> -m_controller.getAxis(4)));
+        // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
+        // () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
+        // () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone)));
 
     // m_drive.setDefaultCommand(new LockToTarget(
     // m_drive,
@@ -80,6 +94,7 @@ public class RobotContainer {
     // () -> -m_driverController.getLeftX()));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    
   }
 
   /**
@@ -124,13 +139,9 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kSlowSpeed)))
         .onFalse(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kDefaultSpeed)));
 
-    // m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(Commands.runOnce(()->SwerveDrive.slowFactor=0.5)).
-    // onFalse(Commands.runOnce(()->SwerveDrive.slowFactor=0.5));
-    // for toggle use conditionalcommand
-
     // Forces the robot to face a speaker while the right stick is pressed.
     // (use down button since stick is easy to release accidentally)
-    m_driverController.a()
+    m_controller.getButton(1)
         .onTrue(Commands.runOnce(() -> m_drive
             .setTarget(DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red

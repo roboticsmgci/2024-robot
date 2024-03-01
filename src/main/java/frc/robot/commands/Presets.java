@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-public final class Autos {
+public final class Presets {
   /** Example static factory for an autonomous command. */
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
@@ -36,7 +36,7 @@ public final class Autos {
     return new ArmSet(arm, ()->1, ()->0);
   }
 
-  private Autos() {
+  private Presets() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
 }

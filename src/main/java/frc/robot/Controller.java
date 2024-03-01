@@ -1,25 +1,37 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Controller {
-    private final GenericHID controller;
-    private double[] errors = new double[4];
+    private final CommandGenericHID controller;
+    private double[] errors = new double[6];
     private double sectorAngle = 0.28255495247;
-    private double maxRadius = 1.14127122105;
+    private double maxRadius = 1.408973;
 
-    public Controller(int id){
-        controller = new GenericHID(id);
+    public Controller(CommandGenericHID controller){
+        this.controller = controller;
         for(int i=0; i<errors.length; i++){
             errors[i] = controller.getRawAxis(i);
         }
     }
 
+    public CommandGenericHID getController(){
+        return controller;
+    }
+
+    public Trigger getButton(int button){
+        return controller.button(button);
+    }
+
     // Map the input of the joystick to a circle
     public double getAxis(int axis){
-        double x = Math.abs(getRawAxis(axis-axis%0));
-        if(x==0){x = 0.0000001;}
-        double y = Math.abs(getRawAxis(axis-axis%0+1));
+        double x = Math.abs(getRawAxis(axis-axis%2));
+        double y = Math.abs(getRawAxis(axis-axis%2+1));
         double angle = Math.atan2(y, x);
         double magnitude = 1;
 

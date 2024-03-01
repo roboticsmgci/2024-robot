@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
       visionProcess.start();
     }
   }
+  
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -80,6 +81,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.log();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

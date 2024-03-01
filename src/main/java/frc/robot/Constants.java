@@ -54,19 +54,19 @@ public final class Constants {
     /**
      * The deadzone to apply to the controller.
      */
-    public static final double kControllerDeadzone = 0.1;
+    public static final double kControllerDeadzone = 0.0;
 
     /**
      * The multiplier for the default driving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kDefaultSpeed = 0.75;
+    public static final double kDefaultSpeed = 0.6;
 
     /**
      * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kSlowSpeed = 0.25;
+    public static final double kSlowSpeed = 0.1;
   }
 
   public static class DrivetrainConstants {
@@ -102,22 +102,26 @@ public final class Constants {
     /**
      * The x-coordinate of the center of the blue speaker.
      */
-    public static final double kBlueSpeakerX = Units.inchesToMeters(9);
+    //9
+    public static final double kBlueSpeakerX = Units.inchesToMeters(0);
 
     /**
      * The y-coordinate of the center of the blue speaker.
      */
-    public static final double kBlueSpeakerY = Units.inchesToMeters(218.64);
+    //218.64
+    public static final double kBlueSpeakerY = Units.inchesToMeters(0);
 
     /**
      * The x-coordinate of the center of the red speaker.
      */
-    public static final double kRedSpeakerX = Units.inchesToMeters(642.25);
+    //642.25
+    public static final double kRedSpeakerX = Units.inchesToMeters(0);
 
     /**
      * The y-coordinate of the center of the red speaker.
      */
-    public static final double kRedSpeakerY = Units.inchesToMeters(218.64);
+    //218.64
+    public static final double kRedSpeakerY = Units.inchesToMeters(0);
 
   }
 
