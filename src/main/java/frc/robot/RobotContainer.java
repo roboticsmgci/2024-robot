@@ -7,6 +7,8 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,10 +16,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SlowDown;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -67,9 +69,9 @@ public class RobotContainer {
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(
-      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
-      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
-      () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone)));
+        () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
+        () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
+        () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone)));
 
     // m_drive.setDefaultCommand(new LockToTarget(
     // m_drive,
@@ -106,30 +108,36 @@ public class RobotContainer {
     // m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
-    //m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
+    // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     // TODO: remove this after sysid is done
-    m_driverController.a().whileTrue(m_drive.sysIdDriveMotorCommand());
-    m_driverController.b().whileTrue(m_drive.sysIdAngleMotorCommand());
+    // m_driverController.a().whileTrue(m_drive.sysIdDriveMotorCommand());
+    // m_driverController.b().whileTrue(m_drive.sysIdAngleMotorCommand());
 
-    // m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
+    // m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new
+    // ResetGyro(m_drive));
     m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(m_drive::zeroGyro));
-    //m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(()->m_drive.resetGyro()));
+    // m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(()->m_drive.resetGyro()));
 
-    m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(new SlowDown(m_drive));
+    m_driverController.leftTrigger()
+        .and(m_driverController.rightTrigger())
+        .onTrue(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kSlowSpeed)))
+        .onFalse(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kDefaultSpeed)));
+
     // m_driverController.leftTrigger().and(m_driverController.rightTrigger()).onTrue(Commands.runOnce(()->SwerveDrive.slowFactor=0.5)).
     // onFalse(Commands.runOnce(()->SwerveDrive.slowFactor=0.5));
-    //for toggle use conditionalcommand
+    // for toggle use conditionalcommand
 
-    // Forces the robot to face a speaker while the right stick is pressed. 
-    //(use down button since stick is easy to release accidentally)
-    // m_driverController.a()
-    //     .onTrue(Commands.runOnce(() -> m_swerveDriveCommand
-    //         .setTarget(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
-    //             ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
-    //             : new Translation2d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY)),
-    //         m_drive))
-    //     .onFalse(Commands.runOnce(() -> m_swerveDriveCommand.setTarget(null), m_drive));
+    // Forces the robot to face a speaker while the right stick is pressed.
+    // (use down button since stick is easy to release accidentally)
+    m_driverController.a()
+        .onTrue(Commands.runOnce(() -> m_drive
+            .setTarget(DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+                    ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
+                    : new Translation2d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY)),
+            m_drive))
+        .onFalse(Commands.runOnce(() -> m_drive.setTarget(null), m_drive));
   }
 
   /**

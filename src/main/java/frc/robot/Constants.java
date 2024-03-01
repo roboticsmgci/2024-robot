@@ -55,6 +55,16 @@ public final class Constants {
      * The deadzone to apply to the controller.
      */
     public static final double kControllerDeadzone = 0.1;
+
+    /**
+     * The multiplier for the default driving speed, between 0-1. 1 means maximum speed.
+     */
+    public static final double kDefaultSpeed = 0.75;
+
+    /**
+     * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum speed.
+     */
+    public static final double kSlowSpeed = 0.25;
   }
 
   public static class DrivetrainConstants {
@@ -108,5 +118,11 @@ public final class Constants {
 
     public static final PIDConstants kTranslationPID = new PIDConstants(0.7, 0, 0);
     public static final PIDConstants kAnglePID = new PIDConstants(0.4, 0, 0.01);
+  }
+
+  public static final class PIDValues {
+    public static final double kPLockTargetRotSpeed = 0.1;
+    public static final double kILockTargetRotSpeed = 0;
+    public static final double kDLockTargetRotSpeed = 0.0001;
   }
 }

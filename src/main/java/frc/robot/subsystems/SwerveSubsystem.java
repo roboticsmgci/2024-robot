@@ -15,9 +15,9 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -31,11 +31,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.PIDValues;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
-import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -54,7 +55,14 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private boolean m_isFieldOriented = false;
 
-  private double m_slowFactor = 0.25;
+  private double m_slowFactor = DriverConstants.kDefaultSpeed;
+
+  private Translation2d m_target;
+
+  private final PIDController m_rotSpeedPID = new PIDController(
+      PIDValues.kPLockTargetRotSpeed,
+      PIDValues.kILockTargetRotSpeed,
+      PIDValues.kDLockTargetRotSpeed);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -192,6 +200,62 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Command to drive the robot using translative values and heading as angular
+   * velocity.
+   *
+   * @param translationX     Translation in the X direction. Cubed for smoother
+   *                         controls.
+   * @param translationY     Translation in the Y direction. Cubed for smoother
+   *                         controls.
+   * @param angularRotationX Angular velocity of the robot to set. Cubed for
+   *                         smoother controls.
+   * @return Drive command.
+   */
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
+      DoubleSupplier angularRotationX) {
+    return run(() -> {
+      double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
+      double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
+
+      if (m_target == null) {
+        // Make the robot move
+        m_swerveDrive.drive(
+            new Translation2d(Math.pow(translationX.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
+                Math.pow(translationY.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
+            Math.pow(angularRotationX.getAsDouble(), 3) * m_swerveDrive.getMaximumAngularVelocity() * m_slowFactor,
+            true,
+            false);
+      } else {
+        System.out.println(getHeading().getDegrees() + " " + getDesiredHeading(getPose(), m_target));
+        m_swerveDrive.drive(
+            new Translation2d(Math.pow(translationX.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
+                Math.pow(translationY.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
+            m_rotSpeedPID.calculate(getHeading().getDegrees(), getDesiredHeading(getPose(), m_target)),
+            true,
+            false);
+      }
+    });
+  }
+
+  /**
+   * Calculates the heading the robot should face based on the robot's current
+   * pose and the target.
+   * 
+   * @param currentPose    the robot's current pose
+   * @param targetLocation the location of the target
+   * @return the heading the robot should face
+   */
+  private double getDesiredHeading(Pose2d currentPose, Translation2d targetLocation) {
+    // if(m_drive.momentum){
+    //   return m_drive.targetHelper(5, 0, 
+    //   Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
+    // }
+    return Math.toDegrees(
+        Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
+    
+  }
+
+  /**
    * Command to drive the robot using translative values and heading as a
    * setpoint.
    *
@@ -237,31 +301,6 @@ public class SwerveSubsystem extends SubsystemBase {
             new Config(),
             this, m_swerveDrive),
         3.0, 5.0, 3.0).finallyDo(() -> System.out.println("angle sys id done"));
-  }
-
-  /**
-   * Command to drive the robot using translative values and heading as angular
-   * velocity.
-   *
-   * @param translationX     Translation in the X direction. Cubed for smoother
-   *                         controls.
-   * @param translationY     Translation in the Y direction. Cubed for smoother
-   *                         controls.
-   * @param angularRotationX Angular velocity of the robot to set. Cubed for
-   *                         smoother controls.
-   * @return Drive command.
-   */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
-      DoubleSupplier angularRotationX) {
-    return run(() -> {
-      // Make the robot move
-      m_swerveDrive.drive(
-          new Translation2d(Math.pow(translationX.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
-              Math.pow(translationY.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
-          Math.pow(angularRotationX.getAsDouble(), 3) * m_swerveDrive.getMaximumAngularVelocity() * m_slowFactor,
-          true,
-          false);
-    });
   }
 
   /**
@@ -515,7 +554,11 @@ public class SwerveSubsystem extends SubsystemBase {
     m_isFieldOriented = isFieldOriented;
   }
 
-  // public void setMaximumSpeed(double maximumSpeed) {
-  //   m
-  // }
+  public void setSlowFactor(double slowFactor) {
+    m_slowFactor = slowFactor;
+  }
+
+  public void setTarget(Translation2d target) {
+    m_target = target;
+  }
 }
