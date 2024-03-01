@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Translation3d;
@@ -23,10 +25,6 @@ import swervelib.math.Matter;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
   public static class OperatorConstants {
     /**
@@ -57,164 +55,29 @@ public final class Constants {
      * The deadzone to apply to the controller.
      */
     public static final double kControllerDeadzone = 0.1;
-
-    /**
-     * The rate limit for the x and y control for the robot's drive.
-     * <p>
-     * Used for the slew rate limiter for the robot's drive.
-     */
-    public static final double kHorizontalRateLimit = 4;
-
-    /**
-     * The rate limit for the rotational control for the robot's drive.
-     * <p>
-     * Used for the slew rate limiter for the robot's drive.
-     */
-    public static final double kRotationalRateLimit = 6;
   }
 
   public static class DrivetrainConstants {
-    // TODO: update dimensions
-    // Dimensions in meters
-    /**
-     * The width of the robot, left to right, in meters.
-     */
-    public static final double kTrackWidth = Units.inchesToMeters(25.27559); // Distance left-right
-    /**
-     * The length of the robot, front to back, in meters.
-     */
-    public static final double kWheelBase = Units.inchesToMeters(25.27559); // Distance forwards-backwards
-    /**
-     * The diameter of the robot's wheels, in meters.
-     */
-    private static final double kWheelDiameter = Units.inchesToMeters(4);
-
-    // TODO: potentially update current limits
-    /**
-     * The smart current limit of the turn motor, in Amps.
-     */
-    public static final int kTurnMotorSmartLimit = 20;
 
     /**
-     * The smart current limit of the drive motor, in Amps.
+     * The maximum speed of the robot, in meters per second. This must be measured empirically.
      */
-    public static final int kDriveMotorSmartLimit = 20;
-
-    // TODO: potentially update volt compensation
-    public static final double kVoltCompensation = 8;
+    public static final double kMaximumSpeed = 4.1 / 3.11 * 4;
 
     /**
-     * The turn gear ratio for the MK4i module. This is the same regardless of the
-     * configuration (L1, L2, L3) being used.
-     * <p>
-     * Source: https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+     * The total mass of the robot, in kilograms.
      */
-    public static final double kTurnGearRatio = 1.0 / (150.0 / 7.0);
-
-    // MK4i L1
-    // public static final double kDriveGearRatio = 1.0 / ((14.0 / 50.0) * (25.0 /
-    // 19.0) * (15.0 / 45.0));
-    // MK4i L2
-    // public static final double kDriveGearRatio = 1 / ((14.0 / 50.0) * (27.0 /
-    // 17.0) * (15.0 / 45.0));
-    // MK4i L3
-    /**
-     * The drive gear ratio for the MK4i module, using the L3 configuration.
-     * <p>
-     * Source: Source:
-     * https://www.swervedrivespecialties.com/products/mk4i-swerve-module
-     */
-    public static final double kDriveGearRatio = 1 / ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0));
-
-    // Multiply by degrees, divide by gear ratio
-    /**
-     * The number of degrees turned per revolution of the turn motor. This can be
-     * used to convert the encoder value (which is in number of revolutions by
-     * default) into degrees.
-     * <p>
-     * This is calculated by dividing 360 by the gear ratio.
-     */
-    public static final double kTurnDegreesPerEncoderRev = 360.0 / kTurnGearRatio;
+    public static final double kRobotMass = Units.lbsToKilograms(40);
 
     /**
-     * The number of meters driven per revolution of the drive motor. This can be
-     * used to convert the encoder value (which is in number of revolutions
-     * by default) into meters.
-     * <p>
-     * This is calculated by dividing the wheel circumference by the gear ratio.
+     * A list of {@link Matter} objects that represent the robot chassis's various parts.
      */
-    public static final double kDriveMetersPerEncoderRev = (kWheelDiameter * Math.PI) / kDriveGearRatio;
-
+    public static final List<Matter> kChassis = List.of(new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), kRobotMass));
+    
     /**
-     * The stall torque of the turn motor in Newton-meters.
-     * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source:
-     * https://www.revrobotics.com/rev-21-1650/
+     * The time it takes for the velocity of the robot to be updated, in seconds.
      */
-    public static final float kTurnMotorStallTorque = 2.6f;
-
-    /**
-     * The free speed of the turn motor in RPM.
-     * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source:
-     * https://www.revrobotics.com/rev-21-1650/
-     */
-    public static final int kTurnMotorFreeSpeed = 5676;
-
-    /**
-     * The stall torque of the drive motor in Newton-meters.
-     * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source:
-     * https://www.revrobotics.com/rev-21-1650/
-     */
-    public static final float kDriveMotorStallTorque = 2.6f;
-
-    /**
-     * The free speed of the drive motor in RPM.
-     * <p>
-     * This value is for the NEO Brushless Motor V1.1. Source:
-     * https://www.revrobotics.com/rev-21-1650/
-     */
-    public static final int kDriveMotorFreeSpeed = 5676;
-
-    // TODO: update motor IDs
-    public static final int kFrontLeftDriveMotorID = 3;
-    public static final int kFrontLeftTurnMotorID = 4;
-    public static final int kFrontLeftCANcoderID = 9;
-    public static final boolean kFrontLeftDriveMotorInverted = false;
-    public static final boolean kFrontLeftTurnMotorInverted = false;
-    public static final double kFrontLeftTurnEncoderOffset = 348.2226; // TODO: should be the value of the encoder when
-                                                                     // the wheel is facing forward
-
-    public static final int kFrontRightDriveMotorID = 5;
-    public static final int kFrontRightTurnMotorID = 6;
-    public static final int kFrontRightCANcoderID = 10;
-    public static final boolean kFrontRightDriveMotorInverted = false;
-    public static final boolean kFrontRightTurnMotorInverted = false;
-    public static final double kFrontRightTurnEncoderOffset = 63.8964;
-
-    public static final int kBackLeftDriveMotorID = 1;
-    public static final int kBackLeftTurnMotorID = 2;
-    public static final int kBackLeftCANcoderID = 11;
-    public static final boolean kBackLeftDriveMotorInverted = false;
-    public static final boolean kBackLeftTurnMotorInverted = false;
-    public static final double kBackLeftTurnEncoderOffset = 246.79692;
-
-    public static final int kBackRightDriveMotorID = 7;
-    public static final int kBackRightTurnMotorID = 8;
-    public static final int kBackRightCANcoderID = 12;
-    public static final boolean kBackRightDriveMotorInverted = false;
-    public static final boolean kBackRightTurnMotorInverted = false;
-    public static final double kBackRightTurnEncoderOffset = 205.40052;
-
-    /**
-     * The maximum speed of a swerve module's drive motor in meters per second.
-     * <p>
-     * TODO: this must be determined experimentally. An underestimation is fine.
-     */
-    public static final double kMaxDriveMotorSpeed = 3.25;
-
-    public static final double kMaximumSpeed = Units.feetToMeters(14.5);
+    public static final double kLoopTime = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
   }
 

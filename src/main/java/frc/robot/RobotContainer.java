@@ -108,6 +108,10 @@ public class RobotContainer {
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
     //m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
+    // TODO: remove this after sysid is done
+    m_driverController.a().whileTrue(m_drive.sysIdDriveMotorCommand());
+    m_driverController.b().whileTrue(m_drive.sysIdAngleMotorCommand());
+
     // m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(new ResetGyro(m_drive));
     m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(m_drive::zeroGyro));
     //m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(()->m_drive.resetGyro()));

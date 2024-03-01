@@ -54,6 +54,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private boolean m_isFieldOriented = false;
 
+  private double m_slowFactor = 0.25;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -91,9 +93,9 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param driveCfg      SwerveDriveConfiguration for the swerve.
    * @param controllerCfg Swerve Controller.
    */
-  public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
-    m_swerveDrive = new SwerveDrive(driveCfg, controllerCfg, DrivetrainConstants.kMaximumSpeed);
-  }
+  // public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
+  //   m_swerveDrive = new SwerveDrive(driveCfg, controllerCfg, DrivetrainConstants.kMaximumSpeed);
+  // }
 
   /**
    * Setup AutoBuilder for PathPlanner.
@@ -254,9 +256,9 @@ public class SwerveSubsystem extends SubsystemBase {
     return run(() -> {
       // Make the robot move
       m_swerveDrive.drive(
-          new Translation2d(Math.pow(translationX.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity(),
-              Math.pow(translationY.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity()),
-          Math.pow(angularRotationX.getAsDouble(), 3) * m_swerveDrive.getMaximumAngularVelocity(),
+          new Translation2d(Math.pow(translationX.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
+              Math.pow(translationY.getAsDouble(), 3) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
+          Math.pow(angularRotationX.getAsDouble(), 3) * m_swerveDrive.getMaximumAngularVelocity() * m_slowFactor,
           true,
           false);
     });
@@ -512,4 +514,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setIsFieldOriented(boolean isFieldOriented) {
     m_isFieldOriented = isFieldOriented;
   }
+
+  // public void setMaximumSpeed(double maximumSpeed) {
+  //   m
+  // }
 }
