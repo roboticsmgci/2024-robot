@@ -223,7 +223,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveDriveTest.setDriveSysIdRoutine(
             new Config(),
             this, m_swerveDrive, 12),
-        3.0, 5.0, 3.0);
+        3.0, 5.0, 3.0).finallyDo(() -> System.out.println("drive sys id done"));
   }
 
   /**
@@ -236,7 +236,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveDriveTest.setAngleSysIdRoutine(
             new Config(),
             this, m_swerveDrive),
-        3.0, 5.0, 3.0);
+        3.0, 5.0, 3.0).finallyDo(() -> System.out.println("angle sys id done"));
   }
 
   /**
