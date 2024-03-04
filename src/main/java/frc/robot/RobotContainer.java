@@ -80,7 +80,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     m_drive.resetOdometry(new Pose2d());
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.NONE;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(

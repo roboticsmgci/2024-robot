@@ -73,7 +73,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
     // objects being created.
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.NONE;
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
     try {
@@ -218,6 +218,7 @@ public class SwerveSubsystem extends SubsystemBase {
       DoubleSupplier angularRotationX) {
     return run(() -> {
       if (m_target == null) {
+        // System.out.println(translationX.getAsDouble());
         // System.out.println(translationX.getAsDouble() + " " + translationY.getAsDouble() + " " + angularRotationX.getAsDouble());
         // Make the robot move
         m_swerveDrive.drive(
@@ -352,7 +353,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_swerveDrive.updateOdometry();
+    // m_swerveDrive.updateOdometry();
   }
 
   @Override
