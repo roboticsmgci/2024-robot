@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -132,7 +133,7 @@ public final class Constants {
   }
 
   public static final class PIDValues {
-    public static final double kPLockTargetRotSpeed = 0.5;
+    public static final double kPLockTargetRotSpeed = 0.2;
     public static final double kILockTargetRotSpeed = 0;
     public static final double kDLockTargetRotSpeed = 0;
   }
