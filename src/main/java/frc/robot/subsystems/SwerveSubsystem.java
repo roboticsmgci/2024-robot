@@ -92,6 +92,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // not seen in real life.
     m_swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation);
 
+    m_rotSpeedPID.enableContinuousInput(-180, 180);
+
     setupPathPlanner();
   }
 
