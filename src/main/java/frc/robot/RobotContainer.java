@@ -25,6 +25,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -79,6 +81,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     m_drive.resetOdometry(new Pose2d());
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.NONE;
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(
