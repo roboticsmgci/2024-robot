@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Controller {
-    private final CommandGenericHID controller;
-    private double[] errors = new double[6];
+    public final CommandGenericHID controller;
+    public double[] errors = new double[6];
     private double sectorAngle = 0.28255495247;
     private double maxRadius = 1.408973;
 
     public Controller(CommandGenericHID controller){
         this.controller = controller;
-        for(int i=0; i<errors.length; i++){
-            errors[i] = controller.getRawAxis(i);
-        }
+        // for(int i=0; i<errors.length; i++){
+        //     errors[i] = controller.getRawAxis(i);
+        // }
     }
 
     public CommandGenericHID getController(){

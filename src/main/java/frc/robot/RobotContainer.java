@@ -45,7 +45,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
-    private final Controller m_controller = new Controller(m_driverController);
+  private final Controller m_controller = new Controller(m_driverController);
 
   /**
    * The PathPlanner auto command chooser.
@@ -58,21 +58,20 @@ public class RobotContainer {
    */
   private final DefaultDrive m_swerveDriveCommand = new DefaultDrive(
       m_drive,
-      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
-      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
-      () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadband),
+      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadband),
+      () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadband),
       () -> false,
       () -> false,
       () -> false,
       () -> false);
 
-
-    public void log(){
-        crad=Math.max(Math.hypot(m_controller.getRawAxis(0), m_controller.getRawAxis(1)),crad);
+  public void log() {
+    crad = Math.max(Math.hypot(m_controller.getRawAxis(0), m_controller.getRawAxis(1)), crad);
     SmartDashboard.putNumber("controller radius", crad);
     SmartDashboard.putNumber("pose x", m_drive.getPose().getX());
     SmartDashboard.putNumber("pose y", m_drive.getPose().getY());
-    }
+  }
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -85,10 +84,15 @@ public class RobotContainer {
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(
-        () -> m_controller.getAxis(0), () -> m_controller.getAxis(1), () -> -m_controller.getAxis(4)));
-        // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadzone),
-        // () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadzone),
-        // () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadzone)));
+        () -> MathUtil.applyDeadband(m_controller.getAxis(0), DriverConstants.kControllerDeadband),
+        () -> MathUtil.applyDeadband(m_controller.getAxis(1), DriverConstants.kControllerDeadband),
+        () -> -MathUtil.applyDeadband(m_controller.getAxis(4), DriverConstants.kControllerDeadband)));
+    // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
+    // DriverConstants.kControllerDeadzone),
+    // () -> -MathUtil.applyDeadband(m_driverController.getLeftX(),
+    // DriverConstants.kControllerDeadzone),
+    // () -> -MathUtil.applyDeadband(m_driverController.getRightX(),
+    // DriverConstants.kControllerDeadzone)));
 
     // m_drive.setDefaultCommand(new LockToTarget(
     // m_drive,
@@ -97,7 +101,7 @@ public class RobotContainer {
     // () -> -m_driverController.getLeftX()));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    
+
   }
 
   /**
@@ -164,5 +168,18 @@ public class RobotContainer {
     // return Autos.exampleAuto(m_exampleSubsystem);
 
     return autoChooser.getSelected();
+  }
+
+  /**
+   * Update the controller errors if it hasn't been updated yet.
+   */
+  public void updateControllerErrors() {
+    // System.out.println(P"hello");
+    if (m_controller.controller.getRawAxis(0) != 0 && m_controller.errors[0] == 0) {
+      // System.out.println("updated");
+      for (int i = 0; i < m_controller.errors.length; i++) {
+        m_controller.errors[i] = m_controller.controller.getRawAxis(i);
+      }
+    }
   }
 }

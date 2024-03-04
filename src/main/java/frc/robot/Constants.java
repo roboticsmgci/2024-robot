@@ -53,21 +53,21 @@ public final class Constants {
     public static final boolean kStartFieldOriented = true;
 
     /**
-     * The deadzone to apply to the controller.
+     * The deadband to apply to the controller.
      */
-    public static final double kControllerDeadzone = 0.0;
+    public static final double kControllerDeadband = 0.05; // Can change this depending on controller being used
 
     /**
      * The multiplier for the default driving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kDefaultSpeed = 0.6;
+    public static final double kDefaultSpeed = 0.75;
 
     /**
      * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kSlowSpeed = 0.1;
+    public static final double kSlowSpeed = 0.25;
   }
 
   public static class DrivetrainConstants {

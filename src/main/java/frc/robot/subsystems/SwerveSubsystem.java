@@ -92,6 +92,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // not seen in real life.
     m_swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation);
 
+    m_rotSpeedPID.enableContinuousInput(-180, 180);
+
     setupPathPlanner();
   }
 
@@ -216,6 +218,7 @@ public class SwerveSubsystem extends SubsystemBase {
       DoubleSupplier angularRotationX) {
     return run(() -> {
       if (m_target == null) {
+        // System.out.println(translationX.getAsDouble() + " " + translationY.getAsDouble() + " " + angularRotationX.getAsDouble());
         // Make the robot move
         m_swerveDrive.drive(
           //try exponent as 1 to make it linear, originally 3
