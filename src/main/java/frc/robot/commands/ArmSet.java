@@ -31,7 +31,7 @@ public class ArmSet extends Command {
   @Override
   public void execute() {
     m_arm.setArm1(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble()));
-    m_arm.setArm2(m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target1.getAsDouble()));
+    m_arm.setArm2(m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble()));
   }
 
   // Called once the command ends or is interrupted.
