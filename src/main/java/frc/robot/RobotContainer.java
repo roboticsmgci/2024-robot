@@ -10,7 +10,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +22,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ToggleFieldOriented;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -41,6 +41,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
+
+  private final Arm m_arm = new Arm();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_driverController = new CommandXboxController(
@@ -87,6 +89,15 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(m_controller.getAxis(0), DriverConstants.kControllerDeadband),
         () -> MathUtil.applyDeadband(m_controller.getAxis(1), DriverConstants.kControllerDeadband),
         () -> -MathUtil.applyDeadband(m_controller.getAxis(4), DriverConstants.kControllerDeadband)));
+    
+    // m_arm.setDefaultCommand(new ArmSet(
+    //   m_arm,
+    //   () -> {
+    //     if (m_controller.getButton()) {
+
+    //     }
+    //   }
+    // ));
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftX(),

@@ -32,9 +32,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class Arm extends SubsystemBase {
 
   private final CANSparkMax joint1 = new CANSparkMax(2, MotorType.kBrushless);
-  private final CANSparkMax joint2 = new CANSparkMax(5, MotorType.kBrushless);
+  private final CANSparkMax joint2 = new CANSparkMax(3, MotorType.kBrushless);
+  private final CANSparkMax intake = new CANSparkMax(5, MotorType.kBrushless);
   private final RelativeEncoder encoder1 = joint1.getEncoder();
   private final RelativeEncoder encoder2 = joint2.getEncoder();
+  private final RelativeEncoder intakeEncoder = intake.getEncoder();
   
   private final Translation2d base = new Translation2d(0, 0);
   private final double arm1 = 1;
@@ -43,8 +45,8 @@ public class Arm extends SubsystemBase {
   public Arm() {
     encoder1.setPositionConversionFactor(1*2*Math.PI);
     encoder1.setPosition(0);
-    encoder2.setPositionConversionFactor(1*2*Math.PI);
-    encoder2.setPosition(0);
+    intakeEncoder.setPositionConversionFactor(1*2*Math.PI);
+    intakeEncoder.setPosition(0);
   }
 
   public Pose2d getArmPos(){
@@ -56,15 +58,27 @@ public class Arm extends SubsystemBase {
   public Pose2d getInoutPos(){
     return new Pose2d(base.getX()+arm1*Math.cos(encoder1.getPosition()), 
       base.getY()+arm1*Math.sin(encoder1.getPosition()), 
-      new Rotation2d(encoder1.getPosition()+encoder2.getPosition()));
+      new Rotation2d(encoder1.getPosition()+intakeEncoder.getPosition()));
   }
 
-  public void setArm(double speed){
+  public void setArm1(double speed){
     joint1.set(speed);
   }
 
-  public void setInout(double speed){
+  public void setArm2(double speed){
     joint2.set(speed);
+  }
+
+  public double getArmEncoder1() {
+    return encoder1.getPosition();
+  }
+
+  public double getArmEncoder2() {
+    return encoder2.getPosition();
+  }
+
+  public void setInout(double speed){
+    intake.set(speed);
   }
 
   /**
