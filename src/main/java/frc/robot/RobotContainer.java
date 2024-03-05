@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.presetConstants;
+import frc.robot.commands.ArmSet;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ToggleFieldOriented;
@@ -90,14 +92,21 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(m_controller.getAxis(1), DriverConstants.kControllerDeadband),
         () -> -MathUtil.applyDeadband(m_controller.getAxis(4), DriverConstants.kControllerDeadband)));
     
-    // m_arm.setDefaultCommand(new ArmSet(
-    //   m_arm,
-    //   () -> {
-    //     if (m_controller.getButton()) {
-
-    //     }
-    //   }
-    // ));
+    m_arm.setDefaultCommand(new ArmSet(
+    m_arm,
+    () -> {
+        if (m_controller.getButton(1).getAsBoolean()) return presetConstants.joint1Preset1;
+        else if (m_controller.getButton(2).getAsBoolean()) return presetConstants.joint1Preset2;
+        else if (m_controller.getButton(3).getAsBoolean()) return presetConstants.joint1Preset3;
+        else if (m_controller.getButton(4).getAsBoolean()) return presetConstants.joint1Preset4;
+        else return m_arm.getArmEncoder1();
+    },() -> {
+      if (m_controller.getButton(1).getAsBoolean()) return presetConstants.joint2Preset1;
+      else if (m_controller.getButton(2).getAsBoolean()) return presetConstants.joint2Preset2;
+      else if (m_controller.getButton(3).getAsBoolean()) return presetConstants.joint2Preset3;
+      else if (m_controller.getButton(4).getAsBoolean()) return presetConstants.joint2Preset4;
+      else return m_arm.getArmEncoder2();
+    }));
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftX(),
