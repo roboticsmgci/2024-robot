@@ -21,9 +21,11 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeTime;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Inout;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -43,10 +45,14 @@ public class RobotContainer {
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
   private final Arm m_arm = new Arm();
+  private final Inout m_inout = new Inout();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
+  // TODO: move this port to constants
+  public final CommandXboxController m_armController = new CommandXboxController(
+      1);
   private final Controller m_controller = new Controller(m_driverController);
 
   /**
@@ -141,6 +147,7 @@ public class RobotContainer {
     // m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
+    m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     // TODO: remove this after sysid is done
