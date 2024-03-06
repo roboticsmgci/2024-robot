@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
+import com.revrobotics.REVPhysicsSim;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -134,9 +136,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    m_robotContainer.simulationInit();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    REVPhysicsSim.getInstance().run();
+  }
 }

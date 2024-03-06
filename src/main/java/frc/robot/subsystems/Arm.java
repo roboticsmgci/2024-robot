@@ -9,25 +9,27 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import java.util.function.DoubleSupplier;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Arm extends SubsystemBase {
 
@@ -62,11 +64,11 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArm1(double speed){
-    joint1.set(speed);
+    joint1.setVoltage(MathUtil.clamp(speed, -1, 1) * RobotController.getBatteryVoltage());
   }
 
   public void setArm2(double speed){
-    joint2.set(speed);
+    joint2.setVoltage(MathUtil.clamp(speed, -1, 1) * RobotController.getBatteryVoltage());
   }
 
   public double getArmEncoder1() {
@@ -108,6 +110,12 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void simulationInit() {
+    REVPhysicsSim.getInstance().addSparkMax(joint1, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(joint2, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(intake, DCMotor.getNEO(1));
   }
 
   @Override

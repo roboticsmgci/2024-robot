@@ -7,12 +7,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -26,8 +28,8 @@ public class Inout extends SubsystemBase {
   private double shooterSpeed;
 
   public Inout() {
-    intake = new CANSparkMax(9, MotorType.kBrushless);
-    shooter = new CANSparkMax(10, MotorType.kBrushless);
+    intake = new CANSparkMax(17, MotorType.kBrushless);
+    shooter = new CANSparkMax(18, MotorType.kBrushless);
     intakeEncoder = intake.getEncoder();
     intakeEncoder.setPositionConversionFactor(1*2*Math.PI);
     shooterEncoder = shooter.getEncoder();
@@ -73,6 +75,11 @@ public class Inout extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void simulationInit() {
+    REVPhysicsSim.getInstance().addSparkMax(intake, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(shooter, DCMotor.getNEO(1));
   }
 
   @Override

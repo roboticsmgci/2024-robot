@@ -209,4 +209,8 @@ public class RobotContainer {
       }
     }
   }
+
+  public void simulationInit() {
+    m_arm.simulationInit();
+  }
 }
