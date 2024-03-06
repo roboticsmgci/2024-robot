@@ -4,48 +4,69 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.util.function.DoubleSupplier;
-
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CANConstants;
+
+/**
+ * The Inout subsystem. Includes the intake and shooter.
+ */
 public class Inout extends SubsystemBase {
 
-  private final CANSparkMax intake;
-  private final CANSparkMax shooter;
-  private final RelativeEncoder intakeEncoder;
-  private final RelativeEncoder shooterEncoder;
+  /**
+   * The intake motor.
+   */
+  private final CANSparkMax m_intake = new CANSparkMax(CANConstants.kIntakeID, MotorType.kBrushless);
+
+  /**
+   * The shooter motor.
+   */
+  private final CANSparkMax m_shooter = new CANSparkMax(CANConstants.kShooterID, MotorType.kBrushless);
+
+  /**
+   * The encoder of the intake motor.
+   */
+  private final RelativeEncoder m_intakeEncoder = m_intake.getEncoder();
+
+  /**
+   * The encoder of the shooter motor.
+   */
+  private final RelativeEncoder m_shooterEncoder = m_shooter.getEncoder();
   
   private double shooterSpeed;
 
   public Inout() {
-    intake = new CANSparkMax(17, MotorType.kBrushless);
-    shooter = new CANSparkMax(18, MotorType.kBrushless);
-    intakeEncoder = intake.getEncoder();
-    intakeEncoder.setPositionConversionFactor(1*2*Math.PI);
-    shooterEncoder = shooter.getEncoder();
-    shooterEncoder.setVelocityConversionFactor(1*2*Math.PI);
+    m_intakeEncoder.setPositionConversionFactor(1*2*Math.PI);
+    m_shooterEncoder.setVelocityConversionFactor(1*2*Math.PI);
   }
 
   public double getShooterSpeed(){
     return shooterSpeed;
   }
 
+  /**
+   * Sets the speed of the intake motor.
+   * 
+   * @param speed speed between [-1, 1]
+   */
   public void setIntake(double speed){
-    intake.set(speed);
+    m_intake.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
   }
 
+  /**
+   * Sets the speed of the shooter motor.
+   * 
+   * @param speed speed between [-1, 1]
+   */
   public void setShooter(double speed){
-    shooter.set(speed);
+    m_shooter.set(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
   }
 
   /**
@@ -53,14 +74,14 @@ public class Inout extends SubsystemBase {
    *
    * @return a command
    */
-  public Command drive(DoubleSupplier joint1, DoubleSupplier joint2) {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return run(
-        () -> {
-          // set the speed of the arm joints
-        });
-  }
+  // public Command drive(DoubleSupplier joint1, DoubleSupplier joint2) {
+  //   // Inline construction of command goes here.
+  //   // Subsystem::RunOnce implicitly requires `this` subsystem.
+  //   return run(
+  //       () -> {
+  //         // set the speed of the arm joints
+  //       });
+  // }
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
@@ -78,8 +99,8 @@ public class Inout extends SubsystemBase {
   }
 
   public void simulationInit() {
-    REVPhysicsSim.getInstance().addSparkMax(intake, DCMotor.getNEO(1));
-    REVPhysicsSim.getInstance().addSparkMax(shooter, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(m_intake, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(m_shooter, DCMotor.getNEO(1));
   }
 
   @Override

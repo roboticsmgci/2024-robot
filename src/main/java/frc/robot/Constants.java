@@ -138,7 +138,7 @@ public final class Constants {
     public static final double kDLockTargetRotSpeed = 0;
   }
 
-  public static final class presetConstants{
+  public static final class PresetConstants {
     
     public static final double joint1Preset1 = 0;
     public static final double joint2Preset1 = 0;
@@ -152,5 +152,12 @@ public final class Constants {
     public static final double joint1Preset4 = 90;
     public static final double joint2Preset4 = 90;
 
+  }
+
+  public static class CANConstants {
+    public static final int kArmJoint1ID = 13;
+    public static final int kArmJoint2ID = 14;
+    public static final int kIntakeID = 15;
+    public static final int kShooterID = 16;
   }
 }

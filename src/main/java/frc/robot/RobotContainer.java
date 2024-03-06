@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.presetConstants;
+import frc.robot.Constants.PresetConstants;
 import frc.robot.commands.ArmSet;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
@@ -90,7 +90,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     m_drive.resetOdometry(new Pose2d());
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(
@@ -101,16 +101,16 @@ public class RobotContainer {
     m_arm.setDefaultCommand(new ArmSet(
     m_arm,
     () -> {
-        if (m_controller.getButton(1).getAsBoolean()) return presetConstants.joint1Preset1;
-        else if (m_controller.getButton(2).getAsBoolean()) return presetConstants.joint1Preset2;
-        else if (m_controller.getButton(3).getAsBoolean()) return presetConstants.joint1Preset3;
-        else if (m_controller.getButton(4).getAsBoolean()) return presetConstants.joint1Preset4;
+        if (m_controller.getButton(1).getAsBoolean()) return PresetConstants.joint1Preset1;
+        else if (m_controller.getButton(2).getAsBoolean()) return PresetConstants.joint1Preset2;
+        else if (m_controller.getButton(3).getAsBoolean()) return PresetConstants.joint1Preset3;
+        else if (m_controller.getButton(4).getAsBoolean()) return PresetConstants.joint1Preset4;
         else return m_arm.getArmEncoder1();
     },() -> {
-      if (m_controller.getButton(1).getAsBoolean()) return presetConstants.joint2Preset1;
-      else if (m_controller.getButton(2).getAsBoolean()) return presetConstants.joint2Preset2;
-      else if (m_controller.getButton(3).getAsBoolean()) return presetConstants.joint2Preset3;
-      else if (m_controller.getButton(4).getAsBoolean()) return presetConstants.joint2Preset4;
+      if (m_controller.getButton(1).getAsBoolean()) return PresetConstants.joint2Preset1;
+      else if (m_controller.getButton(2).getAsBoolean()) return PresetConstants.joint2Preset2;
+      else if (m_controller.getButton(3).getAsBoolean()) return PresetConstants.joint2Preset3;
+      else if (m_controller.getButton(4).getAsBoolean()) return PresetConstants.joint2Preset4;
       else return m_arm.getArmEncoder2();
     }));
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
