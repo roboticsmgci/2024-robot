@@ -31,9 +31,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Arm extends SubsystemBase {
 
-  private final CANSparkMax joint1 = new CANSparkMax(2, MotorType.kBrushless);
-  private final CANSparkMax joint2 = new CANSparkMax(3, MotorType.kBrushless);
-  private final CANSparkMax intake = new CANSparkMax(5, MotorType.kBrushless);
+  private final CANSparkMax joint1 = new CANSparkMax(14, MotorType.kBrushless);
+  private final CANSparkMax joint2 = new CANSparkMax(15, MotorType.kBrushless);
+  private final CANSparkMax intake = new CANSparkMax(16, MotorType.kBrushless);
   private final RelativeEncoder encoder1 = joint1.getEncoder();
   private final RelativeEncoder encoder2 = joint2.getEncoder();
   private final RelativeEncoder intakeEncoder = intake.getEncoder();

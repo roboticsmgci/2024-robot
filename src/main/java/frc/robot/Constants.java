@@ -137,4 +137,20 @@ public final class Constants {
     public static final double kILockTargetRotSpeed = 0;
     public static final double kDLockTargetRotSpeed = 0;
   }
+
+  public static final class presetConstants{
+    
+    public static final double joint1Preset1 = 0;
+    public static final double joint2Preset1 = 0;
+
+    public static final double joint1Preset2 = 30;
+    public static final double joint2Preset2 = 30;
+
+    public static final double joint1Preset3 = 45;
+    public static final double joint2Preset3 = 45;
+
+    public static final double joint1Preset4 = 90;
+    public static final double joint2Preset4 = 90;
+
+  }
 }
