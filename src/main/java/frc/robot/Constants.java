@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -211,9 +212,27 @@ public final class Constants {
   }
 
   public static class CANConstants {
-    public static final int kArmJoint1ID = 13;
-    public static final int kArmJoint2ID = 14;
-    public static final int kIntakeID = 15;
-    public static final int kShooterID = 16;
+    public static final int kArmJoint1ID = 29;
+    public static final int kArmJoint2ID = 21;
+    public static final int kIntakeBottomID = 24;
+    public static final int kIntakeTopID = 25;
+    public static final int kShooterTopID = 22;
+    public static final int kShooterBottomID = 30;
+    public static final int kSPXID = 17;
+  }
+
+  public static final class ArmConstants {
+    public static final double kArm1GearRatio = 1.0/16.0*32.0/16.0*64.0/32.0;
+    public static final double kArm2GearRatio = 64.0/24.0*1.0/80.0;
+    public static final double kArm3GearRatio = 6.0*4.0/24.0*1.0/80.0;
+    public static final double kShooterLength = Units.inchesToMeters(8.35);
+    public static final double kArm2Length = Units.inchesToMeters(24);
+    public static final double kArm3Length = Units.inchesToMeters(16.5);
+    //currently base below arm 2, later change to arm 3
+    public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
+    public static final double kArm1Initial = Math.toRadians(-40);
+    public static final double kArm2Initial = Math.toRadians(90);
+    public static final double kArm1MaxSpeed = 0.2;
+    public static final double kArm2MaxSpeed = 0.2;
   }
 }

@@ -27,12 +27,16 @@ public class Inout extends SubsystemBase {
   /**
    * The intake motor.
    */
-  private final CANSparkMax m_intake = new CANSparkMax(CANConstants.kIntakeID, MotorType.kBrushless);
+  private final CANSparkMax m_intake = new CANSparkMax(CANConstants.kIntakeTopID, MotorType.kBrushless);
+
+  private final CANSparkMax m_intakeBottom = new CANSparkMax(CANConstants.kIntakeBottomID, MotorType.kBrushless);
 
   /**
    * The shooter motor.
    */
-  private final CANSparkMax m_shooter = new CANSparkMax(CANConstants.kShooterID, MotorType.kBrushless);
+  private final CANSparkMax m_shooter = new CANSparkMax(CANConstants.kShooterTopID, MotorType.kBrushless);
+
+  private final CANSparkMax m_shooterBottom = new CANSparkMax(CANConstants.kShooterBottomID, MotorType.kBrushless);
 
   /**
    * The encoder of the intake motor.
@@ -58,6 +62,9 @@ public class Inout extends SubsystemBase {
 
     m_intake.restoreFactoryDefaults();
     m_shooter.restoreFactoryDefaults();
+
+    m_intakeBottom.follow(m_intake);
+    m_shooterBottom.follow(m_shooter);
 
     m_intake.setIdleMode(IdleMode.kBrake);
     m_shooter.setIdleMode(IdleMode.kCoast);

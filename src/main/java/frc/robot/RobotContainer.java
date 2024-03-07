@@ -162,13 +162,13 @@ public class RobotContainer {
 
     m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
       m_arm,
-      () -> m_armController.getLeftY() * DriverConstants.kArmJoint1Speed,
-      () -> m_armController.getRightY() * DriverConstants.kArmJoint2Speed
+      () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.1) * DriverConstants.kArmJoint1Speed,
+      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.1) * DriverConstants.kArmJoint2Speed
     ));
 
     m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
       m_inout,
-      () -> m_armController.getLeftTriggerAxis() - m_armController.getRightTriggerAxis(),
+      () -> m_armController.getHID().getPOV() == 0 ? -1 : (m_armController.getHID().getPOV() == 180 ? 1 : 0),
       () -> 0
     ));
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
@@ -225,6 +225,6 @@ public class RobotContainer {
   }
 
   public void simulationInit() {
-    m_arm.simulationInit();
+    // m_arm.simulationInit();
   }
 }
