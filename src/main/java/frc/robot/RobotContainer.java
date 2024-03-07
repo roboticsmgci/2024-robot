@@ -227,4 +227,14 @@ public class RobotContainer {
   public void simulationInit() {
     // m_arm.simulationInit();
   }
+
+  private double calcShooterAngle(){
+    double shooterX = m_drive.getPose().getX()-Math.cos(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
+    double shooterY = m_drive.getPose().getY()-Math.sin(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
+    double shooterZ = m_arm.getInoutPos().getY();
+    
+    // TODO: fix
+    return 0.0;
+
+  }
 }
