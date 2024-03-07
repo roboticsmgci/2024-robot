@@ -24,6 +24,7 @@ import frc.robot.commands.ArmDrive;
 import frc.robot.commands.ArmSet;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.InoutDrive;
 import frc.robot.commands.IntakeSpeed;
 import frc.robot.commands.IntakeTime;
 import frc.robot.commands.ToggleFieldOriented;
@@ -163,6 +164,12 @@ public class RobotContainer {
       m_arm,
       () -> m_armController.getLeftY() * DriverConstants.kArmJoint1Speed,
       () -> m_armController.getRightY() * DriverConstants.kArmJoint2Speed
+    ));
+
+    m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
+      m_inout,
+      () -> m_armController.getLeftTriggerAxis() - m_armController.getRightTriggerAxis(),
+      () -> 0
     ));
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
