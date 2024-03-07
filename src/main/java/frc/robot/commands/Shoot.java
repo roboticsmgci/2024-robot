@@ -11,7 +11,7 @@ public class Shoot extends Command {
   private final Inout m_inout;
   private double m_startTime;
 
-  public Shoot(Inout inout, double time, double speed) {
+  public Shoot(Inout inout) {
     m_inout = inout;
 
     addRequirements(inout);

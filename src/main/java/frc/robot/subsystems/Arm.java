@@ -28,11 +28,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.CANConstants;
 
 public class Arm extends SubsystemBase {
   private final WPI_VictorSPX joint0 = new WPI_VictorSPX(17);
-  private final CANSparkMax joint1 = new CANSparkMax(14, MotorType.kBrushless);
-  private final CANSparkMax joint2 = new CANSparkMax(15, MotorType.kBrushless);
+  private final CANSparkMax joint1 = new CANSparkMax(CANConstants.kArmJoint1ID, MotorType.kBrushless);
+  private final CANSparkMax joint2 = new CANSparkMax(CANConstants.kArmJoint2ID, MotorType.kBrushless);
   
   //cim on victor
   private final RelativeEncoder encoder1 = joint1.getEncoder();

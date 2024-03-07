@@ -27,6 +27,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.InoutDrive;
 import frc.robot.commands.IntakeSpeed;
 import frc.robot.commands.IntakeTime;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -98,22 +99,27 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(m_controller.getAxis(0), DriverConstants.kControllerDeadband),
         () -> MathUtil.applyDeadband(m_controller.getAxis(1), DriverConstants.kControllerDeadband),
         () -> -MathUtil.applyDeadband(m_controller.getAxis(4), DriverConstants.kControllerDeadband)));
+    // TODO: add this back
+    // m_arm.setDefaultCommand(new ArmSet(
+    // m_arm,
+    // () -> {
+    //     if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset1;
+    //     else if (m_armController.getHID().getBButton()) return PresetConstants.joint1Preset2;
+    //     else if (m_armController.getHID().getXButton()) return PresetConstants.joint1Preset3;
+    //     else if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset4;
+    //     else return m_arm.getArmEncoder1();
+    // },() -> {
+    //   if (m_armController.getHID().getAButton()) return PresetConstants.joint2Preset1;
+    //   else if (m_armController.getHID().getBButton()) return PresetConstants.joint2Preset2;
+    //   else if (m_armController.getHID().getXButton()) return PresetConstants.joint2Preset3;
+    //   else if (m_armController.getHID().getYButton()) return PresetConstants.joint2Preset4;
+    //   else return m_arm.getArmEncoder2();
+    // }));
+    m_arm.setDefaultCommand(new ArmDrive(
+      m_arm,
+      () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
+      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
     
-    m_arm.setDefaultCommand(new ArmSet(
-    m_arm,
-    () -> {
-        if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset1;
-        else if (m_armController.getHID().getBButton()) return PresetConstants.joint1Preset2;
-        else if (m_armController.getHID().getXButton()) return PresetConstants.joint1Preset3;
-        else if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset4;
-        else return m_arm.getArmEncoder1();
-    },() -> {
-      if (m_armController.getHID().getAButton()) return PresetConstants.joint2Preset1;
-      else if (m_armController.getHID().getBButton()) return PresetConstants.joint2Preset2;
-      else if (m_armController.getHID().getXButton()) return PresetConstants.joint2Preset3;
-      else if (m_armController.getHID().getYButton()) return PresetConstants.joint2Preset4;
-      else return m_arm.getArmEncoder2();
-    }));
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftX(),
@@ -158,19 +164,24 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
     // m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
-    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.8)).onFalse(new IntakeTime(m_inout, 100, -0.8));
+    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.12)).onFalse(new IntakeTime(m_inout, 150, -0.12));
+    m_armController.rightTrigger().whileTrue(new Shoot(m_inout));
 
-    m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
-      m_arm,
-      () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.1) * DriverConstants.kArmJoint1Speed,
-      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.1) * DriverConstants.kArmJoint2Speed
-    ));
+    // TODO: add back
+    // m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
+    //   m_arm,
+    //   () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.1) * DriverConstants.kArmJoint1Speed,
+    //   () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.1) * DriverConstants.kArmJoint2Speed
+    // ));
 
-    m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
-      m_inout,
-      () -> m_armController.getHID().getPOV() == 0 ? -1 : (m_armController.getHID().getPOV() == 180 ? 1 : 0),
-      () -> 0
-    ));
+    // TODO: add back
+    // m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
+    //   m_inout,
+    //   () -> m_armController.getHID().getPOV() == 0 ? -1 : (m_armController.getHID().getPOV() == 180 ? 1 : 0),
+    //   () -> 0
+    // ));
+
+
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     // TODO: remove this after sysid is done
@@ -232,7 +243,7 @@ public class RobotContainer {
     double shooterX = m_drive.getPose().getX()-Math.cos(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
     double shooterY = m_drive.getPose().getY()-Math.sin(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
     double shooterZ = m_arm.getInoutPos().getY();
-    
+
     // TODO: fix
     return 0.0;
 
