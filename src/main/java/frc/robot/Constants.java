@@ -96,7 +96,43 @@ public final class Constants {
      * The time it takes for the velocity of the robot to be updated, in seconds.
      */
     public static final double kLoopTime = 0.13; // s, 20ms + 110ms sprk max velocity lag
+  }
 
+  public static class InoutConstants {
+    /**
+     * The ultrasonic sensor's minimum reading.
+     */
+    public static final int kUltrasonicAnalogPort = 0;
+
+    /**
+     * The ultrasonic sensor's range of output, in external units.
+     */
+    public static final double kUltrasonicRange = 500;
+
+    /**
+     * The starting point of the ultrasonic sensor, i.e., what the value is when the output is 0V.
+     */
+    public static final double kUltrasonicOffset = 0;
+
+    /**
+     * The cutoff ultrasonic sensor value for whether there is a note in the intake.
+     */
+    public static final double kUltrasonicCutoff = 35;
+
+    /**
+     * The speed at which to run the intake motors to pick up a note.
+     */
+    public static final double kIntakeSpeed = 0.8;
+
+    /**
+     * The gear ratio of the intake.
+     */
+    public static final double kIntakeGearRatio = 2.0 / 1.0;
+
+    /**
+     * The gear ratio of the shooter.
+     */
+    public static final double kShooterGearRatio = 1.0 / 1.0;
   }
 
   public final static class FieldConstants {

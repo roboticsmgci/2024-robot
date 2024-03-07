@@ -33,4 +33,9 @@ public class IntakeTime extends Command {
   public boolean isFinished() {
     return (System.currentTimeMillis() - m_startTime) >= m_time;
   }
+
+  @Override
+  public void end(boolean interrupted) {
+    m_inout.setIntake(0);
+  }
 }

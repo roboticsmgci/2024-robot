@@ -11,8 +11,11 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.InoutConstants;
 import frc.robot.Constants.CANConstants;
 
 /**
@@ -39,12 +42,20 @@ public class Inout extends SubsystemBase {
    * The encoder of the shooter motor.
    */
   private final RelativeEncoder m_shooterEncoder = m_shooter.getEncoder();
+
+  /**
+   * The ultrasonic sensor.
+   */
+  private final AnalogPotentiometer m_ultrasonic = new AnalogPotentiometer(
+    InoutConstants.kUltrasonicAnalogPort,
+    InoutConstants.kUltrasonicRange,
+    InoutConstants.kUltrasonicOffset);
   
   private double shooterSpeed;
 
   public Inout() {
-    m_intakeEncoder.setPositionConversionFactor(1*2*Math.PI);
-    m_shooterEncoder.setVelocityConversionFactor(1*2*Math.PI);
+    m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kShooterGearRatio);
+    m_shooterEncoder.setVelocityConversionFactor(360 * InoutConstants.kShooterGearRatio / 60);
   }
 
   public double getShooterSpeed(){
@@ -67,6 +78,15 @@ public class Inout extends SubsystemBase {
    */
   public void setShooter(double speed){
     m_shooter.set(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
+  }
+
+  /**
+   * Checks whether there is a note in the intake.
+   * 
+   * @return <code>true</code> if there is a note; <code>false</code> if there isn't a note
+   */
+  public boolean hasNote() {
+    return m_ultrasonic.get() < InoutConstants.kUltrasonicCutoff;
   }
 
   /**
@@ -96,6 +116,8 @@ public class Inout extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // TODO: remove logging
+    SmartDashboard.putNumber("Ultrasonic", m_ultrasonic.get());
   }
 
   public void simulationInit() {
@@ -107,4 +129,6 @@ public class Inout extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+
 }

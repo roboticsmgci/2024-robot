@@ -23,14 +23,13 @@ import frc.robot.Constants.PresetConstants;
 import frc.robot.commands.ArmSet;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeSpeed;
 import frc.robot.commands.IntakeTime;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Inout;
 import frc.robot.subsystems.SwerveSubsystem;
-import swervelib.telemetry.SwerveDriveTelemetry;
-import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -101,16 +100,16 @@ public class RobotContainer {
     m_arm.setDefaultCommand(new ArmSet(
     m_arm,
     () -> {
-        if (m_controller.getButton(1).getAsBoolean()) return PresetConstants.joint1Preset1;
-        else if (m_controller.getButton(2).getAsBoolean()) return PresetConstants.joint1Preset2;
-        else if (m_controller.getButton(3).getAsBoolean()) return PresetConstants.joint1Preset3;
-        else if (m_controller.getButton(4).getAsBoolean()) return PresetConstants.joint1Preset4;
+        if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset1;
+        else if (m_armController.getHID().getBButton()) return PresetConstants.joint1Preset2;
+        else if (m_armController.getHID().getXButton()) return PresetConstants.joint1Preset3;
+        else if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset4;
         else return m_arm.getArmEncoder1();
     },() -> {
-      if (m_controller.getButton(1).getAsBoolean()) return PresetConstants.joint2Preset1;
-      else if (m_controller.getButton(2).getAsBoolean()) return PresetConstants.joint2Preset2;
-      else if (m_controller.getButton(3).getAsBoolean()) return PresetConstants.joint2Preset3;
-      else if (m_controller.getButton(4).getAsBoolean()) return PresetConstants.joint2Preset4;
+      if (m_armController.getHID().getAButton()) return PresetConstants.joint2Preset1;
+      else if (m_armController.getHID().getBButton()) return PresetConstants.joint2Preset2;
+      else if (m_armController.getHID().getXButton()) return PresetConstants.joint2Preset3;
+      else if (m_armController.getHID().getYButton()) return PresetConstants.joint2Preset4;
       else return m_arm.getArmEncoder2();
     }));
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
@@ -156,7 +155,8 @@ public class RobotContainer {
     // m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
-    m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
+    // m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
+    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.8)).onFalse(new IntakeTime(m_inout, 100, -0.8));
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     // TODO: remove this after sysid is done
