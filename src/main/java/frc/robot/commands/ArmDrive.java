@@ -26,7 +26,11 @@ public class ArmDrive extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_arm.setArm1(m_speed1.getAsDouble());
+    m_arm.setArm2(m_speed2.getAsDouble());
+    System.out.println("hey");
+  }
 
   // Called once the command ends or is interrupted.
   @Override

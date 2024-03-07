@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -54,8 +55,16 @@ public class Inout extends SubsystemBase {
   private double shooterSpeed;
 
   public Inout() {
+
+    m_intake.restoreFactoryDefaults();
+    m_shooter.restoreFactoryDefaults();
+
+    m_intake.setIdleMode(IdleMode.kBrake);
+    m_shooter.setIdleMode(IdleMode.kCoast);
+    
     m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kShooterGearRatio);
     m_shooterEncoder.setVelocityConversionFactor(360 * InoutConstants.kShooterGearRatio / 60);
+    
   }
 
   public double getShooterSpeed(){

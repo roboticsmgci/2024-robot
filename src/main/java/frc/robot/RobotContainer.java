@@ -20,6 +20,7 @@ import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PresetConstants;
+import frc.robot.commands.ArmDrive;
 import frc.robot.commands.ArmSet;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
@@ -157,6 +158,12 @@ public class RobotContainer {
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
     // m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
     m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.8)).onFalse(new IntakeTime(m_inout, 100, -0.8));
+
+    m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
+      m_arm,
+      () -> m_armController.getLeftY() * DriverConstants.kArmJoint1Speed,
+      () -> m_armController.getRightY() * DriverConstants.kArmJoint2Speed
+    ));
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
     // TODO: remove this after sysid is done

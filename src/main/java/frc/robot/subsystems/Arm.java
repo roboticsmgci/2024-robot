@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -67,6 +68,9 @@ public class Arm extends SubsystemBase {
    * Constructs a new Arm object.
    */
   public Arm() {
+    m_joint1.setIdleMode(IdleMode.kBrake);
+    m_joint2.setIdleMode(IdleMode.kBrake);
+
     m_encoder1.setPositionConversionFactor(1*2*Math.PI);
     m_encoder1.setPosition(0);
     m_encoder2.setPositionConversionFactor(1*2*Math.PI);

@@ -68,6 +68,16 @@ public final class Constants {
      * speed.
      */
     public static final double kSlowSpeed = 0.1;
+
+    /**
+     * The multiplier for the arm joint 1's speed.
+     */
+    public static final double kArmJoint1Speed = 0.5;
+
+    /**
+     * The multiplier for the arm joint 2's speed.
+     */
+    public static final double kArmJoint2Speed = 0.5;
   }
 
   public static class DrivetrainConstants {
@@ -133,6 +143,16 @@ public final class Constants {
      * The gear ratio of the shooter.
      */
     public static final double kShooterGearRatio = 1.0 / 1.0;
+
+    /**
+     * The time (in milliseconds) to "warm up" the shooter before shooting.
+     */
+    public static final double kWarmupTime = 2000;
+
+    /**
+     * The speed at which to run the shooter.
+     */
+    public static final double kShooterSpeed = 1;
   }
 
   public final static class FieldConstants {
