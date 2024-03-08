@@ -195,11 +195,13 @@ public final class Constants {
 
   public static final class PresetConstants {
     
-    public static final double joint1Preset1 = 0;
-    public static final double joint2Preset1 = 0;
+    // Intake
+    public static final double joint1Preset1 = 86799.944623;
+    public static final double joint2Preset1 = -37.428542;
 
-    public static final double joint1Preset2 = 30;
-    public static final double joint2Preset2 = 30;
+    // Speaker
+    public static final double joint1Preset2 = 16238.660442;
+    public static final double joint2Preset2 = -182.000007;
 
     public static final double joint1Preset3 = 45;
     public static final double joint2Preset3 = 45;
@@ -220,7 +222,7 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-    public static final double kArm1GearRatio = 1.0/16.0*32.0/16.0*64.0/32.0;
+    public static final double kArm1GearRatio = 1.0/(1.0/16.0*32.0/16.0*64.0/32.0);
     public static final double kArm2GearRatio = 64.0/24.0*1.0/80.0;
     public static final double kArm3GearRatio = 6.0*4.0/24.0*1.0/80.0;
     public static final double kShooterLength = Units.inchesToMeters(8.35);
@@ -228,8 +230,8 @@ public final class Constants {
     public static final double kArm3Length = Units.inchesToMeters(16.5);
     //currently base below arm 2, later change to arm 3
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
-    public static final double kArm1Initial = Math.toRadians(-40);
-    public static final double kArm2Initial = Math.toRadians(90);
+    public static final double kArm1Initial = Math.toRadians(90);
+    public static final double kArm2Initial = Math.toRadians(0);
     public static final double kArm1MaxSpeed = 0.05;
     public static final double kArm2MaxSpeed = 0.05;
 

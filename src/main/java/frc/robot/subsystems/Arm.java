@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,14 +44,16 @@ public class Arm extends SubsystemBase {
   // private final double arm2 = 1;
   /** Creates a new ExampleSubsystem. */
   public Arm() {
+    joint1.setIdleMode(IdleMode.kCoast);
+    joint2.setIdleMode(IdleMode.kCoast);
+
+    // joint1.setIdleMode(IdleMode.kBrake);
+    // joint2.setIdleMode(IdleMode.kBrake);
+
     encoder1.setPositionConversionFactor(ArmConstants.kArm1GearRatio*2*Math.PI);
     encoder1.setPosition(ArmConstants.kArm1Initial);
     encoder2.setPositionConversionFactor(ArmConstants.kArm2GearRatio*2*Math.PI);
     encoder2.setPosition(ArmConstants.kArm2Initial);
-  }
-
-  public void log() {
-    System.out.println(encoder1.getPosition() + " " + encoder2.getPosition());
   }
 
   public void setArm(double arm1, double arm2){

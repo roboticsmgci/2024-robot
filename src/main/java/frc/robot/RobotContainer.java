@@ -46,7 +46,8 @@ public class RobotContainer {
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
   private final Arm m_arm = new Arm();
-  private final Inout m_inout = new Inout();
+  // TODO: 1) add this back
+  // private final Inout m_inout = new Inout();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_driverController = new CommandXboxController(
@@ -112,10 +113,11 @@ public class RobotContainer {
     //   else if (m_armController.getHID().getYButton()) return PresetConstants.joint2Preset4;
     //   else return m_arm.getArmEncoder2();
     // }));
-    m_arm.setDefaultCommand(new ArmDrive(
-      m_arm,
-      () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
-      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
+
+    // m_arm.setDefaultCommand(new ArmDrive(
+    //   m_arm,
+    //   () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
+    //   () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
     
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
@@ -161,10 +163,12 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
     // m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
-    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.12)).onFalse(new IntakeTime(m_inout, 150, -0.12));
-    m_armController.rightTrigger().whileTrue(new Shoot(m_inout));
 
-    m_armController.a().onTrue(Commands.runOnce(() -> m_arm.setArm(0, -40)));
+    // TODO: 1) add back 2 lines
+    // m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.12)).onFalse(new IntakeTime(m_inout, 150, -0.12));
+    // m_armController.rightTrigger().whileTrue(new Shoot(m_inout));
+
+    m_armController.leftStick().and(m_armController.rightStick()).onTrue(Commands.runOnce(() -> m_arm.setArm(90, 0)));
 
     // TODO: add back
     // m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
