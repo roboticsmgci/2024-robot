@@ -68,6 +68,9 @@ public class Inout extends SubsystemBase {
 
     m_intake.setIdleMode(IdleMode.kBrake);
     m_shooter.setIdleMode(IdleMode.kCoast);
+
+    m_shooter.setSmartCurrentLimit(75);
+    m_shooterBottom.setSmartCurrentLimit(75);
     
     m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kShooterGearRatio);
     m_shooterEncoder.setVelocityConversionFactor(360 * InoutConstants.kShooterGearRatio / 60);
@@ -93,7 +96,7 @@ public class Inout extends SubsystemBase {
    * @param speed speed between [-1, 1]
    */
   public void setShooter(double speed){
-    m_shooter.set(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
+    m_shooter.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
   }
 
   /**

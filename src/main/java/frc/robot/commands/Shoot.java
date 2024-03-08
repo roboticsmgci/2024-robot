@@ -24,7 +24,10 @@ public class Shoot extends Command {
 
   @Override
   public void execute() {
-    m_inout.setShooter(InoutConstants.kShooterSpeed);
+    System.out.println(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
+    m_inout.setShooter(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
+    // m_inout.setShooter(1);
+    
     if ((System.currentTimeMillis() - m_startTime) > InoutConstants.kWarmupTime) {
       m_inout.setIntake(InoutConstants.kIntakeSpeed);
     }
@@ -38,5 +41,6 @@ public class Shoot extends Command {
   @Override
   public void end(boolean interrupted) {
     m_inout.setIntake(0);
+    m_inout.setShooter(0);
   }
 }
