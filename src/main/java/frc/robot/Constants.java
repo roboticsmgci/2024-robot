@@ -229,8 +229,8 @@ public final class Constants {
     public static final double kArm3Length = Units.inchesToMeters(16.5);
     //currently base below arm 2, later change to arm 3
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
-    public static final double kArm1Initial = Math.toRadians(-40);
-    public static final double kArm2Initial = Math.toRadians(90);
+    public static final double kArm1Initial = Math.toRadians(90);
+    public static final double kArm2Initial = Math.toRadians(0);
     public static final double kArm1MaxSpeed = 0.05;
     public static final double kArm2MaxSpeed = 0.05;
 
