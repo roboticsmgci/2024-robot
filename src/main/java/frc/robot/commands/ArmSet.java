@@ -5,6 +5,7 @@ import frc.robot.subsystems.Arm;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ArmSet extends Command {
@@ -16,6 +17,11 @@ public class ArmSet extends Command {
 
   private final PIDController m_armSpeedPID1 = new PIDController(0.001, 0, 0);
   private final PIDController m_armSpeedPID2 = new PIDController(0.001, 0, 0);
+
+  /**
+   * Gradually adjust speed? TODO: add this in
+   */
+  // private final SlewRateLimiter m_limiter1 = new SlewRateLimiter(100);
 
   public ArmSet(Arm subsystem, DoubleSupplier arm1Angle, DoubleSupplier arm2Angle) {
     m_arm = subsystem;
@@ -42,7 +48,9 @@ public class ArmSet extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // m_arm.setArm1(m_limiter1.calculate(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble())));
     m_arm.setArm1(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble()));
+
     m_arm.setArm2(m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble()));
 
     if (m_finishedTime == -1 && m_armSpeedPID1.atSetpoint() && m_armSpeedPID2.atSetpoint()) {

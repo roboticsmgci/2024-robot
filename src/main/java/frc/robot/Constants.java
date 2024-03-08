@@ -138,12 +138,12 @@ public final class Constants {
     /**
      * The time (in milliseconds) to "warm up" the shooter before shooting.
      */
-    public static final double kWarmupTime = 10000;
+    public static final double kWarmupTime = 2000;
 
     /**
      * The speed at which to run the shooter.
      */
-    public static final double kShooterSpeed = 1;
+    public static final double kShooterSpeed = 0.5;
 
 
     public static final double kInitialShooterSpeed = 0.3;
@@ -151,7 +151,7 @@ public final class Constants {
     /**
      * The multiplier to use for the CIM speed of the top of the shooter (relative to the bottom NEO).
      */
-    public static final double kCIMMultiplier = 0.9;
+    public static final double kCIMMultiplier = 1;
   }
 
   public final static class FieldConstants {
@@ -232,5 +232,7 @@ public final class Constants {
     public static final double kArm2Initial = Math.toRadians(90);
     public static final double kArm1MaxSpeed = 0.05;
     public static final double kArm2MaxSpeed = 0.05;
+
+    public static final double kArm1RateLimit = 0.1;
   }
 }
