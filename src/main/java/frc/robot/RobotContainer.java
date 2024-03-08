@@ -167,6 +167,8 @@ public class RobotContainer {
     m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.12)).onFalse(new IntakeTime(m_inout, 150, -0.12));
     m_armController.rightTrigger().whileTrue(new Shoot(m_inout));
 
+    m_armController.a().onTrue(Commands.runOnce(() -> m_arm.setArm(0, -40)));
+
     // TODO: add back
     // m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
     //   m_arm,

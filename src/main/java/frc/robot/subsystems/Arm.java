@@ -24,6 +24,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -46,6 +47,11 @@ public class Arm extends SubsystemBase {
     encoder1.setPosition(ArmConstants.kArm1Initial);
     encoder2.setPositionConversionFactor(ArmConstants.kArm2GearRatio*2*Math.PI);
     encoder2.setPosition(ArmConstants.kArm2Initial);
+  }
+
+  public void setArm(double arm1, double arm2){
+    encoder1.setPosition(arm1);
+    encoder2.setPosition(arm2);
   }
 
   public Pose2d getArmPos(){
@@ -106,6 +112,8 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("joint1", Math.toDegrees(getArmEncoder1()));
+    SmartDashboard.putNumber("joint2", Math.toDegrees(getArmEncoder2()));
     // This method will be called once per scheduler run
   }
 

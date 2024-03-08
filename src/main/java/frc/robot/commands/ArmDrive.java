@@ -29,6 +29,7 @@ public class ArmDrive extends Command {
   public void execute() {
     m_arm.setArm1(m_speed1.getAsDouble());
     m_arm.setArm2(m_speed2.getAsDouble());
+    m_arm.setArm0(-0.1);
     System.out.println("hey");
   }
 

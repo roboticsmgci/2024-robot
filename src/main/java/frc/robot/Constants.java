@@ -232,7 +232,7 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
     public static final double kArm1Initial = Math.toRadians(-40);
     public static final double kArm2Initial = Math.toRadians(90);
-    public static final double kArm1MaxSpeed = 0.2;
-    public static final double kArm2MaxSpeed = 0.2;
+    public static final double kArm1MaxSpeed = 0.4;
+    public static final double kArm2MaxSpeed = 0.4;
   }
 }
