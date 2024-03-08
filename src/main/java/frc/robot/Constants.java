@@ -69,16 +69,6 @@ public final class Constants {
      * speed.
      */
     public static final double kSlowSpeed = 0.1;
-
-    /**
-     * The multiplier for the arm joint 1's speed.
-     */
-    public static final double kArmJoint1Speed = 0.05;
-
-    /**
-     * The multiplier for the arm joint 2's speed.
-     */
-    public static final double kArmJoint2Speed = 0.05;
   }
 
   public static class DrivetrainConstants {
@@ -113,17 +103,17 @@ public final class Constants {
     /**
      * The ultrasonic sensor's minimum reading.
      */
-    public static final int kUltrasonicAnalogPort = 0;
+    // public static final int kUltrasonicAnalogPort = 0;
 
-    /**
-     * The ultrasonic sensor's range of output, in external units.
-     */
-    public static final double kUltrasonicRange = 500;
+    // /**
+    //  * The ultrasonic sensor's range of output, in external units.
+    //  */
+    // public static final double kUltrasonicRange = 500;
 
-    /**
-     * The starting point of the ultrasonic sensor, i.e., what the value is when the output is 0V.
-     */
-    public static final double kUltrasonicOffset = 0;
+    // /**
+    //  * The starting point of the ultrasonic sensor, i.e., what the value is when the output is 0V.
+    //  */
+    // public static final double kUltrasonicOffset = 0;
 
     /**
      * The cutoff ultrasonic sensor value for whether there is a note in the intake.
@@ -157,6 +147,11 @@ public final class Constants {
 
 
     public static final double kInitialShooterSpeed = 0.3;
+
+    /**
+     * The multiplier to use for the CIM speed of the top of the shooter (relative to the bottom NEO).
+     */
+    public static final double kCIMMultiplier = 0.9;
   }
 
   public final static class FieldConstants {
@@ -235,7 +230,7 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
     public static final double kArm1Initial = Math.toRadians(-40);
     public static final double kArm2Initial = Math.toRadians(90);
-    public static final double kArm1MaxSpeed = 0.4;
-    public static final double kArm2MaxSpeed = 0.4;
+    public static final double kArm1MaxSpeed = 0.05;
+    public static final double kArm2MaxSpeed = 0.05;
   }
 }

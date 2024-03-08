@@ -51,10 +51,10 @@ public class Inout extends SubsystemBase {
   /**
    * The ultrasonic sensor.
    */
-  private final AnalogPotentiometer m_ultrasonic = new AnalogPotentiometer(
-    InoutConstants.kUltrasonicAnalogPort,
-    InoutConstants.kUltrasonicRange,
-    InoutConstants.kUltrasonicOffset);
+  // private final AnalogPotentiometer m_ultrasonic = new AnalogPotentiometer(
+  //   InoutConstants.kUltrasonicAnalogPort,
+  //   InoutConstants.kUltrasonicRange,
+  //   InoutConstants.kUltrasonicOffset);
   
   private double shooterSpeed;
 
@@ -87,7 +87,8 @@ public class Inout extends SubsystemBase {
    * @param speed speed between [-1, 1]
    */
   public void setIntake(double speed){
-    m_intake.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
+    m_intake.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1) * InoutConstants.kCIMMultiplier);
+    m_intakeBottom.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
   }
 
   /**
@@ -104,9 +105,9 @@ public class Inout extends SubsystemBase {
    * 
    * @return <code>true</code> if there is a note; <code>false</code> if there isn't a note
    */
-  public boolean hasNote() {
-    return m_ultrasonic.get() < InoutConstants.kUltrasonicCutoff;
-  }
+  // public boolean hasNote() {
+  //   return m_ultrasonic.get() < InoutConstants.kUltrasonicCutoff;
+  // }
 
   /**
    * Example command factory method.
@@ -136,7 +137,7 @@ public class Inout extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     // TODO: remove logging
-    SmartDashboard.putNumber("Ultrasonic", m_ultrasonic.get());
+    // SmartDashboard.putNumber("Ultrasonic", m_ultrasonic.get());
   }
 
   public void simulationInit() {
