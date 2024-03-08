@@ -32,7 +32,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CANConstants;
 
 public class Arm extends SubsystemBase {
-  private final WPI_VictorSPX joint0 = new WPI_VictorSPX(17);
+  private final WPI_VictorSPX joint0 = new WPI_VictorSPX(CANConstants.kSPXID);
   private final CANSparkMax joint1 = new CANSparkMax(CANConstants.kArmJoint1ID, MotorType.kBrushless);
   private final CANSparkMax joint2 = new CANSparkMax(CANConstants.kArmJoint2ID, MotorType.kBrushless);
   

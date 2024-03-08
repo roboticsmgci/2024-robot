@@ -217,8 +217,8 @@ public final class Constants {
   public static class CANConstants {
     public static final int kArmJoint1ID = 29;
     public static final int kArmJoint2ID = 21;
-    public static final int kIntakeBottomID = 24;
-    public static final int kIntakeTopID = 25;
+    public static final int kIntakeBottomID = 25;
+    public static final int kIntakeTopID = 24;
     public static final int kShooterTopID = 22;
     public static final int kShooterBottomID = 30;
     public static final int kSPXID = 17;
