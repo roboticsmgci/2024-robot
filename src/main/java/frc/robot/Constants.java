@@ -193,21 +193,22 @@ public final class Constants {
     public static final double kDLockTargetRotSpeed = 0;
   }
 
-  public static final class PresetConstants {
+   public static final class PresetConstants {
     
-    public static final double joint1Preset1 = 0;
-    public static final double joint2Preset1 = 0;
+    // Intake
+    public static final double joint1Preset1 = 86799.944623;
+    public static final double joint2Preset1 = -37.428542;
 
-    public static final double joint1Preset2 = 30;
-    public static final double joint2Preset2 = 30;
+    // Speaker
+    public static final double joint1Preset2 = 16238.660442;
+    public static final double joint2Preset2 = -182.000007;
 
     public static final double joint1Preset3 = 45;
     public static final double joint2Preset3 = 45;
 
     public static final double joint1Preset4 = 90;
     public static final double joint2Preset4 = 90;
-
-  }
+   }
 
   public static class CANConstants {
     public static final int kArmJoint1ID = 29;

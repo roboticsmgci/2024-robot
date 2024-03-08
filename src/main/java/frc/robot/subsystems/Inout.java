@@ -34,7 +34,7 @@ public class Inout extends SubsystemBase {
   /**
    * The shooter motor.
    */
-  private final CANSparkMax m_shooter = new CANSparkMax(CANConstants.kShooterTopID, MotorType.kBrushed);
+  private final CANSparkMax m_shooter = new CANSparkMax(CANConstants.kShooterTopID, MotorType.kBrushless);
 
   private final CANSparkMax m_shooterBottom = new CANSparkMax(CANConstants.kShooterBottomID, MotorType.kBrushless);
 
@@ -63,7 +63,7 @@ public class Inout extends SubsystemBase {
     m_intake.restoreFactoryDefaults();
     m_shooter.restoreFactoryDefaults();
 
-    // m_intakeBottom.follow(m_intake);
+    m_intakeBottom.follow(m_intake);
     m_shooterBottom.follow(m_shooter);
 
     m_intake.setIdleMode(IdleMode.kBrake);
@@ -87,8 +87,8 @@ public class Inout extends SubsystemBase {
    * @param speed speed between [-1, 1]
    */
   public void setIntake(double speed){
-    m_intake.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1) * InoutConstants.kCIMMultiplier);
-    m_intakeBottom.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
+    m_intake.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1)/* * InoutConstants.kCIMMultiplier*/);
+    // m_intakeBottom.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
   }
 
   /**
