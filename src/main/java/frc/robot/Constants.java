@@ -138,15 +138,15 @@ public final class Constants {
     /**
      * The time (in milliseconds) to "warm up" the shooter before shooting.
      */
-    public static final double kWarmupTime = 2000;
+    public static final double kWarmupTime = 1000;
 
     /**
      * The speed at which to run the shooter.
      */
-    public static final double kShooterSpeed = 0.5;
+    public static final double kShooterSpeed = 1;
 
 
-    public static final double kInitialShooterSpeed = 0.3;
+    public static final double kInitialShooterSpeed = 1;
 
     /**
      * The multiplier to use for the CIM speed of the top of the shooter (relative to the bottom NEO).
@@ -195,35 +195,36 @@ public final class Constants {
 
    public static final class PresetConstants {
     
-    // Intake
-    public static final double joint1Preset1 = 86799.944623;
-    public static final double joint2Preset1 = -37.428542;
+    // Intake (A)
+    public static final double joint1Preset1 = 5468.661228;
+    public static final double joint2Preset1 = -35.428553;
 
-    // Speaker
-    public static final double joint1Preset2 = 16238.660442;
-    public static final double joint2Preset2 = -182.000007;
+    // Speaker (B)
+    public static final double joint1Preset2 = 2228.557619;
+    public static final double joint2Preset2 = -165.143141;
 
-    public static final double joint1Preset3 = 45;
-    public static final double joint2Preset3 = 45;
+    // Start
+    public static final double joint1Preset3 = 90;
+    public static final double joint2Preset3 = 0;
 
     public static final double joint1Preset4 = 90;
     public static final double joint2Preset4 = 90;
    }
 
   public static class CANConstants {
-    public static final int kArmJoint1ID = 29;
-    public static final int kArmJoint2ID = 21;
-    public static final int kIntakeBottomID = 25;
-    public static final int kIntakeTopID = 24;
+    public static final int kArmJoint1ID = 29; // invert (NEVERMIND)
+    public static final int kArmJoint2ID = 21; // invert (NEVERMIND)
+    public static final int kIntakeBottomID = 24; // slower
+    public static final int kIntakeTopID = 25;
     public static final int kShooterTopID = 22;
-    public static final int kShooterBottomID = 30;
+    public static final int kShooterBottomID = 30; // invert
     public static final int kSPXID = 17;
   }
 
   public static final class ArmConstants {
     public static final double kArm1GearRatio = 1.0/16.0*32.0/16.0*64.0/32.0;
     public static final double kArm2GearRatio = 64.0/24.0*1.0/80.0;
-    public static final double kArm3GearRatio = 6.0*4.0/24.0*1.0/80.0;
+    public static final double kArm3GearRatio = 64.0/24.0*1.0/80.0;
     public static final double kShooterLength = Units.inchesToMeters(8.35);
     public static final double kArm2Length = Units.inchesToMeters(24);
     public static final double kArm3Length = Units.inchesToMeters(16.5);
@@ -231,8 +232,8 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
     public static final double kArm1Initial = Math.toRadians(90);
     public static final double kArm2Initial = Math.toRadians(0);
-    public static final double kArm1MaxSpeed = 0.05;
-    public static final double kArm2MaxSpeed = 0.05;
+    public static final double kArm1MaxSpeed = 0.5;
+    public static final double kArm2MaxSpeed = 0.3;
 
     public static final double kArm1RateLimit = 0.1;
   }

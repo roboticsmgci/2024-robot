@@ -61,16 +61,24 @@ public class Inout extends SubsystemBase {
   public Inout() {
 
     m_intake.restoreFactoryDefaults();
+    m_intakeBottom.restoreFactoryDefaults();
     m_shooter.restoreFactoryDefaults();
+    m_shooterBottom.restoreFactoryDefaults();
+
+    
 
     m_intakeBottom.follow(m_intake);
-    m_shooterBottom.follow(m_shooter);
+
+    // m_shooterBottom.setInverted(true);
 
     m_intake.setIdleMode(IdleMode.kBrake);
     m_shooter.setIdleMode(IdleMode.kCoast);
+    // -3415.680998 39.142824
+    m_intake.setSmartCurrentLimit(65);
+    m_intakeBottom.setSmartCurrentLimit(65);
 
-    m_shooter.setSmartCurrentLimit(75);
-    m_shooterBottom.setSmartCurrentLimit(75);
+    m_shooter.setSmartCurrentLimit(65);
+    m_shooterBottom.setSmartCurrentLimit(65);
     
     m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kShooterGearRatio);
     m_shooterEncoder.setVelocityConversionFactor(360 * InoutConstants.kShooterGearRatio / 60);
@@ -97,7 +105,9 @@ public class Inout extends SubsystemBase {
    * @param speed speed between [-1, 1]
    */
   public void setShooter(double speed){
-    m_shooter.setVoltage(RobotController.getBatteryVoltage() * MathUtil.clamp(speed, -1, 1));
+    m_shooter.set(MathUtil.clamp(speed, -1, 1));
+    m_shooterBottom.set(-MathUtil.clamp(speed, -1, 1));
+    // System.out.println(m_shooterBottom.get());
   }
 
   /**

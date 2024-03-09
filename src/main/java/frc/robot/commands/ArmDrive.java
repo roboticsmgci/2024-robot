@@ -33,15 +33,15 @@ public class ArmDrive extends Command {
   public void execute() {
     double currentSpeed = m_speed1.getAsDouble();
 
-    if (currentSpeed > prevSpeed) {
-      currentSpeed = m_limiter.calculate(currentSpeed);
-    } else {
-      m_limiter.calculate(currentSpeed);
-    }
+    // if (currentSpeed > prevSpeed) {
+    //   currentSpeed = m_limiter.calculate(currentSpeed);
+    // } else {
+    //   m_limiter.calculate(currentSpeed);
+    // }
 
     m_arm.setArm1(currentSpeed);
     m_arm.setArm2(m_speed2.getAsDouble());
-    m_arm.setArm0(0.1);
+    m_arm.setArm0(0.7);
 
     System.out.println(currentSpeed);
 

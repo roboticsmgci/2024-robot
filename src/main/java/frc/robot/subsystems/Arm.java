@@ -44,12 +44,15 @@ public class Arm extends SubsystemBase {
   // private final double arm2 = 1;
   /** Creates a new ExampleSubsystem. */
   public Arm() {
-    joint1.setIdleMode(IdleMode.kCoast);
-    joint2.setIdleMode(IdleMode.kCoast);
+    // joint1.setIdleMode(IdleMode.kCoast);
+    // joint2.setIdleMode(IdleMode.kCoast);
+
+    // joint1.setInverted(true);
+    // joint2.setInverted(true);
 
     // TODO
-    // joint1.setIdleMode(IdleMode.kBrake);
-    // joint2.setIdleMode(IdleMode.kBrake);
+    joint1.setIdleMode(IdleMode.kBrake);
+    joint2.setIdleMode(IdleMode.kBrake);
 
     encoder1.setPositionConversionFactor(ArmConstants.kArm1GearRatio*2*Math.PI);
     encoder1.setPosition(ArmConstants.kArm1Initial);
@@ -75,6 +78,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArm1(double speed){
+    System.out.println(speed);
     joint1.set(speed*ArmConstants.kArm1MaxSpeed);
   }
 

@@ -9,10 +9,11 @@ import frc.robot.subsystems.Inout;
  */
 public class Shoot extends Command {
   private final Inout m_inout;
-  private double m_startTime;
+  private double m_startTime, m_speed;
 
-  public Shoot(Inout inout) {
+  public Shoot(Inout inout, double speed) {
     m_inout = inout;
+    m_speed = speed;
 
     addRequirements(inout);
   }
@@ -24,12 +25,12 @@ public class Shoot extends Command {
 
   @Override
   public void execute() {
-    System.out.println(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
-    m_inout.setShooter(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
-    // m_inout.setShooter(1);
+    // System.out.println(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
+    // m_inout.setShooter(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
+    m_inout.setShooter(m_speed);
     
     if ((System.currentTimeMillis() - m_startTime) > InoutConstants.kWarmupTime) {
-      m_inout.setIntake(InoutConstants.kIntakeSpeed);
+      m_inout.setIntake(m_speed);
     }
   }
 

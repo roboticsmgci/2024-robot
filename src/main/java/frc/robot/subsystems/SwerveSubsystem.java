@@ -354,6 +354,7 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // m_swerveDrive.updateOdometry();
+    // System.out.println(m_swerveDrive.getModulePositions()[0].angle);
   }
 
   @Override
