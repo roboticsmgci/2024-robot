@@ -104,9 +104,10 @@ public class RobotContainer {
     // TODO: add this back
 
    //checks if presets are being used, only active when button is pressed 
-   m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset1;}, () -> {return PresetConstants.joint2Preset1;})); 
-   m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset2;}, () -> {return PresetConstants.joint2Preset2;}));
-   
+  
+
+    m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
+
     // m_arm.setDefaultCommand(new ArmDrive(
     //   m_arm,
     //   () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
@@ -198,6 +199,9 @@ public class RobotContainer {
       () -> 0
     ));
 
+    
+    m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset1;}, () -> {return PresetConstants.joint2Preset1;})); 
+    m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset2;}, () -> {return PresetConstants.joint2Preset2;}));
 
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
