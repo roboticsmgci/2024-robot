@@ -11,12 +11,13 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Distance;
@@ -79,15 +80,15 @@ public class Arm extends SubsystemBase {
 
   public void setArm1(double speed){
     System.out.println(speed);
-    joint1.set(speed*ArmConstants.kArm1MaxSpeed);
+    joint1.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm1MaxSpeed);
   }
 
   public void setArm2(double speed){
-    joint2.set(speed*ArmConstants.kArm2MaxSpeed);
+    joint2.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm2MaxSpeed);
   }
 
   public void setArm0(double speed){
-    joint0.set(speed);
+    joint0.set(MathUtil.clamp(speed, -1, 1));
   }
 
   public double getArmEncoder1() {

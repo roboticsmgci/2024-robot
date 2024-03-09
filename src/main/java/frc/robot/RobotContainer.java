@@ -164,13 +164,13 @@ public class RobotContainer {
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     // m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
-    m_driverController.y().onTrue(new ToggleFieldOriented(m_drive));
+    m_driverController.rightTrigger().onTrue(new ToggleFieldOriented(m_drive));
     // m_armController.a().onTrue((new IntakeTime(m_inout, 0.5, 0.8)).andThen(new IntakeTime(m_inout, 0.1, -0.8)));
 
-    m_driverController.x().onTrue(Commands.runOnce(m_drive::zeroGyro));
+    m_driverController.leftTrigger().onTrue(Commands.runOnce(m_drive::zeroGyro));
     // m_driverController.leftBumper().and(m_driverController.rightBumper()).onTrue(Commands.runOnce(()->m_drive.resetGyro()));
 
-    m_driverController.leftTrigger()
+    m_driverController.leftBumper()
         .onTrue(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kSlowSpeed)))
         .onFalse(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kDefaultSpeed)));
 
@@ -186,7 +186,7 @@ public class RobotContainer {
         .onFalse(Commands.runOnce(() -> m_drive.setTarget(null), m_drive));
     
     // TODO: 1) add back 2 lines
-    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.12)).onFalse(new IntakeTime(m_inout, 150, -0.12));
+    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.3)).onFalse(new IntakeTime(m_inout, 50, -0.1));
     m_armController.rightTrigger().whileTrue(new Shoot(m_inout, 0.2));
     m_armController.rightStick().whileTrue(new Shoot(m_inout, 1));
 

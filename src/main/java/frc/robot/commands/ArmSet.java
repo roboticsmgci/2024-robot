@@ -16,7 +16,7 @@ public class ArmSet extends Command {
   private double m_finishedTime = -1;
 
   private final PIDController m_armSpeedPID1 = new PIDController(0.000001, 0, 0);
-  private final PIDController m_armSpeedPID2 = new PIDController(0, 0, 0);
+  private final PIDController m_armSpeedPID2 = new PIDController(0.001, 0, 0);
 
   /**
    * Gradually adjust speed? TODO: add this in

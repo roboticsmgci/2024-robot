@@ -138,7 +138,7 @@ public final class Constants {
     /**
      * The time (in milliseconds) to "warm up" the shooter before shooting.
      */
-    public static final double kWarmupTime = 1000;
+    public static final double kWarmupTime = 2000;
 
     /**
      * The speed at which to run the shooter.
