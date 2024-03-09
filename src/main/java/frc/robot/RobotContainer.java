@@ -60,7 +60,7 @@ public class RobotContainer {
   public final CommandXboxController m_armController = new CommandXboxController(
       1);
   private final Controller m_controller = new Controller(m_driverController);
-  
+
   /**
    * The PathPlanner auto command chooser.
    */
@@ -102,21 +102,12 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(m_controller.getAxis(1), DriverConstants.kControllerDeadband),
         () -> -MathUtil.applyDeadband(m_controller.getAxis(4), DriverConstants.kControllerDeadband)));
     // TODO: add this back
-    m_arm.setDefaultCommand(new ArmSet(
-    m_arm,
-    () -> {
-        if (m_armController.getHID().getAButton()) return PresetConstants.joint1Preset1;
-        else if (m_armController.getHID().getBButton()) return PresetConstants.joint1Preset2;
-        else if (m_armController.getHID().getXButton()) return PresetConstants.joint1Preset3;
-        else if (false) return PresetConstants.joint1Preset4;
-        else return m_arm.getArmEncoder1();
-    },() -> {
-      if (m_armController.getHID().getAButton()) return PresetConstants.joint2Preset1;
-      else if (m_armController.getHID().getBButton()) return PresetConstants.joint2Preset2;
-      else if (m_armController.getHID().getXButton()) return PresetConstants.joint2Preset3;
-      else if (false) return PresetConstants.joint2Preset4;
-      else return m_arm.getArmEncoder2();
-    }));
+
+   //checks if presets are being used, only active when button is pressed 
+  
+
+    m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
+
     // m_arm.setDefaultCommand(new ArmDrive(
     //   m_arm,
     //   () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
@@ -208,6 +199,9 @@ public class RobotContainer {
       () -> 0
     ));
 
+    
+    m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset1;}, () -> {return PresetConstants.joint2Preset1;})); 
+    m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset2;}, () -> {return PresetConstants.joint2Preset2;}));
 
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
