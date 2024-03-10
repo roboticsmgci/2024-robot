@@ -79,11 +79,8 @@ public class Arm extends SubsystemBase {
   }
   
   public void setArm1(double speed){
-    // System.out.println(speed);
     double actualSpeed = MathUtil.clamp(speed, -1, 1);
-    // actualSpeed += 0.3 * Math.sin((getArmEncoder1() - 1.57) / 60.0);
-    // System.out.println(0.3 * Math.sin((getArmEncoder1() - 1.57) / 60.0) + " " + getArmEncoder1());
-    joint1.set(actualSpeed*ArmConstants.kArm1MaxSpeed);
+    joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.091) * Math.sin((getArmEncoder1() - 1.57) / 60.0)));
   }
 
   public void setArm2(double speed){
