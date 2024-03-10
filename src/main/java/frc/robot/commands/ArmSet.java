@@ -15,8 +15,8 @@ public class ArmSet extends Command {
   private final double m_time;
   private double m_finishedTime = -1;
 
-  private final PIDController m_armSpeedPID1 = new PIDController(0.000001, 0, 0);
-  private final PIDController m_armSpeedPID2 = new PIDController(0.001, 0, 0);
+  private final PIDController m_armSpeedPID1 = new PIDController(1.0/50, 0.01, 0);
+  private final PIDController m_armSpeedPID2 = new PIDController(1.0/80, 0, 0);
 
   /**
    * Gradually adjust speed? TODO: add this in
@@ -28,6 +28,7 @@ public class ArmSet extends Command {
     m_target1 = arm1Angle;
     m_target2 = arm2Angle;
     m_time = -1;
+    m_armSpeedPID1.setIntegratorRange(-1, 0);
 
     addRequirements(subsystem);
   }
@@ -48,11 +49,16 @@ public class ArmSet extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // System.out.println("command running");
+    double test = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble());
+    // System.out.println(m_arm.getArmEncoder1() + " " + m_target1.getAsDouble());
+    // System.out.println(test);
     // m_arm.setArm1(m_limiter1.calculate(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble())));
-    m_arm.setArm1(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble()));
+    // System.out.println("test: " + test);
+    m_arm.setArm1(test);
 
     m_arm.setArm2(m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble()));
-    m_arm.setArm0(0.7);
+    // m_arm.setArm0(0.7);
 
     if (m_finishedTime == -1 && m_armSpeedPID1.atSetpoint() && m_armSpeedPID2.atSetpoint()) {
       m_finishedTime = System.currentTimeMillis();

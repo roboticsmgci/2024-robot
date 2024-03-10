@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.0680920648574521,
-      "y": 6.335562571271046
+      "x": 2.0,
+      "y": 7.0
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LEAVE"
+            "pathName": "LEAVE RED"
           }
         }
       ]

@@ -41,9 +41,9 @@ public class ArmDrive extends Command {
 
     m_arm.setArm1(currentSpeed);
     m_arm.setArm2(m_speed2.getAsDouble());
-    m_arm.setArm0(0.7);
+    // m_arm.setArm0(0.7);
 
-    System.out.println(currentSpeed);
+    // System.out.println(currentSpeed);
 
     prevSpeed = currentSpeed;
   }

@@ -9,11 +9,13 @@ import frc.robot.subsystems.Inout;
  */
 public class Shoot extends Command {
   private final Inout m_inout;
-  private double m_startTime, m_speed;
+  private double m_startTime;
+  private final double m_speed, m_warmupTime;
 
-  public Shoot(Inout inout, double speed) {
+  public Shoot(Inout inout, double speed, double warmupTime) {
     m_inout = inout;
     m_speed = speed;
+    m_warmupTime = warmupTime;
 
     addRequirements(inout);
   }
@@ -29,7 +31,7 @@ public class Shoot extends Command {
     // m_inout.setShooter(InoutConstants.kInitialShooterSpeed + ((InoutConstants.kShooterSpeed - InoutConstants.kInitialShooterSpeed) * ((System.currentTimeMillis() - m_startTime)/InoutConstants.kWarmupTime)));
     m_inout.setShooter(m_speed);
     
-    if ((System.currentTimeMillis() - m_startTime) > InoutConstants.kWarmupTime) {
+    if ((System.currentTimeMillis() - m_startTime) > m_warmupTime) {
       m_inout.setIntake(m_speed);
     }
   }

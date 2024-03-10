@@ -62,7 +62,7 @@ public final class Constants {
      * The multiplier for the default driving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kDefaultSpeed = 0.6;
+    public static final double kDefaultSpeed = 1;
 
     /**
      * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum
@@ -196,28 +196,28 @@ public final class Constants {
    public static final class PresetConstants {
     
     // Intake (A)
-    public static final double joint1Preset1 = 5468.661228;
-    public static final double joint2Preset1 = -35.428553;
+    public static final double joint1Preset1 = 95.8;
+    public static final double joint2Preset1 = -0.718;
 
     // Speaker (B)
-    public static final double joint1Preset2 = 2228.557619;
-    public static final double joint2Preset2 = -165.143141;
+    public static final double joint1Preset2 = 62.0;
+    public static final double joint2Preset2 = -2.22;
 
     // Start
-    public static final double joint1Preset3 = 90;
+    public static final double joint1Preset3 = 1.57;
     public static final double joint2Preset3 = 0;
 
-    public static final double joint1Preset4 = 90;
-    public static final double joint2Preset4 = 90;
+    public static final double joint1Preset4 = 3.1415;
+    public static final double joint2Preset4 = -2.169;
    }
 
   public static class CANConstants {
-    public static final int kArmJoint1ID = 29; // invert (NEVERMIND)
-    public static final int kArmJoint2ID = 21; // invert (NEVERMIND)
-    public static final int kIntakeBottomID = 24; // slower
+    public static final int kArmJoint1ID = 29;
+    public static final int kArmJoint2ID = 21;
+    public static final int kIntakeBottomID = 24;
     public static final int kIntakeTopID = 25;
     public static final int kShooterTopID = 22;
-    public static final int kShooterBottomID = 30; // invert
+    public static final int kShooterBottomID = 30;
     public static final int kSPXID = 17;
   }
 
@@ -232,7 +232,7 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
     public static final double kArm1Initial = Math.toRadians(90);
     public static final double kArm2Initial = Math.toRadians(0);
-    public static final double kArm1MaxSpeed = 0.5;
+    public static final double kArm1MaxSpeed = 0.35;
     public static final double kArm2MaxSpeed = 0.3;
 
     public static final double kArm1RateLimit = 0.1;

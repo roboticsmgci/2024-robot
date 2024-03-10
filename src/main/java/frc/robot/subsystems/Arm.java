@@ -34,7 +34,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CANConstants;
 
 public class Arm extends SubsystemBase {
-  private final WPI_VictorSPX joint0 = new WPI_VictorSPX(CANConstants.kSPXID);
+  // private final WPI_VictorSPX joint0 = new WPI_VictorSPX(CANConstants.kSPXID);
   private final CANSparkMax joint1 = new CANSparkMax(CANConstants.kArmJoint1ID, MotorType.kBrushless);
   private final CANSparkMax joint2 = new CANSparkMax(CANConstants.kArmJoint2ID, MotorType.kBrushless);
   
@@ -77,19 +77,22 @@ public class Arm extends SubsystemBase {
       ArmConstants.kArmBase.getY()+ArmConstants.kArm2Length*Math.sin(encoder2.getPosition()), 
       new Rotation2d(encoder1.getPosition()+encoder2.getPosition()));
   }
-
+  
   public void setArm1(double speed){
-    System.out.println(speed);
-    joint1.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm1MaxSpeed);
+    // System.out.println(speed);
+    double actualSpeed = MathUtil.clamp(speed, -1, 1);
+    // actualSpeed += 0.3 * Math.sin((getArmEncoder1() - 1.57) / 60.0);
+    // System.out.println(0.3 * Math.sin((getArmEncoder1() - 1.57) / 60.0) + " " + getArmEncoder1());
+    joint1.set(actualSpeed*ArmConstants.kArm1MaxSpeed);
   }
 
   public void setArm2(double speed){
     joint2.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm2MaxSpeed);
   }
 
-  public void setArm0(double speed){
-    joint0.set(MathUtil.clamp(speed, -1, 1));
-  }
+  // public void setArm0(double speed){
+  //   joint0.set(MathUtil.clamp(speed, -1, 1));
+  // }
 
   public double getArmEncoder1() {
     return encoder1.getPosition();
@@ -125,8 +128,8 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("joint1", Math.toDegrees(getArmEncoder1()));
-    SmartDashboard.putNumber("joint2", Math.toDegrees(getArmEncoder2()));
+    SmartDashboard.putNumber("joint1", getArmEncoder1());
+    SmartDashboard.putNumber("joint2", getArmEncoder2());
     // This method will be called once per scheduler run
   }
 

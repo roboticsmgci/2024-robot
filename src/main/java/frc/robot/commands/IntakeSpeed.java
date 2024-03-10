@@ -34,6 +34,7 @@ public class IntakeSpeed extends Command {
   // When the note is in the correct location (pid?)
   @Override
   public void end(boolean interrupted) {
+    m_inout.setIntake(0);
   }
 
   // Returns true when the command should end.
