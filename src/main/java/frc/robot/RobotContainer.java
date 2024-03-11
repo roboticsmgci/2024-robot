@@ -313,6 +313,10 @@ public class RobotContainer {
     // m_arm.simulationInit();
   }
 
+  public void teleopInit() {
+    m_drive.teleopInit();
+  }
+
   private double calcShooterAngle(){
     double shooterX = m_drive.getPose().getX()-Math.cos(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
     double shooterY = m_drive.getPose().getY()-Math.sin(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
