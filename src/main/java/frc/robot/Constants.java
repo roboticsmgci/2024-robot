@@ -8,11 +8,12 @@ import java.util.List;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
-import swervelib.telemetry.SwerveDriveTelemetry;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -178,6 +179,23 @@ public final class Constants {
      */
     //218.64
     public static final double kRedSpeakerY = Units.inchesToMeters(0);
+
+    // TODO: update these
+    public static final Pose2d[] kStartPoses = {
+      new Pose2d(0.9, 4, new Rotation2d()),
+      new Pose2d(0.9, 5, new Rotation2d())
+    };
+
+    public static final Pose2d[] kNotes = {
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(161.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(218.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d())
+    };
+
+    public static final Pose2d[] kEndPoses = {
+      new Pose2d(6, 6, new Rotation2d()),
+      new Pose2d(5, 5, new Rotation2d())
+    };
 
   }
 

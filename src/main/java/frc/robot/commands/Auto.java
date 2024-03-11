@@ -4,18 +4,14 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Inout;
-import frc.robot.subsystems.SwerveSubsystem;
-
-import java.util.ArrayList;
-
-import org.opencv.core.Point;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.PresetConstants;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Inout;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class Auto extends SequentialCommandGroup {
@@ -46,20 +42,39 @@ public class Auto extends SequentialCommandGroup {
   public void setStartPos(Pose2d startPos){
     
     //this.addCommands(create trajectory to startPos);
-    System.out.println(startPos);
+    this.addCommands(Commands.runOnce(() -> m_swerve.resetOdometry(startPos), m_swerve));
   }
 
   public void addNote(Pose2d notePos){
     //go to note, pick up note, shoot note
     //this.addCommands();
-    System.out.println(notePos);
+    this.addCommands(m_swerve.driveToPose(notePos));
+    // TODO: pick up note, shoot note
   }
 
 
   public void setEndPos(Pose2d endPos){
     //this.addCommands(create trajectory to endPos);
-    System.out.println(endPos);
+    this.addCommands(m_swerve.driveToPose(endPos));
   }
+
+  public static Command intakeNote(Arm arm, Inout inout) {
+    return Commands.parallel(
+      new ArmSet(arm, () -> PresetConstants.joint1Preset1, () -> PresetConstants.joint2Preset1),
+      new IntakeTime(inout, 0.12, 500)
+    );
+  }
+
+  // public static Command shootNote(Arm arm, Inout inout) {
+  //   return Commands.parallel(
+  //     new ArmSet(arm, () -> PresetConstants.joint1Preset2, () -> PresetConstants.joint2Preset2),
+  //     Commands.deadline(
+  //       new Shoot(inout, 1, 1000),
+  //       new ArmSet()
+
+  //     )
+  //   );
+  // }
 
 
 }

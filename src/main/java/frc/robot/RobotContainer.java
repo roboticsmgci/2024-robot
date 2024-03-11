@@ -4,16 +4,25 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
+import java.sql.Driver;
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriverConstants;
@@ -23,6 +32,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PresetConstants;
 import frc.robot.commands.ArmDrive;
 import frc.robot.commands.ArmSet;
+import frc.robot.commands.Auto;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.InoutDrive;
@@ -66,6 +76,15 @@ public class RobotContainer {
    */
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto");
 
+  private final SendableChooser<Pose2d> m_startPosChooser = new SendableChooser<>();
+  private final SendableChooser<Pose2d> m_endPosChooser = new SendableChooser<>();
+  private final SendableChooser<Pose2d> m_note1Chooser = new SendableChooser<>();
+
+  /**
+   * An empty command, just used to give the auto chooser an option for the generated auto. DO NOT RUN THIS COMMAND.
+   */
+  private final Command m_dummyGeneratedAuto = Commands.none();
+
   private double crad = 0;
   /**
    * The default swerve drive command.
@@ -93,20 +112,23 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    m_drive.resetOdometry(new Pose2d());
+
+    // m_drive.resetOdometry(new Pose2d());
     // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     // m_drive.setDefaultCommand(m_swerveDriveCommand);
     m_drive.setDefaultCommand(m_drive.driveCommand(
-        () -> MathUtil.applyDeadband(m_controller.getAxis(0), DriverConstants.kControllerDeadband),
         () -> MathUtil.applyDeadband(m_controller.getAxis(1), DriverConstants.kControllerDeadband),
+        () -> -MathUtil.applyDeadband(m_controller.getAxis(0), DriverConstants.kControllerDeadband),
         () -> -MathUtil.applyDeadband(m_controller.getAxis(4), DriverConstants.kControllerDeadband)));
     // TODO: add this back
 
    //checks if presets are being used, only active when button is pressed 
-  
+    
 
     m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
+
+    configureChoosers();
 
     // m_arm.setDefaultCommand(new ArmDrive(
     //   m_arm,
@@ -125,8 +147,6 @@ public class RobotContainer {
     // new Translation2d(0, 0),
     // () -> -m_driverController.getLeftY(),
     // () -> -m_driverController.getLeftX()));
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
 
@@ -216,6 +236,28 @@ public class RobotContainer {
     
   }
 
+  private void configureChoosers() {
+    for (int i = 0; i < FieldConstants.kStartPoses.length; i++) {
+      m_startPosChooser.addOption("Start " + i, FieldConstants.kStartPoses[i]);
+    }
+
+    for (int i = 0; i < FieldConstants.kNotes.length; i++) {
+      m_note1Chooser.addOption("1st Note - " + i, FieldConstants.kNotes[i]);
+    }
+
+    for (int i = 0; i < FieldConstants.kEndPoses.length; i++) {
+      m_endPosChooser.addOption("End " + i, FieldConstants.kEndPoses[i]);
+    }
+
+    autoChooser.addOption("Generated Auto", m_dummyGeneratedAuto);
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Start Pos Chooser", m_startPosChooser);
+    SmartDashboard.putData("Note 1 Chooser", m_note1Chooser);
+    SmartDashboard.putData("End Pos Chooser", m_endPosChooser);
+
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -223,9 +265,35 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem)
 
-    return autoChooser.getSelected();
+    if (autoChooser.getSelected().equals(m_dummyGeneratedAuto)) {
+      Pose2d startPos = m_startPosChooser.getSelected();
+      Pose2d note1Pos = m_note1Chooser.getSelected();
+      Pose2d endPos = m_endPosChooser.getSelected();
+
+      Optional<Alliance> alliance = DriverStation.getAlliance();
+      if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red)) {
+        startPos = mirrorPose(startPos);
+        note1Pos = mirrorPose(note1Pos);
+        endPos = mirrorPose(endPos);
+      }
+
+      Auto generatedAuto = new Auto(m_drive, m_arm, m_inout);
+      generatedAuto.setStartPos(startPos);
+      generatedAuto.addNote(note1Pos);
+      generatedAuto.setEndPos(endPos);
+
+      System.out.println(startPos + " " + note1Pos + " " + endPos);
+
+      return generatedAuto;
+    } else {
+      return autoChooser.getSelected();
+    }
+  }
+
+  private Pose2d mirrorPose(Pose2d pose) {
+    return new Pose2d(Units.inchesToMeters(651.75) - pose.getX(), pose.getY(), pose.getRotation().rotateBy(Rotation2d.fromDegrees(180)));
   }
 
   /**

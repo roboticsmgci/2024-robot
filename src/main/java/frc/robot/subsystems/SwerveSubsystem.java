@@ -64,16 +64,24 @@ public class SwerveSubsystem extends SubsystemBase {
       PIDValues.kILockTargetRotSpeed,
       PIDValues.kDLockTargetRotSpeed);
 
+  private boolean m_isForwardsInverted = false;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
    * @param directory Directory of swerve drive config files.
    */
   public SwerveSubsystem() {
-
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
     // objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+
+    // To invert which way is "forward" for teleop field-oriented driving if starting on
+    // red
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red)) {
+      m_isForwardsInverted = true;
+    }
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
     try {
@@ -103,8 +111,10 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param driveCfg      SwerveDriveConfiguration for the swerve.
    * @param controllerCfg Swerve Controller.
    */
-  // public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
-  //   m_swerveDrive = new SwerveDrive(driveCfg, controllerCfg, DrivetrainConstants.kMaximumSpeed);
+  // public SwerveSubsystem(SwerveDriveConfiguration driveCfg,
+  // SwerveControllerConfiguration controllerCfg) {
+  // m_swerveDrive = new SwerveDrive(driveCfg, controllerCfg,
+  // DrivetrainConstants.kMaximumSpeed);
   // }
 
   /**
@@ -192,7 +202,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return run(() -> {
       double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
       double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
-      
+
       // Make the robot move
       driveFieldOriented(m_swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
           headingX.getAsDouble(),
@@ -217,23 +227,27 @@ public class SwerveSubsystem extends SubsystemBase {
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
       DoubleSupplier angularRotationX) {
     return run(() -> {
+      double actualXTranslation = (m_isForwardsInverted && m_isFieldOriented) ? -translationX.getAsDouble() : translationX.getAsDouble();
       if (m_target == null) {
         // System.out.println(translationX.getAsDouble());
-        // System.out.println(translationX.getAsDouble() + " " + translationY.getAsDouble() + " " + angularRotationX.getAsDouble());
+        // System.out.println(translationX.getAsDouble() + " " +
+        // translationY.getAsDouble() + " " + angularRotationX.getAsDouble());
         // Make the robot move
         m_swerveDrive.drive(
-          //try exponent as 1 to make it linear, originally 3
-            new Translation2d(Math.pow(translationX.getAsDouble(), 1) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
+            // try exponent as 1 to make it linear, originally 3
+            new Translation2d(
+                Math.pow(actualXTranslation, 1) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
                 Math.pow(translationY.getAsDouble(), 1) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
-            Math.pow(angularRotationX.getAsDouble(),1) * m_swerveDrive.getMaximumAngularVelocity() * m_slowFactor,
-            true,
+            Math.pow(angularRotationX.getAsDouble(), 1) * m_swerveDrive.getMaximumAngularVelocity() * m_slowFactor,
+            m_isFieldOriented,
             false);
       } else {
         m_swerveDrive.drive(
-            new Translation2d(Math.pow(translationX.getAsDouble(), 1) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
+            new Translation2d(
+                Math.pow(actualXTranslation, 1) * m_swerveDrive.getMaximumVelocity() * m_slowFactor,
                 Math.pow(translationY.getAsDouble(), 1) * m_swerveDrive.getMaximumVelocity() * m_slowFactor),
             m_rotSpeedPID.calculate(getHeading().getDegrees(), getDesiredHeading(getPose(), m_target)),
-            true,
+            m_isFieldOriented,
             false);
       }
     });
@@ -249,12 +263,13 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   private double getDesiredHeading(Pose2d currentPose, Translation2d targetLocation) {
     // if(m_drive.momentum){
-    //   return m_drive.targetHelper(5, 0, 
-    //   Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
+    // return m_drive.targetHelper(5, 0,
+    // Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX()
+    // - currentPose.getX()));
     // }
     return Math.toDegrees(
         Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
-    
+
   }
 
   /**
@@ -415,6 +430,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * facing toward 0.
    */
   public void zeroGyro() {
+    m_isForwardsInverted = false;
     m_swerveDrive.zeroGyro();
   }
 
