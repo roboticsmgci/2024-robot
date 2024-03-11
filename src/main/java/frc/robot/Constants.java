@@ -85,7 +85,7 @@ public final class Constants {
     /**
      * The total mass of the robot, in kilograms.
      */
-    public static final double kRobotMass = Units.lbsToKilograms(40);
+    public static final double kRobotMass = Units.lbsToKilograms(100);
 
     /**
      * A list of {@link Matter} objects that represent the robot chassis's various

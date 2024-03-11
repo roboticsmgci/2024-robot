@@ -234,8 +234,9 @@ public class SwerveSubsystem extends SubsystemBase {
     return run(() -> {
       double actualXTranslation = (m_isForwardsInverted && m_isFieldOriented) ? -translationX.getAsDouble() : translationX.getAsDouble();
       double actualYTranslation = (m_isForwardsInverted && m_isFieldOriented) ? -translationY.getAsDouble() : translationY.getAsDouble();
+      // System.out.println(actualXTranslation + " " + actualYTranslation);
       // System.out.println(m_isForwardsInverted);
-      if (m_target == null) {
+      if (m_target == null) { 
         // System.out.println(translationX.getAsDouble());
         // System.out.println(translationX.getAsDouble() + " " +
         // translationY.getAsDouble() + " " + angularRotationX.getAsDouble());

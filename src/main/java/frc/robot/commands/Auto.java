@@ -19,6 +19,7 @@ public class Auto extends SequentialCommandGroup {
   private final SwerveSubsystem m_swerve;
   private final Arm m_arm;
   private final Inout m_inout;
+  private Pose2d m_startPos;
 
   // private Pose2d m_startPos;
   // private ArrayList<Pose2d> m_notes = new ArrayList<>();
@@ -40,7 +41,7 @@ public class Auto extends SequentialCommandGroup {
   }
 
   public void setStartPos(Pose2d startPos){
-    
+    m_startPos = startPos;
     //this.addCommands(create trajectory to startPos);
     this.addCommands(Commands.runOnce(() -> m_swerve.resetOdometry(startPos), m_swerve));
   }
@@ -48,7 +49,23 @@ public class Auto extends SequentialCommandGroup {
   public void addNote(Pose2d notePos){
     //go to note, pick up note, shoot note
     //this.addCommands();
-    this.addCommands(m_swerve.driveToPose(notePos));
+    // this.addCommands(m_swerve.driveToPose(notePos));
+    this.addCommands(
+      Commands.deadline(
+        m_swerve.driveToPose(notePos), intakeNote(m_arm, m_inout)
+      )
+    );
+
+    if (notePos == null) {
+      this.addCommands(m_swerve.driveToPose(m_startPos));
+    } else {
+      this.addCommands(Commands.deadline(
+        m_swerve.driveToPose(m_startPos),
+        new ArmSet(m_arm, () -> PresetConstants.joint1Preset2, () -> PresetConstants.joint1Preset2)
+      ));
+    }
+
+    this.addCommands(shootNote(m_arm, m_inout));
     // TODO: pick up note, shoot note
   }
 
@@ -65,16 +82,15 @@ public class Auto extends SequentialCommandGroup {
     );
   }
 
-  // public static Command shootNote(Arm arm, Inout inout) {
-  //   return Commands.parallel(
-  //     new ArmSet(arm, () -> PresetConstants.joint1Preset2, () -> PresetConstants.joint2Preset2),
-  //     Commands.deadline(
-  //       new Shoot(inout, 1, 1000),
-  //       new ArmSet()
-
-  //     )
-  //   );
-  // }
+  public static Command shootNote(Arm arm, Inout inout) {
+    return Commands.parallel(
+      new ArmSet(arm, () -> PresetConstants.joint1Preset2, () -> PresetConstants.joint2Preset2),
+      Commands.deadline(
+        new Shoot(inout, 1, 1000),
+        new ArmSet(arm, () -> PresetConstants.joint1Preset1, () -> PresetConstants.joint2Preset1)
+      )
+    );
+  }
 
 
 }

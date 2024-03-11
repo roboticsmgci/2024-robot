@@ -284,7 +284,7 @@ public class RobotContainer {
       generatedAuto.addNote(note1Pos);
       generatedAuto.setEndPos(endPos);
 
-      System.out.println(startPos + " " + note1Pos + " " + endPos);
+      // System.out.println(startPos + " " + note1Pos + " " + endPos);
 
       return generatedAuto;
     } else {
