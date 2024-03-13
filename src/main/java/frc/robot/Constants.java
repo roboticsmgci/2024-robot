@@ -184,10 +184,10 @@ public final class Constants {
 
     
     public static final Pose2d[] kStartPoses = {
-      new Pose2d(0.71, 6.68, new Rotation2d(60.00)),
+      new Pose2d(0.71, 6.68, new Rotation2d(Math.toRadians(60.00))),
       new Pose2d(1.36, 5.54, new Rotation2d()),
-      new Pose2d(0.71, 4.40, new Rotation2d(-60.00)),
-      new Pose2d(0.56, 3.09, new Rotation2d(-90.00))
+      new Pose2d(0.71, 4.40, new Rotation2d(Math.toRadians(-60.00))),
+      new Pose2d(0.56, 3.09, new Rotation2d(Math.toRadians(-90.00)))
     };
     // TODO: add all notes
     public static final Pose2d[] kNotes = {
@@ -200,6 +200,10 @@ public final class Constants {
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d())
+    };
+
+    public static final String[] kNotePaths = {
+      ""
     };
 
     public static final Pose2d[] kEndPoses = {

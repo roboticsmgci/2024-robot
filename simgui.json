@@ -26,6 +26,11 @@
           "open": true
         }
       },
+      "SPARK MAX [24]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [29]": {
         "header": {
           "open": true
@@ -74,6 +79,9 @@
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
     "visible": true
   },
   "NetworkTables View": {

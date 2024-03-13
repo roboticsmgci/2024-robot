@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -57,7 +58,6 @@ import frc.robot.subsystems.SwerveSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
   private final Arm m_arm = new Arm();
@@ -153,14 +153,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     // m_driverController.x().onTrue(Commands.runOnce(()->m_drive.momentum=!m_drive.momentum));
 
     m_driverController.rightTrigger().onTrue(new ToggleFieldOriented(m_drive));
@@ -225,7 +217,7 @@ public class RobotContainer {
   }
 
   private void configureChoosers() {
-    NamedCommands.registerCommand("Intake", new InoutDrive(m_inout, ()->0.3, ()->0));
+    NamedCommands.registerCommand("Intake", Auto.intakeNote(m_arm, m_inout));
     for (int i = 0; i < FieldConstants.kStartPoses.length; i++) {
       m_startPosChooser.addOption("Start " + i, FieldConstants.kStartPoses[i]);
     }
@@ -269,13 +261,14 @@ public class RobotContainer {
       }
 
       Auto generatedAuto = new Auto(m_drive, m_arm, m_inout);
-      generatedAuto.setStartPos(startPos);
-      generatedAuto.addNote(note1Pos);
-      generatedAuto.setEndPos(endPos);
+      //generatedAuto.setStartPos(startPos);
+      //generatedAuto.addNote(note1Pos);
+      generatedAuto.addNote("LEAVE BLUE");
+      //generatedAuto.setEndPos(endPos);
 
       // System.out.println(startPos + " " + note1Pos + " " + endPos);
 
-      return generatedAuto;
+      return AutoBuilder.followPath(PathPlannerPath.fromPathFile("2-2"));
     } else {
       return autoChooser.getSelected();
     }
@@ -306,10 +299,10 @@ public class RobotContainer {
     m_drive.teleopInit();
   }
 
-  private double calcShooterAngle(){
-    double shooterX = m_drive.getPose().getX()-Math.cos(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
-    double shooterY = m_drive.getPose().getY()-Math.sin(m_drive.getHeading().getRadians())*m_arm.getInoutPos().getX();
-    double shooterZ = m_arm.getInoutPos().getY();
+  public static double calcShooterAngle(Pose2d drivePose, Translation2d inoutPos){
+    double shooterX = drivePose.getX()-Math.cos(drivePose.getRotation().getRadians())*inoutPos.getX();
+    double shooterY = drivePose.getY()-Math.sin(drivePose.getRotation().getRadians())*inoutPos.getX();
+    double shooterZ = inoutPos.getY();
 
     // TODO: fix
     return 0.0;
