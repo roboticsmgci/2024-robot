@@ -80,13 +80,13 @@ public class Inout extends SubsystemBase {
     m_shooter.setSmartCurrentLimit(65);
     m_shooterBottom.setSmartCurrentLimit(65);
     
-    m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kShooterGearRatio);
-    m_shooterEncoder.setVelocityConversionFactor(360 * InoutConstants.kShooterGearRatio / 60);
+    m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kIntakeGearRatio);
+    m_shooterEncoder.setVelocityConversionFactor(InoutConstants.kShooterGearRatio);
     
   }
 
   public double getShooterSpeed(){
-    return shooterSpeed;
+    return m_shooterEncoder.getVelocity();
   }
 
   /**

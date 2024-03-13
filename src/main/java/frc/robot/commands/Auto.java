@@ -4,10 +4,17 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.InoutConstants;
 import frc.robot.Constants.PresetConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Inout;
@@ -40,10 +47,17 @@ public class Auto extends SequentialCommandGroup {
     addRequirements(swerve, arm, inout);
   }
 
+  public void setDelayTime(double time){
+    this.addCommands(new WaitCommand(time));
+  }
+
   public void setStartPos(Pose2d startPos){
     m_startPos = startPos;
     //this.addCommands(create trajectory to startPos);
     this.addCommands(Commands.runOnce(() -> m_swerve.resetOdometry(startPos), m_swerve));
+    if(startPos == FieldConstants.kStartPoses[1]){
+      this.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("4_3 setup")));
+    }
   }
 
   public void addNote(Pose2d notePos){
@@ -61,12 +75,18 @@ public class Auto extends SequentialCommandGroup {
     } else {
       this.addCommands(Commands.deadline(
         m_swerve.driveToPose(m_startPos),
-        new ArmSet(m_arm, () -> PresetConstants.joint1Preset2, () -> PresetConstants.joint1Preset2)
+        new ArmSet(m_arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint1Speaker)
       ));
     }
 
     this.addCommands(shootNote(m_arm, m_inout));
     // TODO: pick up note, shoot note
+  }
+
+  public void addNote(String path){
+    this.addCommands(
+      shootNote(m_arm, m_inout),
+      AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)));
   }
 
 
@@ -77,17 +97,39 @@ public class Auto extends SequentialCommandGroup {
 
   public static Command intakeNote(Arm arm, Inout inout) {
     return Commands.parallel(
-      new ArmSet(arm, () -> PresetConstants.joint1Preset1, () -> PresetConstants.joint2Preset1),
+      new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake),
       new IntakeTime(inout, 0.12, 500)
     );
   }
 
-  public static Command shootNote(Arm arm, Inout inout) {
+  //Set the arm position and warm up shooter
+  private static Command setupShot(Arm arm, Inout inout){
+    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker);
     return Commands.parallel(
-      new ArmSet(arm, () -> PresetConstants.joint1Preset2, () -> PresetConstants.joint2Preset2),
+      armSet,
+      new InoutDrive(inout, ()->0, ()->1)
+    ).until(()->(armSet.atSetpoint()&&inout.getShooterSpeed()>=InoutConstants.kShooterTargetSpeed));
+  }
+
+  //Lower arm and stop shooter
+  private static Command lowerArm(Arm arm, Inout inout){
+    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake);
+    return Commands.parallel(
+      armSet,
+      new InoutDrive(inout, ()->0, ()->0)
+    ).until(()->armSet.atSetpoint());
+  }
+
+  //Shoot a note from the subwoofer
+  public static Command shootNote(Arm arm, Inout inout) {
+    return Commands.sequence(
+      //Remainder of arm setup
+      setupShot(arm, inout),
+      //Shoot for 1 second while holding shooter/arm
       Commands.deadline(
-        new Shoot(inout, 1, 1000),
-        new ArmSet(arm, () -> PresetConstants.joint1Preset1, () -> PresetConstants.joint2Preset1)
+        new WaitCommand(1),
+        new InoutDrive(inout, ()->1, ()->1),
+        new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker)
       )
     );
   }

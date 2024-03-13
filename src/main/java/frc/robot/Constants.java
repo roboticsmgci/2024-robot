@@ -129,7 +129,7 @@ public final class Constants {
     /**
      * The gear ratio of the intake.
      */
-    public static final double kIntakeGearRatio = 2.0 / 1.0;
+    public static final double kIntakeGearRatio = 1.0 / 1.0;
 
     /**
      * The gear ratio of the shooter.
@@ -153,6 +153,8 @@ public final class Constants {
      * The multiplier to use for the CIM speed of the top of the shooter (relative to the bottom NEO).
      */
     public static final double kCIMMultiplier = 1;
+
+    public static final double kShooterTargetSpeed = 3000;
   }
 
   public final static class FieldConstants {
@@ -180,21 +182,29 @@ public final class Constants {
     //218.64
     public static final double kRedSpeakerY = Units.inchesToMeters(0);
 
-    // TODO: update these
+    
     public static final Pose2d[] kStartPoses = {
-      new Pose2d(0.9, 4, new Rotation2d()),
-      new Pose2d(0.9, 5, new Rotation2d())
+      new Pose2d(0.71, 6.68, new Rotation2d(60.00)),
+      new Pose2d(1.36, 5.54, new Rotation2d()),
+      new Pose2d(0.71, 4.40, new Rotation2d(-60.00)),
+      new Pose2d(0.56, 3.09, new Rotation2d(-90.00))
     };
     // TODO: add all notes
     public static final Pose2d[] kNotes = {
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(161.625), new Rotation2d()),
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(218.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
+      //fill in, not currently used though
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d())
     };
 
     public static final Pose2d[] kEndPoses = {
-      new Pose2d(6, 6, new Rotation2d()),
-      new Pose2d(5, 5, new Rotation2d())
+      new Pose2d(6, 6.68, new Rotation2d()),
+      new Pose2d(5, 1.20, new Rotation2d())
     };
 
   }
@@ -214,19 +224,22 @@ public final class Constants {
    public static final class PresetConstants {
     
     // Intake (A)
-    public static final double joint1Preset1 = 95.8;
-    public static final double joint2Preset1 = -0.718;
+    public static final double joint1Intake = 95.8;
+    public static final double joint2Intake = -0.718;
 
     // Speaker (B)
-    public static final double joint1Preset2 = 62.0;
-    public static final double joint2Preset2 = -2.22;
+    public static final double joint1Speaker = 62.0;
+    public static final double joint2Speaker = -2.22;
 
     // Start
-    public static final double joint1Preset3 = 1.57;
-    public static final double joint2Preset3 = 0;
+    public static final double joint1Initial = 1.57;
+    public static final double joint2Initial = 0;
 
-    public static final double joint1Preset4 = 3.1415;
-    public static final double joint2Preset4 = -2.169;
+    public static final double joint1Amp = 3.1415;
+    public static final double joint2Amp = -2.169;
+
+    public static final double joint1Trap = 3.1415;
+    public static final double joint2Trap = -2.169;
    }
 
   public static class CANConstants {
@@ -242,17 +255,15 @@ public final class Constants {
   public static final class ArmConstants {
     public static final double kArm1GearRatio = 1.0/16.0*32.0/16.0*64.0/32.0;
     public static final double kArm2GearRatio = 64.0/24.0*1.0/80.0;
-    public static final double kArm3GearRatio = 64.0/24.0*1.0/80.0;
-    public static final double kShooterLength = Units.inchesToMeters(8.35);
-    public static final double kArm2Length = Units.inchesToMeters(24);
-    public static final double kArm3Length = Units.inchesToMeters(16.5);
-    //currently base below arm 2, later change to arm 3
-    public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-8), Units.inchesToMeters(11.5));
+    public static final double kShooterLength = Units.inchesToMeters(2);
+    public static final double kArm2Length = Units.inchesToMeters(17);
+    public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(17.5));
+    //redo
     public static final double kArm1Initial = Math.toRadians(90);
     public static final double kArm2Initial = Math.toRadians(0);
-    public static final double kArm1MaxSpeed = 0.35;
-    public static final double kArm2MaxSpeed = 0.3;
+    public static final double kArm1MaxSpeed = 1.0;
+    public static final double kArm2MaxSpeed = 1.0;
 
-    public static final double kArm1RateLimit = 0.1;
+    public static final double kArm1RateLimit = 0.5;
   }
 }

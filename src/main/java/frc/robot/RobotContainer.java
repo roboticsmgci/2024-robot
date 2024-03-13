@@ -10,6 +10,7 @@ import java.sql.Driver;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -86,18 +87,6 @@ public class RobotContainer {
   private final Command m_dummyGeneratedAuto = Commands.none();
 
   private double crad = 0;
-  /**
-   * The default swerve drive command.
-   */
-  private final DefaultDrive m_swerveDriveCommand = new DefaultDrive(
-      m_drive,
-      () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), DriverConstants.kControllerDeadband),
-      () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), DriverConstants.kControllerDeadband),
-      () -> -MathUtil.applyDeadband(m_driverController.getRightX(), DriverConstants.kControllerDeadband),
-      () -> false,
-      () -> false,
-      () -> false,
-      () -> false);
 
   public void log() {
     crad = Math.max(Math.hypot(m_controller.getRawAxis(0), m_controller.getRawAxis(1)), crad);
@@ -110,6 +99,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    configureChoosers();
     // Configure the trigger bindings
     configureBindings();
 
@@ -127,8 +117,6 @@ public class RobotContainer {
     
 
     m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
-
-    configureChoosers();
 
     // m_arm.setDefaultCommand(new ArmDrive(
     //   m_arm,
@@ -220,9 +208,9 @@ public class RobotContainer {
     ));
 
     
-    m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset1;}, () -> {return PresetConstants.joint2Preset1;})); 
-    m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset2;}, () -> {return PresetConstants.joint2Preset2;}));
-    m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Preset3;}, () -> {return PresetConstants.joint2Preset3;}));
+    m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Intake;}, () -> {return PresetConstants.joint2Intake;})); 
+    m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Speaker;}, () -> {return PresetConstants.joint2Speaker;}));
+    m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Initial;}, () -> {return PresetConstants.joint2Initial;}));
     m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
@@ -237,6 +225,7 @@ public class RobotContainer {
   }
 
   private void configureChoosers() {
+    NamedCommands.registerCommand("Intake", new InoutDrive(m_inout, ()->0.3, ()->0));
     for (int i = 0; i < FieldConstants.kStartPoses.length; i++) {
       m_startPosChooser.addOption("Start " + i, FieldConstants.kStartPoses[i]);
     }

@@ -20,7 +20,7 @@ public final class Presets {
 
   public static Command IntakePreset(Arm arm, Inout inout){
     return Commands.parallel(
-      new ArmSet(arm, ()->PresetConstants.joint1Preset1, ()->PresetConstants.joint2Preset1),
+      new ArmSet(arm, ()->PresetConstants.joint1Intake, ()->PresetConstants.joint2Intake),
       new IntakeSpeed(inout, 0.12)
     );
   }

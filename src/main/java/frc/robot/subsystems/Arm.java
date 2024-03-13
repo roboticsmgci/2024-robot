@@ -83,6 +83,7 @@ public class Arm extends SubsystemBase {
     joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.091) * Math.sin((getArmEncoder1() - 1.57) / 60.0)));
   }
 
+  //add gravity compensator like arm1
   public void setArm2(double speed){
     joint2.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm2MaxSpeed);
   }
