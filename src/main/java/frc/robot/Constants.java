@@ -185,7 +185,7 @@ public final class Constants {
       new Pose2d(0.9, 4, new Rotation2d()),
       new Pose2d(0.9, 5, new Rotation2d())
     };
-
+    // TODO: add all notes
     public static final Pose2d[] kNotes = {
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(161.625), new Rotation2d()),
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(218.625), new Rotation2d()),

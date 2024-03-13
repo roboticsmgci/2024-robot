@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.PresetConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Inout;
@@ -19,8 +20,8 @@ public final class Presets {
 
   public static Command IntakePreset(Arm arm, Inout inout){
     return Commands.parallel(
-      new ArmSet(arm, ()->1, ()->0),
-      new Intake(inout)
+      new ArmSet(arm, ()->PresetConstants.joint1Preset1, ()->PresetConstants.joint2Preset1),
+      new IntakeSpeed(inout, 0.12)
     );
   }
 
