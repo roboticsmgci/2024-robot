@@ -224,7 +224,7 @@ public class RobotContainer {
     m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Initial;}, () -> {return PresetConstants.joint2Initial;}));
     m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 
-    m_driverController.y().whileTrue(new ClimbSet(m_climb, () -> {return 360;}));
+    //m_driverController.y().whileTrue(new ClimbSet(m_climb, () -> {return 360;}));
 
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
