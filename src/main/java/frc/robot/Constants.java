@@ -174,14 +174,19 @@ public final class Constants {
      * The x-coordinate of the center of the red speaker.
      */
     //642.25
-    public static final double kRedSpeakerX = Units.inchesToMeters(0);
+    public static final double kRedSpeakerX = Units.inchesToMeters(642.25);
 
     /**
      * The y-coordinate of the center of the red speaker.
      */
     //218.64
-    public static final double kRedSpeakerY = Units.inchesToMeters(0);
+    public static final double kRedSpeakerY = Units.inchesToMeters(218.64);
 
+    /**
+     * The z-coordinate of the red speaker
+     */
+
+     public static final double kRedSpeakerZ = Units.inchesToMeters(69.23);
     
     public static final Pose2d[] kStartPoses = {
       new Pose2d(0.71, 6.68, new Rotation2d(Math.toRadians(60.00))),

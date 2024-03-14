@@ -17,8 +17,10 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -93,10 +95,14 @@ public class RobotContainer {
   private double crad = 0;
 
   public void log() {
-    crad = Math.max(Math.hypot(m_controller.getRawAxis(0), m_controller.getRawAxis(1)), crad);
-    SmartDashboard.putNumber("controller radius", crad);
+ 
     SmartDashboard.putNumber("pose x", m_drive.getPose().getX());
     SmartDashboard.putNumber("pose y", m_drive.getPose().getY());
+
+
+    SmartDashboard.putNumber("Angle for Shooter", calcShooterAngle(m_drive.getPose(), m_arm.getInoutPos(), 
+      new Translation3d(FieldConstants.kRedSpeakerX,FieldConstants.kRedSpeakerY, FieldConstants.kRedSpeakerZ)));
+    
   }
 
   /**
@@ -317,13 +323,18 @@ public class RobotContainer {
     m_drive.teleopInit();
   }
 
-  public static double calcShooterAngle(Pose2d drivePose, Translation2d inoutPos){
-    double shooterX = drivePose.getX()-Math.cos(drivePose.getRotation().getRadians())*inoutPos.getX();
-    double shooterY = drivePose.getY()-Math.sin(drivePose.getRotation().getRadians())*inoutPos.getX();
+  public static double calcShooterAngle(Pose2d drivePose, Pose2d inoutPos, Translation3d target){
+    //drivePos it the center of the robot
+    //inout is the relative position of the joint? shooter?
+    double shooterX = drivePose.getX()+Math.cos(drivePose.getRotation().getRadians())*inoutPos.getX();
+    double shooterY = drivePose.getY()+Math.sin(drivePose.getRotation().getRadians())*inoutPos.getX();
     double shooterZ = inoutPos.getY();
 
-    // TODO: fix
-    return 0.0;
+    double deltaX = target.getX() - shooterX;
+    double deltaY = target.getY() - shooterY;
+    double deltaZ = target.getZ() - shooterZ;
+
+    return Math.atan(deltaZ/deltaX);
 
   }
 }
