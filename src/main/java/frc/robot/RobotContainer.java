@@ -40,6 +40,7 @@ import frc.robot.Constants.PresetConstants;
 import frc.robot.commands.ArmDrive;
 import frc.robot.commands.ArmSet;
 import frc.robot.commands.Auto;
+import frc.robot.commands.ClimbSet;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.InoutDrive;
@@ -48,6 +49,7 @@ import frc.robot.commands.IntakeTime;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Inout;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -68,6 +70,8 @@ public class RobotContainer {
   private final Arm m_arm = new Arm();
   // TODO: 1) add this back
   private final Inout m_inout = new Inout();
+
+  private final Climber m_climb = new Climber();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_driverController = new CommandXboxController(
@@ -102,7 +106,9 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Angle for Shooter", calcShooterAngle(m_drive.getPose(), m_arm.getInoutPos(), 
       new Translation3d(FieldConstants.kRedSpeakerX,FieldConstants.kRedSpeakerY, FieldConstants.kRedSpeakerZ)));
+
     
+    SmartDashboard.putNumber("Climber", m_climb.getClimbEncoder()); 
   }
 
   /**
@@ -127,6 +133,9 @@ public class RobotContainer {
     
 
     m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
+
+
+    m_driverController.y().whileTrue(new ClimbSet(m_climb, () -> {return 0;}));
 
     // m_arm.setDefaultCommand(new ArmDrive(
     //   m_arm,
@@ -214,6 +223,8 @@ public class RobotContainer {
     m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Speaker;}, () -> {return PresetConstants.joint2Speaker;}));
     m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Initial;}, () -> {return PresetConstants.joint2Initial;}));
     m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
+
+    m_driverController.y().whileTrue(new ClimbSet(m_climb, () -> {return 360;}));
 
     // m_driverController.a().onTrue(Commands.runOnce(()->m_drive.setIsFieldOriented(!m_drive.getIsFieldOriented())));
 
