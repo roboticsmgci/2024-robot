@@ -7,7 +7,9 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Rotation;
 
 import java.sql.Driver;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.InoutConstants;
@@ -75,11 +78,12 @@ public class RobotContainer {
   /**
    * The PathPlanner auto command chooser.
    */
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+  private SendableChooser<Command> autoChooser;
 
   private final SendableChooser<Pose2d> m_startPosChooser = new SendableChooser<>();
   private final SendableChooser<Pose2d> m_endPosChooser = new SendableChooser<>();
-  private final SendableChooser<Pose2d> m_note1Chooser = new SendableChooser<>();
+  private final ArrayList<SendableChooser<String>> m_noteChoosers = new ArrayList<>();
+  private final SendableChooser<DoubleSupplier> m_delayTimeChooser = new SendableChooser<>();
 
   /**
    * An empty command, just used to give the auto chooser an option for the generated auto. DO NOT RUN THIS COMMAND.
@@ -218,23 +222,40 @@ public class RobotContainer {
 
   private void configureChoosers() {
     NamedCommands.registerCommand("Intake", Auto.intakeNote(m_arm, m_inout));
+    NamedCommands.registerCommand("Setup Shot", Auto.setupShot(m_arm, m_inout));
+
+    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+    autoChooser.addOption("Generated Auto", m_dummyGeneratedAuto);
+
+    //can this be put in a loop?
+    m_delayTimeChooser.addOption("3s", ()->3.0);
+    m_delayTimeChooser.addOption("6s", ()->6.0);
+    m_delayTimeChooser.addOption("9s", ()->9.0);
+    m_delayTimeChooser.addOption("12s", ()->12.0);
+    m_delayTimeChooser.addOption("15s", ()->15.0);
+
     for (int i = 0; i < FieldConstants.kStartPoses.length; i++) {
-      m_startPosChooser.addOption("Start " + i, FieldConstants.kStartPoses[i]);
+      m_startPosChooser.addOption("Start " + (i+1), FieldConstants.kStartPoses[i]);
     }
 
-    for (int i = 0; i < FieldConstants.kNotes.length; i++) {
-      m_note1Chooser.addOption("1st Note - " + i, FieldConstants.kNotes[i]);
+    //up to 4 notes (subject to change)
+    for(int i=0; i<4; i++){
+      m_noteChoosers.add(new SendableChooser<String>());
+      for (int j = 0; j < AutonConstants.kNotePaths.length; j++) {
+        m_noteChoosers.get(i).addOption("Path " + AutonConstants.kNotePaths[j], AutonConstants.kNotePaths[j]);
+      }
     }
 
     for (int i = 0; i < FieldConstants.kEndPoses.length; i++) {
-      m_endPosChooser.addOption("End " + i, FieldConstants.kEndPoses[i]);
+      m_endPosChooser.addOption("End " + (i+1), FieldConstants.kEndPoses[i]);
     }
 
-    autoChooser.addOption("Generated Auto", m_dummyGeneratedAuto);
-
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Delay Time Chooser", m_delayTimeChooser);
     SmartDashboard.putData("Start Pos Chooser", m_startPosChooser);
-    SmartDashboard.putData("Note 1 Chooser", m_note1Chooser);
+    for(int i=0; i<m_noteChoosers.size(); i++){
+      SmartDashboard.putData("Note "+(i+1)+" Chooser", m_noteChoosers.get(i));
+    }
     SmartDashboard.putData("End Pos Chooser", m_endPosChooser);
 
   }
@@ -250,25 +271,22 @@ public class RobotContainer {
 
     if (autoChooser.getSelected().equals(m_dummyGeneratedAuto)) {
       Pose2d startPos = m_startPosChooser.getSelected();
-      Pose2d note1Pos = m_note1Chooser.getSelected();
       Pose2d endPos = m_endPosChooser.getSelected();
 
       Optional<Alliance> alliance = DriverStation.getAlliance();
       if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red)) {
         startPos = mirrorPose(startPos);
-        note1Pos = mirrorPose(note1Pos);
         endPos = mirrorPose(endPos);
       }
 
       Auto generatedAuto = new Auto(m_drive, m_arm, m_inout);
       //generatedAuto.setStartPos(startPos);
-      //generatedAuto.addNote(note1Pos);
-      generatedAuto.addNote("LEAVE BLUE");
-      //generatedAuto.setEndPos(endPos);
+      //generatedAuto.addNote("LEAVE BLUE");
+      generatedAuto.setEndPos(endPos);
 
       // System.out.println(startPos + " " + note1Pos + " " + endPos);
 
-      return AutoBuilder.followPath(PathPlannerPath.fromPathFile("2-2"));
+      return generatedAuto;
     } else {
       return autoChooser.getSelected();
     }

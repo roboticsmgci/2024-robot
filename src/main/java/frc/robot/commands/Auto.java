@@ -57,7 +57,7 @@ public class Auto extends SequentialCommandGroup {
     //this.addCommands(create trajectory to startPos);
     this.addCommands(Commands.runOnce(() -> m_swerve.resetOdometry(startPos), m_swerve));
     //4_3 setup
-    if(startPos == FieldConstants.kStartPoses[1]){
+    if(startPos == FieldConstants.kStartPoses[3]){
       this.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("4_3 setup")));
     }
     //preload

@@ -47,13 +47,22 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Delay Time Chooser": "String Chooser",
       "/SmartDashboard/End Pos Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Note 1 Chooser": "String Chooser",
+      "/SmartDashboard/Note 2 Chooser": "String Chooser",
+      "/SmartDashboard/Note 3 Chooser": "String Chooser",
+      "/SmartDashboard/Note 4 Chooser": "String Chooser",
       "/SmartDashboard/Start Pos Chooser": "String Chooser",
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
     },
     "windows": {
+      "/SmartDashboard/End Pos Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "XModules": {
           "arrowColor": [
@@ -79,9 +88,6 @@
     }
   },
   "NetworkTables Info": {
-    "Connections": {
-      "open": true
-    },
     "visible": true
   },
   "NetworkTables View": {

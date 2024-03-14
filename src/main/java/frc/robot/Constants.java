@@ -202,10 +202,6 @@ public final class Constants {
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d())
     };
 
-    public static final String[] kNotePaths = {
-      ""
-    };
-
     public static final Pose2d[] kEndPoses = {
       new Pose2d(6, 6.68, new Rotation2d()),
       new Pose2d(5, 1.20, new Rotation2d())
@@ -217,6 +213,12 @@ public final class Constants {
 
     public static final PIDConstants kTranslationPID = new PIDConstants(0.7, 0, 0);
     public static final PIDConstants kAnglePID = new PIDConstants(0.4, 0, 0.01);
+    public static final String[] kNotePaths = {
+      "None",
+      "1-1", "1-4", "1-5",
+      "2-1", "2-2", "2-3",
+      "3-3", "3-7", "3-7 (fast)", "3-8", "3-8 (fast)"
+    };
   }
 
   public static final class PIDValues {
