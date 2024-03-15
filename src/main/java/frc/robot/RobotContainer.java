@@ -245,11 +245,12 @@ public class RobotContainer {
     autoChooser.addOption("Generated Auto", m_dummyGeneratedAuto);
 
     //can this be put in a loop?
+    m_delayTimeChooser.addOption("0s", ()->0.0);
     m_delayTimeChooser.addOption("3s", ()->3.0);
     m_delayTimeChooser.addOption("6s", ()->6.0);
     m_delayTimeChooser.addOption("9s", ()->9.0);
     m_delayTimeChooser.addOption("12s", ()->12.0);
-    m_delayTimeChooser.addOption("15s", ()->15.0);
+    m_delayTimeChooser.setDefaultOption("15s", ()->15.0);
 
     for (int i = 0; i < FieldConstants.kStartPoses.length; i++) {
       m_startPosChooser.addOption("Start " + (i+1), FieldConstants.kStartPoses[i]);
@@ -258,11 +259,13 @@ public class RobotContainer {
     //up to 4 notes (subject to change)
     for(int i=0; i<4; i++){
       m_noteChoosers.add(new SendableChooser<String>());
-      for (int j = 0; j < AutonConstants.kNotePaths.length; j++) {
+      m_noteChoosers.get(i).setDefaultOption("None", AutonConstants.kNotePaths[0]);
+      for (int j = 1; j < AutonConstants.kNotePaths.length; j++) {
         m_noteChoosers.get(i).addOption("Path " + AutonConstants.kNotePaths[j], AutonConstants.kNotePaths[j]);
       }
     }
 
+    //m_endPosChooser.setDefaultOption("None", new Pose2d());
     for (int i = 0; i < FieldConstants.kEndPoses.length; i++) {
       m_endPosChooser.addOption("End " + (i+1), FieldConstants.kEndPoses[i]);
     }
@@ -297,11 +300,17 @@ public class RobotContainer {
       }
 
       Auto generatedAuto = new Auto(m_drive, m_arm, m_inout);
-      //generatedAuto.setStartPos(startPos);
-      //generatedAuto.addNote("LEAVE BLUE");
+      generatedAuto.setDelayTime(m_delayTimeChooser.getSelected().getAsDouble());
+      generatedAuto.setStartPos(startPos);
+      for(int i=0; i<m_noteChoosers.size(); i++){
+        String path = m_noteChoosers.get(i).getSelected();
+        if(path==null || path.equals("None")){
+          break;
+        }else{
+          generatedAuto.addNote(path);
+        }
+      }
       generatedAuto.setEndPos(endPos);
-
-      // System.out.println(startPos + " " + note1Pos + " " + endPos);
 
       return generatedAuto;
     } else {
@@ -310,7 +319,7 @@ public class RobotContainer {
   }
 
   private Pose2d mirrorPose(Pose2d pose) {
-    return new Pose2d(Units.inchesToMeters(651.75) - pose.getX(), pose.getY(), pose.getRotation().rotateBy(Rotation2d.fromDegrees(180)));
+    return new Pose2d(Units.inchesToMeters(651.75) - pose.getX(), pose.getY(), new Rotation2d(Math.toRadians(180)-pose.getRotation().getRadians()));
   }
 
   /**

@@ -15,7 +15,7 @@ import frc.robot.Constants.CANConstants;
 
 public class Climber extends SubsystemBase {
 
-private final CANSparkMax motor1 = new CANSparkMax(30, MotorType.kBrushless);
+private final CANSparkMax motor1 = new CANSparkMax(33, MotorType.kBrushless);
 
 private final RelativeEncoder encoder1 = motor1.getEncoder();
 

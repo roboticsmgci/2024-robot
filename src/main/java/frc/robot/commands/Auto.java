@@ -60,8 +60,10 @@ public class Auto extends SequentialCommandGroup {
     if(startPos == FieldConstants.kStartPoses[3]){
       this.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("4_3 setup")));
     }
+    System.out.println("go to pose"+startPos);
     //preload
     this.addCommands(shootNote(m_arm, m_inout));
+    System.out.println("start done");
   }
 
   //use new version
@@ -112,12 +114,14 @@ public class Auto extends SequentialCommandGroup {
 
 
   public void setEndPos(Pose2d endPos){
+    System.out.println("go to pose"+endPos);
     this.addCommands(m_swerve.driveToPose(endPos));
   }
 
   //Intake a note
   public static Command intakeNote(Arm arm, Inout inout) {
-    return Commands.parallel(
+    return Commands.deadline(
+      new WaitCommand(1),
       new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake),
       new InoutDrive(inout, ()->0.3, ()->0)
     );
@@ -125,16 +129,19 @@ public class Auto extends SequentialCommandGroup {
 
   //Set the arm position and warm up shooter
   public static Command setupShot(Arm arm, Inout inout){
-    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker);
+    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker, 0);
     return Commands.parallel(
       armSet,
-      new InoutDrive(inout, ()->0, ()->1)
+      Commands.sequence(
+        Commands.deadline(new WaitCommand(0.1), new InoutDrive(inout, ()->-0.1, ()->0)),
+        new InoutDrive(inout, ()->0, ()->1)
+      )
     ).until(()->(armSet.atSetpoint()&&inout.getShooterSpeed()>=InoutConstants.kShooterTargetSpeed));
   }
 
   //Lower arm and stop shooter
   public static Command setupIntake(Arm arm, Inout inout){
-    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake);
+    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake, 0);
     return Commands.parallel(
       armSet,
       new InoutDrive(inout, ()->0, ()->0)
@@ -148,10 +155,12 @@ public class Auto extends SequentialCommandGroup {
       setupShot(arm, inout),
       //Shoot for 1 second while holding shooter/arm
       Commands.deadline(
-        new WaitCommand(1),
+        new WaitCommand(0.5),
         new InoutDrive(inout, ()->1, ()->1),
         new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker)
-      )
+      ),
+      Commands.runOnce(()->inout.setIntake(0), inout),
+      Commands.runOnce(()->inout.setShooter(0), inout)
     );
   }
 

@@ -81,6 +81,8 @@ public class ArmSet extends Command {
   }
 
   public boolean atSetpoint(){
-    return (m_armSpeedPID1.atSetpoint() && m_armSpeedPID2.atSetpoint());
+    //use commented one
+    return true;
+    //return (m_armSpeedPID1.atSetpoint() && m_armSpeedPID2.atSetpoint());
   }
 }

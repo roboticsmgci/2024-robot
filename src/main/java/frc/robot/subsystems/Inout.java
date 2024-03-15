@@ -86,7 +86,9 @@ public class Inout extends SubsystemBase {
   }
 
   public double getShooterSpeed(){
-    return m_shooterEncoder.getVelocity();
+    //testing
+    return 3500;
+    //return m_shooterEncoder.getVelocity();
   }
 
   /**
