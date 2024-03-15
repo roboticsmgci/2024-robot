@@ -221,6 +221,7 @@ public class RobotContainer {
     
     m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Intake;}, () -> {return PresetConstants.joint2Intake;})); 
     m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Speaker;}, () -> {return PresetConstants.joint2Speaker;}));
+    //amp, trap, autoaim shooter (there arent enough so either make fixed speaker or trap seperate from the others (eg dpad or something uncommon))
     m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Initial;}, () -> {return PresetConstants.joint2Initial;}));
     m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 
