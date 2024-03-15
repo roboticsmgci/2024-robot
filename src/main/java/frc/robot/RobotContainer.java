@@ -345,7 +345,7 @@ public class RobotContainer {
     double deltaY = target.getY() - shooterY;
     double deltaZ = target.getZ() - shooterZ;
 
-    return Math.atan(deltaZ/deltaX);
+    return Math.atan(deltaZ/Math.hypot(deltaX, deltaY));
 
   }
 }
