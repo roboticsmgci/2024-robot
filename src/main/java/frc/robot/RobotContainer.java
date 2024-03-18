@@ -140,7 +140,12 @@ public class RobotContainer {
     m_arm.setDefaultCommand(new ArmDrive(
       m_arm,
       () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
-      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
+      () -> MathUtil.applyDeadband(m_armController.getLeftX(), 0.15) * 1));
+    
+    m_inout.setDefaultCommand(new InoutDrive(
+      m_inout,
+      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15),
+      () -> MathUtil.applyDeadband(m_armController.getRightX(), 0.15)));
     
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
@@ -200,8 +205,12 @@ public class RobotContainer {
     // Intake
     m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.3));
 
-    // Shoot
-    m_armController.rightBumper().whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
+    // Shoot (slow when amp preset is pressed)
+    m_armController.rightBumper().and(m_armController.x()).whileTrue(new Shoot(m_inout, 0.3, 0));
+    // Shoot (fast when amp preset is not pressed)
+    m_armController.rightBumper().and(() -> !m_armController.getHID().getXButton()).whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
+    
+    // m_armController.rightBumper().whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
 
     // Reset gyro
     m_armController.leftStick().and(m_armController.rightStick()).onTrue(Commands.runOnce(() -> m_arm.setArm(90, 0)));
@@ -215,11 +224,19 @@ public class RobotContainer {
     // ));
 
     
-    m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Intake;}, () -> {return PresetConstants.joint2Intake;})); 
-    m_armController.b().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Speaker;}, () -> {return PresetConstants.joint2Speaker;}));
+    
+    m_armController.leftBumper().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Speaker;}, () -> {return PresetConstants.joint2Speaker;}));
+    
+    m_armController.b().whileTrue(new ArmSet(m_arm, () -> PresetConstants.joint1Trap, () -> PresetConstants.joint2Trap));
+
+    m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Amp;}, () -> {return PresetConstants.joint2Amp;})); 
     //amp, trap, autoaim shooter (there arent enough so either make fixed speaker or trap seperate from the others (eg dpad or something uncommon))
-    m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Initial;}, () -> {return PresetConstants.joint2Initial;}));
-    m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
+    m_armController.y().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Intake;}, () -> {return PresetConstants.joint2Intake;}));
+    
+    // Initial
+    m_armController.povDown().whileTrue(new ArmSet(m_arm, () -> PresetConstants.joint1Initial, () -> PresetConstants.joint2Initial));
+
+    // m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 
     //m_driverController.y().whileTrue(new ClimbSet(m_climb, () -> {return 360;}));
 
