@@ -132,15 +132,15 @@ public class RobotContainer {
    //checks if presets are being used, only active when button is pressed 
     
 
-    m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
+    // m_arm.setDefaultCommand(new ArmSet(m_arm, () -> m_arm.getArmEncoder1(), () -> m_arm.getArmEncoder2()));
 
 
     m_driverController.y().whileTrue(new ClimbSet(m_climb, () -> {return 0;}));
 
-    // m_arm.setDefaultCommand(new ArmDrive(
-    //   m_arm,
-    //   () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
-    //   () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
+    m_arm.setDefaultCommand(new ArmDrive(
+      m_arm,
+      () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
+      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
     
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
@@ -195,28 +195,24 @@ public class RobotContainer {
             m_drive))
         .onFalse(Commands.runOnce(() -> m_drive.setTarget(null), m_drive));
     
-    // TODO: 1) add back 2 lines
-    m_armController.leftTrigger().onTrue(new IntakeSpeed(m_inout, 0.3)).onFalse(new IntakeTime(m_inout, 50, -0.1));
-    m_armController.rightTrigger().whileTrue(new Shoot(m_inout, 0.2, 0));
-    m_armController.rightStick().whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
+    // Outtake
+    m_armController.leftTrigger().whileTrue(new IntakeSpeed(m_inout, -0.3));
+    // Intake
+    m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.3));
 
+    // Shoot
+    m_armController.rightBumper().whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
+
+    // Reset gyro
     m_armController.leftStick().and(m_armController.rightStick()).onTrue(Commands.runOnce(() -> m_arm.setArm(90, 0)));
-
-    // TODO: add back
-    m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new ArmDrive(
-      m_arm,
-      () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.1),
-      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.1)
-    ));
     // DriverConstants
     // MathUtil.applyDeadband(crad, crad)
 
-    // TODO: add back
-    m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
-      m_inout,
-      () -> m_armController.getHID().getPOV() == 0 ? -1 : (m_armController.getHID().getPOV() == 180 ? 1 : 0),
-      () -> 0
-    ));
+    // m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
+    //   m_inout,
+    //   () -> m_armController.getHID().getPOV() == 0 ? -1 : (m_armController.getHID().getPOV() == 180 ? 1 : 0),
+    //   () -> 0
+    // ));
 
     
     m_armController.a().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Intake;}, () -> {return PresetConstants.joint2Intake;})); 
