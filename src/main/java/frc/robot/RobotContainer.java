@@ -189,6 +189,9 @@ public class RobotContainer {
     m_driverController.leftBumper()
         .onTrue(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kSlowSpeed)))
         .onFalse(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kDefaultSpeed)));
+    
+    m_driverController.povDown()
+      .onTrue(Commands.runOnce(() -> m_drive.resetOdometry(new Pose2d(8.257198, 4.132412, m_drive.getHeading()))));
 
     // Forces the robot to face a speaker while the right stick is pressed.
     // (use down button since stick is easy to release accidentally)
