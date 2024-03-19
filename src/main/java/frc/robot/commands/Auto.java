@@ -66,7 +66,7 @@ public class Auto extends SequentialCommandGroup {
     }
     System.out.println("go to pose"+startPos);
     //preload
-    this.addCommands(shootNote(m_arm, m_inout, m_swerve));
+    this.addCommands(shootNote(m_arm, m_inout, m_swerve.getPose()));
     System.out.println("start done");
   }
 

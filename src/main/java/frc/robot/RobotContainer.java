@@ -256,7 +256,7 @@ public class RobotContainer {
 
   private void configureChoosers() {
     NamedCommands.registerCommand("Intake", Auto.intakeNote(m_arm, m_inout));
-    NamedCommands.registerCommand("Setup Shot", Auto.setupShot(m_arm, m_inout, m_drive));
+    NamedCommands.registerCommand("Setup Shot", Auto.setupShot(m_arm, m_inout, m_drive.getPose()));
 
     autoChooser = AutoBuilder.buildAutoChooser("New Auto");
     autoChooser.addOption("Generated Auto", m_dummyGeneratedAuto);
