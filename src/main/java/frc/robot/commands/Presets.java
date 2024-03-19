@@ -39,6 +39,10 @@ public final class Presets {
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker);
   }
 
+  public static Command InitialPreset(Arm arm, Inout inout){
+    return new ArmSet(arm, () -> PresetConstants.joint1Initial, () -> PresetConstants.joint2Initial);
+  }
+
   public static Command AutoSpeakerPreset(Arm arm, Inout inout, Pose2d drivePose){
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, 
     ()->Math.PI-arm.getArmEncoder1()-

@@ -62,7 +62,7 @@ public class Auto extends SequentialCommandGroup {
     }
     System.out.println("go to pose"+startPos);
     //preload
-    this.addCommands(shootNote(m_arm, m_inout));
+    this.addCommands(shootNote(m_arm, m_inout, m_swerve));
     System.out.println("start done");
   }
 
@@ -86,7 +86,7 @@ public class Auto extends SequentialCommandGroup {
       ));
     }
 
-    this.addCommands(shootNote(m_arm, m_inout));
+    this.addCommands(shootNote(m_arm, m_inout, m_swerve));
     // TODO: pick up note, shoot note
   }
 
@@ -101,13 +101,13 @@ public class Auto extends SequentialCommandGroup {
           AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
           setupIntake(m_arm, m_inout)
         ),
-        shootNote(m_arm, m_inout)
+        shootNote(m_arm, m_inout, m_swerve)
       );
     }else{
     this.addCommands(
       setupIntake(m_arm, m_inout),
       AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
-      shootNote(m_arm, m_inout)
+      shootNote(m_arm, m_inout, m_swerve)
       );
     }
   }
@@ -124,8 +124,8 @@ public class Auto extends SequentialCommandGroup {
   }
 
   //Set the arm position and warm up shooter
-  public static Command setupShot(Arm arm, Inout inout){
-    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker);//, 0) (time)
+  public static Command setupShot(Arm arm, Inout inout, SwerveSubsystem swerve){
+    ArmSet armSet = (ArmSet) Presets.AutoSpeakerPreset(arm, inout, swerve.getPose());//, 0) (time)
     return Commands.parallel(
       armSet,
       Commands.sequence(
@@ -145,15 +145,15 @@ public class Auto extends SequentialCommandGroup {
   }
 
   //Shoot a note from the subwoofer
-  public static Command shootNote(Arm arm, Inout inout) {
+  public static Command shootNote(Arm arm, Inout inout, SwerveSubsystem swerve) {
     return Commands.sequence(
       //Remainder of arm setup
-      setupShot(arm, inout),
+      setupShot(arm, inout, swerve),
       //Shoot for 1 second while holding shooter/arm
       Commands.deadline(
         new WaitCommand(0.5),
         new InoutDrive(inout, ()->1, ()->1),
-        new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker)
+        Presets.AutoSpeakerPreset(arm, inout, swerve.getPose())
       ),
       Commands.runOnce(()->inout.setIntake(0), inout),
       Commands.runOnce(()->inout.setShooter(0), inout)

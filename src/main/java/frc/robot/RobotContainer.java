@@ -46,6 +46,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.InoutDrive;
 import frc.robot.commands.IntakeSpeed;
 import frc.robot.commands.IntakeTime;
+import frc.robot.commands.Presets;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.subsystems.Arm;
@@ -225,16 +226,18 @@ public class RobotContainer {
 
     
     
-    m_armController.leftBumper().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Speaker;}, () -> {return PresetConstants.joint2Speaker;}));
-    
-    m_armController.b().whileTrue(new ArmSet(m_arm, () -> PresetConstants.joint1Trap, () -> PresetConstants.joint2Trap));
+    m_armController.leftBumper().whileTrue(Presets.SpeakerPreset(m_arm, m_inout));
 
-    m_armController.x().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Amp;}, () -> {return PresetConstants.joint2Amp;})); 
+    m_armController.a().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive.getPose()));
+    
+    m_armController.b().whileTrue(Presets.TrapPreset(m_arm));
+
+    m_armController.x().whileTrue(Presets.AmpPreset(m_arm)); 
     //amp, trap, autoaim shooter (there arent enough so either make fixed speaker or trap seperate from the others (eg dpad or something uncommon))
-    m_armController.y().whileTrue(new ArmSet(m_arm, () -> {return PresetConstants.joint1Intake;}, () -> {return PresetConstants.joint2Intake;}));
+    m_armController.y().whileTrue(Presets.IntakePreset(m_arm, m_inout));
     
     // Initial
-    m_armController.povDown().whileTrue(new ArmSet(m_arm, () -> PresetConstants.joint1Initial, () -> PresetConstants.joint2Initial));
+    m_armController.povDown().whileTrue(Presets.InitialPreset(m_arm, m_inout));
 
     // m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 
@@ -253,7 +256,7 @@ public class RobotContainer {
 
   private void configureChoosers() {
     NamedCommands.registerCommand("Intake", Auto.intakeNote(m_arm, m_inout));
-    NamedCommands.registerCommand("Setup Shot", Auto.setupShot(m_arm, m_inout));
+    NamedCommands.registerCommand("Setup Shot", Auto.setupShot(m_arm, m_inout, m_drive));
 
     autoChooser = AutoBuilder.buildAutoChooser("New Auto");
     autoChooser.addOption("Generated Auto", m_dummyGeneratedAuto);
