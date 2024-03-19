@@ -183,10 +183,10 @@ public final class Constants {
     public static final double kRedSpeakerY = Units.inchesToMeters(218.64);
 
     /**
-     * The z-coordinate of the red speaker
+     * The z-coordinate of both speakers
      */
 
-     public static final double kRedSpeakerZ = Units.inchesToMeters(69.23);
+     public static final double kSpeakerZ = Units.inchesToMeters(69.23);
     
     public static final Pose2d[] kStartPoses = {
       new Pose2d(0.71, 6.68, new Rotation2d(Math.toRadians(60.00))),

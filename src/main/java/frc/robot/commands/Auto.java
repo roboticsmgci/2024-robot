@@ -120,16 +120,12 @@ public class Auto extends SequentialCommandGroup {
 
   //Intake a note
   public static Command intakeNote(Arm arm, Inout inout) {
-    return Commands.deadline(
-      new WaitCommand(1),
-      new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake),
-      new InoutDrive(inout, ()->0.3, ()->0)
-    );
+    return Presets.IntakePreset(arm, inout).withTimeout(1);
   }
 
   //Set the arm position and warm up shooter
   public static Command setupShot(Arm arm, Inout inout){
-    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker, 0);
+    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Speaker, () -> PresetConstants.joint2Speaker);//, 0) (time)
     return Commands.parallel(
       armSet,
       Commands.sequence(
@@ -141,7 +137,7 @@ public class Auto extends SequentialCommandGroup {
 
   //Lower arm and stop shooter
   public static Command setupIntake(Arm arm, Inout inout){
-    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake, 0);
+    ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake);//, 0) (time)
     return Commands.parallel(
       armSet,
       new InoutDrive(inout, ()->0, ()->0)

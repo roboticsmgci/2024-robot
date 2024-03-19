@@ -105,7 +105,7 @@ public class RobotContainer {
 
 
     SmartDashboard.putNumber("Angle for Shooter", calcShooterAngle(m_drive.getPose(), m_arm.getInoutPos(), 
-      new Translation3d(FieldConstants.kRedSpeakerX,FieldConstants.kRedSpeakerY, FieldConstants.kRedSpeakerZ)));
+      new Translation3d(FieldConstants.kRedSpeakerX,FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)));
 
     
     SmartDashboard.putNumber("Climber", m_climb.getClimbEncoder()); 
