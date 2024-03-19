@@ -72,7 +72,9 @@ public class Inout extends SubsystemBase {
     // m_shooterBottom.setInverted(true);
 
     m_intake.setIdleMode(IdleMode.kBrake);
+    m_intakeBottom.setIdleMode(IdleMode.kBrake);
     m_shooter.setIdleMode(IdleMode.kCoast);
+    m_shooterBottom.setIdleMode(IdleMode.kCoast);
     // -3415.680998 39.142824
     m_intake.setSmartCurrentLimit(65);
     m_intakeBottom.setSmartCurrentLimit(65);
@@ -87,8 +89,8 @@ public class Inout extends SubsystemBase {
 
   public double getShooterSpeed(){
     //testing
-    return 3500;
-    //return m_shooterEncoder.getVelocity();
+    // return 3500;
+    return m_shooterEncoder.getVelocity();
   }
 
   /**
