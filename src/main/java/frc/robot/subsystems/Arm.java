@@ -61,7 +61,7 @@ public class Arm extends SubsystemBase {
     encoder2.setPosition(ArmConstants.kArm2Initial);
   }
 
-  public void setArm(double arm1, double arm2){
+  public void setArmEncoders(double arm1, double arm2){
     encoder1.setPosition(arm1);
     encoder2.setPosition(arm2);
   }

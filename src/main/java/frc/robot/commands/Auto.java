@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.InoutConstants;
 import frc.robot.Constants.PresetConstants;
@@ -55,7 +56,10 @@ public class Auto extends SequentialCommandGroup {
   public void setStartPos(Pose2d startPos){
     m_startPos = startPos;
     //this.addCommands(create trajectory to startPos);
-    this.addCommands(Commands.runOnce(() -> m_swerve.resetOdometry(startPos), m_swerve));
+    this.addCommands(
+      Commands.runOnce(() -> m_swerve.resetOdometry(startPos), m_swerve),
+      Commands.runOnce(() -> m_arm.setArmEncoders(ArmConstants.kArm1Initial, ArmConstants.kArm2Initial))
+    );
     //4_3 setup
     if(startPos == FieldConstants.kStartPoses[3]){
       this.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("4_3 setup")));

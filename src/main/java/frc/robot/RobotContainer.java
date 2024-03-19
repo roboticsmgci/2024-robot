@@ -214,7 +214,7 @@ public class RobotContainer {
     // m_armController.rightBumper().whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
 
     // Reset gyro
-    m_armController.leftStick().and(m_armController.rightStick()).onTrue(Commands.runOnce(() -> m_arm.setArm(90, 0)));
+    m_armController.leftStick().and(m_armController.rightStick()).onTrue(Commands.runOnce(() -> m_arm.setArmEncoders(90, 0)));
     // DriverConstants
     // MathUtil.applyDeadband(crad, crad)
 
