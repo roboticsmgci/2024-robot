@@ -71,7 +71,7 @@ public class Auto extends SequentialCommandGroup {
   }
 
   //use new version
-  public void addNote(Pose2d notePos){
+  public void addNote(Pose2d notePos, Pose2d position){
     //go to note, pick up note, shoot note
     //this.addCommands();
     // this.addCommands(m_swerve.driveToPose(notePos));
@@ -90,12 +90,13 @@ public class Auto extends SequentialCommandGroup {
       ));
     }
 
-    this.addCommands(shootNote(m_arm, m_inout, m_swerve));
+    this.addCommands(shootNote(m_arm, m_inout, position));
     // TODO: pick up note, shoot note
   }
 
   //use this one
-  public void addNote(String path){
+  public void addNote(String path){//ykw maybe it didnt matter im not really sure. i though the command would require everything in the
+    //composition but there isnt actually a command in the composition that required the swerve so maybe it wouldve worked
     //Lower arm while driving for far notes, or else lower arm first
     //1 note paths are formatted s-n (startposid-noteid)
     if(path.charAt(0)!='2'&&path.charAt(2)>=4){
@@ -105,13 +106,13 @@ public class Auto extends SequentialCommandGroup {
           AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
           setupIntake(m_arm, m_inout)
         ),
-        shootNote(m_arm, m_inout, m_swerve)
+        shootNote(m_arm, m_inout, m_swerve.getPose())
       );
     }else{
     this.addCommands(
       setupIntake(m_arm, m_inout),
       AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
-      shootNote(m_arm, m_inout, m_swerve)
+      shootNote(m_arm, m_inout, m_swerve.getPose())
       );
     }
   }
@@ -128,8 +129,8 @@ public class Auto extends SequentialCommandGroup {
   }
 
   //Set the arm position and warm up shooter
-  public static Command setupShot(Arm arm, Inout inout, SwerveSubsystem swerve){
-    ArmSet armSet = (ArmSet) Presets.AutoSpeakerPreset(arm, inout, swerve.getPose());//, 0) (time)
+  public static Command setupShot(Arm arm, Inout inout, Pose2d position){
+    ArmSet armSet = (ArmSet) Presets.AutoSpeakerPreset(arm, inout, position);//, 0) (time)
     return Commands.parallel(
       armSet,
       Commands.sequence(
@@ -149,15 +150,15 @@ public class Auto extends SequentialCommandGroup {
   }
 
   //Shoot a note from the subwoofer
-  public static Command shootNote(Arm arm, Inout inout, SwerveSubsystem swerve) {
+  public static Command shootNote(Arm arm, Inout inout, Pose2d position) {
     return Commands.sequence(
       //Remainder of arm setup
-      setupShot(arm, inout, swerve),
+      setupShot(arm, inout, position),
       //Shoot for 1 second while holding shooter/arm
       Commands.deadline(
         new WaitCommand(0.5),
         new InoutDrive(inout, ()->1, ()->1),
-        Presets.AutoSpeakerPreset(arm, inout, swerve.getPose())
+        Presets.AutoSpeakerPreset(arm, inout, position)
       ),
       Commands.runOnce(()->inout.setIntake(0), inout),
       Commands.runOnce(()->inout.setShooter(0), inout)
