@@ -141,12 +141,12 @@ public class RobotContainer {
     m_arm.setDefaultCommand(new ArmDrive(
       m_arm,
       () -> MathUtil.applyDeadband(m_armController.getLeftY(), 0.15) * 1,
-      () -> MathUtil.applyDeadband(m_armController.getLeftX(), 0.15) * 1));
+      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15) * 1));
     
-    m_inout.setDefaultCommand(new InoutDrive(
-      m_inout,
-      () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15),
-      () -> MathUtil.applyDeadband(m_armController.getRightX(), 0.15)));
+    // m_inout.setDefaultCommand(new InoutDrive(
+    //   m_inout,
+    //   () -> MathUtil.applyDeadband(m_armController.getRightY(), 0.15),
+    //   () -> MathUtil.applyDeadband(m_armController.getRightX(), 0.15)));
     
     // () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
     // DriverConstants.kControllerDeadzone),
@@ -205,7 +205,9 @@ public class RobotContainer {
         .onFalse(Commands.runOnce(() -> m_drive.setTarget(null), m_drive));
     
     // Outtake
-    m_armController.leftTrigger().whileTrue(new IntakeSpeed(m_inout, -0.3));
+    // m_armController.leftTrigger().whileTrue(new IntakeSpeed(m_inout, -0.3));
+        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.3, () -> -0.1));
+
     // Intake
     m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.3));
 

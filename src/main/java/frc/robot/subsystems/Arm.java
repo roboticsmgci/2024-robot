@@ -35,8 +35,8 @@ import frc.robot.Constants.CANConstants;
 
 public class Arm extends SubsystemBase {
   // private final WPI_VictorSPX joint0 = new WPI_VictorSPX(CANConstants.kSPXID);
-  private final CANSparkMax joint1 = new CANSparkMax(CANConstants.kArmJoint1ID, MotorType.kBrushless);
-  private final CANSparkMax joint2 = new CANSparkMax(CANConstants.kArmJoint2ID, MotorType.kBrushless);
+  private final CANSparkMax joint2 = new CANSparkMax(CANConstants.kArmJoint1ID, MotorType.kBrushless);
+  private final CANSparkMax joint1 = new CANSparkMax(CANConstants.kArmJoint2ID, MotorType.kBrushless);
   
   //cim on victor
   private final RelativeEncoder encoder1 = joint1.getEncoder();
@@ -53,17 +53,21 @@ public class Arm extends SubsystemBase {
 
     // TODO
     joint1.setIdleMode(IdleMode.kBrake);
+    joint1.setInverted(true);
+
     joint2.setIdleMode(IdleMode.kBrake);
 
+    joint2.setSmartCurrentLimit(80);
+
     encoder1.setPositionConversionFactor(ArmConstants.kArm1GearRatio*2*Math.PI);
-    encoder1.setPosition(ArmConstants.kArm1Initial);
+    encoder1.setPosition(ArmConstants.kArm1Initial * (-75.46458893280632));
     encoder2.setPositionConversionFactor(ArmConstants.kArm2GearRatio*2*Math.PI);
-    encoder2.setPosition(ArmConstants.kArm2Initial);
+    encoder2.setPosition(ArmConstants.kArm2Initial * (-1.54852495378927));
   }
 
   public void setArmEncoders(double arm1, double arm2){
-    encoder1.setPosition(arm1);
-    encoder2.setPosition(arm2);
+    encoder1.setPosition(arm1 * (-75.46458893280632));
+    encoder2.setPosition(arm2 * (-1.548524953789279));
   }
 
   public Pose2d getArmPos(){
@@ -80,14 +84,16 @@ public class Arm extends SubsystemBase {
   
   public void setArm1(double speed){
     double actualSpeed = MathUtil.clamp(speed, -1, 1);
-    joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.091) * Math.sin((getArmEncoder1() - 1.57) / 60.0)));
+    // System.out.println(Math.cos(getArmEncoder1()) + " " + (getArmEncoder1()+getArmEncoder2()));
+    // joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.07) * Math.cos(getArmEncoder1())));
+    joint1.set(actualSpeed*ArmConstants.kArm1MaxSpeed);
   }
 
   //add gravity compensator like arm1
   public void setArm2(double speed){
 
     double actualSpeed = MathUtil.clamp(speed, -1, 1);
-    joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.091) * Math.sin(encoder1.getPosition()+encoder2.getPosition()) ) / 60.0);
+    // joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.14) * Math.cos(encoder1.getPosition()+encoder2.getPosition())));
 
     joint2.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm2MaxSpeed);
   }
@@ -97,11 +103,11 @@ public class Arm extends SubsystemBase {
   // }
 
   public double getArmEncoder1() {
-    return encoder1.getPosition();
+    return encoder1.getPosition() / (-75.46458893280632);
   }
 
   public double getArmEncoder2() {
-    return encoder2.getPosition();
+    return encoder2.getPosition() / (-1.548524953789279);
   }
 
   /**

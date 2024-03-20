@@ -4,6 +4,7 @@ import frc.robot.subsystems.Arm;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,9 +56,9 @@ public class ArmSet extends Command {
     // System.out.println(test);
     // m_arm.setArm1(m_limiter1.calculate(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble())));
     // System.out.println("test: " + test);
-    m_arm.setArm1(test);
+    m_arm.setArm1(MathUtil.clamp(test, -0.5, 0.5));
 
-    m_arm.setArm2(m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble()));
+    m_arm.setArm2(MathUtil.clamp(m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble()), -0.5, 0.5));
     // m_arm.setArm0(0.7);
 
     if (m_finishedTime == -1 && m_armSpeedPID1.atSetpoint() && m_armSpeedPID2.atSetpoint()) {
