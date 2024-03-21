@@ -89,7 +89,7 @@ public class SwerveSubsystem extends SubsystemBase {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-
+    // m_swerveDrive.swerveDriveConfiguration.physicalCharacteristics.
     // Heading correction should only be used while controlling the robot via angle.
     m_swerveDrive.setHeadingCorrection(false);
     // Disables cosine compensation for simulations since it causes discrepancies
