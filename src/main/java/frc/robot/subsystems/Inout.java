@@ -75,10 +75,10 @@ public class Inout extends SubsystemBase {
     m_intake.setSmartCurrentLimit(65);
     m_intakeBottom.setSmartCurrentLimit(65);
 
+    // m_intakeBottom.setInverted(true);
+
     m_shooter.setSmartCurrentLimit(65);
     m_shooterBottom.setSmartCurrentLimit(65);
-
-    m_shooterBottom.setInverted(true);
     
     m_intakeEncoder.setPositionConversionFactor(360 * InoutConstants.kIntakeGearRatio);
     m_shooterEncoder.setVelocityConversionFactor(InoutConstants.kShooterGearRatio);
@@ -108,7 +108,7 @@ public class Inout extends SubsystemBase {
    */
   public void setShooter(double speed){
     m_shooter.set(MathUtil.clamp(speed, -1, 1));
-    m_shooterBottom.set(-MathUtil.clamp(speed, -1, 1));
+    m_shooterBottom.set(MathUtil.clamp(speed, -1, 1));
     // System.out.println(m_shooterBottom.get());
   }
 

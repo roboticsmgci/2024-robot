@@ -206,10 +206,10 @@ public class RobotContainer {
     
     // Outtake
     // m_armController.leftTrigger().whileTrue(new IntakeSpeed(m_inout, -0.3));
-        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.3, () -> -0.1));
+        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.15, () -> 0));
 
     // Intake
-    m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.3));
+    m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.15));
 
     // Shoot (slow when amp preset is pressed)
     m_armController.rightBumper().and(m_armController.x()).whileTrue(new Shoot(m_inout, 0.3, 0));

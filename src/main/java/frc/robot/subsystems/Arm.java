@@ -112,7 +112,7 @@ public class Arm extends SubsystemBase {
   }
 
   public double getArmEncoder2() {
-    return encoder2.getPosition() / (-1.548524953789279);
+    return encoder2.getPosition() / (-1.548524953789279 * (20.0/3));
   }
 
   /**
