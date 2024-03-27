@@ -17,7 +17,7 @@ public class ArmSet extends Command {
   private double m_finishedTime = -1;
 
   private final PIDController m_armSpeedPID1 = new PIDController(1.0/2, 0.01, 0);
-  private final PIDController m_armSpeedPID2 = new PIDController(1.0/2, 0, 0);
+  private final PIDController m_armSpeedPID2 = new PIDController(1.0, 0.05, 0);
 
   /**
    * Gradually adjust speed? TODO: add this in
@@ -57,10 +57,13 @@ public class ArmSet extends Command {
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), 0);
       arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(90) - m_arm.getArmEncoder1());
     } else {
-      System.out.println(m_arm.getArmEncoder1() + " " + m_target1.getAsDouble());
+      
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble());
       arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble());
     }
+
+    System.out.println(m_arm.getArmEncoder2() + " " + m_target2.getAsDouble() + " " + arm2Power);
+
     // System.out.println(m_arm.getArmEncoder1() + " " + m_target1.getAsDouble());
     // System.out.println(test);
     // m_arm.setArm1(m_limiter1.calculate(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble())));

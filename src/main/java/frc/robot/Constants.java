@@ -239,8 +239,8 @@ public final class Constants {
     public static final double joint2Intake = 0;
 
     // Speaker (B)
-    public static final double joint1Speaker = -0.36043;
-    public static final double joint2Speaker = 0.5;
+    public static final double joint1Speaker = 0;
+    public static final double joint2Speaker = -0.1;
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;

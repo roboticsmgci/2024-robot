@@ -103,10 +103,10 @@ public class Arm extends SubsystemBase {
 
     // TODO: uncomment this when we stop being a defence bot
 
-    if (getArmEncoder1() >= Math.toRadians(-10)) {
+    if (getArmEncoder1() >= Math.toRadians(-20)) {
       joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.14) * Math.cos(getArmEncoder1()+getArmEncoder2() + Math.toRadians(45))));
     } else {
-      joint2.set(actualSpeed*ArmConstants.kArm2MaxSpeed);
+      joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.05) * Math.cos(getArmEncoder1()+getArmEncoder2() + Math.toRadians(45))));
     }
 
     
@@ -123,6 +123,9 @@ public class Arm extends SubsystemBase {
   }
 
   public double getArmEncoder2() {
+    // 33 57 = 24
+    // -0.608031
+    // 120
     return encoder2.getPosition() / (-1.548524953789279 * (5.0 / 2));
   }
 
