@@ -62,24 +62,28 @@ public class Arm extends SubsystemBase {
     encoder1.setPositionConversionFactor(ArmConstants.kArm1GearRatio*2*Math.PI);
     encoder1.setPosition(ArmConstants.kArm1Initial * (-75.46458893280632));
     encoder2.setPositionConversionFactor(ArmConstants.kArm2GearRatio*2*Math.PI);
-    encoder2.setPosition(ArmConstants.kArm2Initial * (-1.54852495378927));
+    encoder2.setPosition(ArmConstants.kArm2Initial * (-1.548524953789279 * (5.0 / 2)));
   }
 
   public void setArmEncoders(double arm1, double arm2){
     encoder1.setPosition(arm1 * (-75.46458893280632));
-    encoder2.setPosition(arm2 * (-1.548524953789279));
+    encoder2.setPosition(arm2 * (-1.548524953789279 * (5.0 / 2)));
   }
 
   public Pose2d getArmPos(){
     return new Pose2d(ArmConstants.kArmBase.getX(), 
       ArmConstants.kArmBase.getY(), 
-      new Rotation2d(encoder2.getPosition()));
+      new Rotation2d(getArmEncoder2()));
   }
 
   public Pose2d getInoutPos(){
-    return new Pose2d(ArmConstants.kArmBase.getX()+ArmConstants.kArm2Length*Math.cos(encoder2.getPosition()), 
-      ArmConstants.kArmBase.getY()+ArmConstants.kArm2Length*Math.sin(encoder2.getPosition()), 
-      new Rotation2d(encoder1.getPosition()+encoder2.getPosition()));
+    return new Pose2d(ArmConstants.kArmBase.getX()+ArmConstants.kArm2Length*Math.cos(getArmEncoder2()), 
+      ArmConstants.kArmBase.getY()+ArmConstants.kArm2Length*Math.sin(getArmEncoder2()), 
+      new Rotation2d(getArmEncoder1()+getArmEncoder2()));
+  }
+
+  public double getRelativeAngle(DoubleSupplier absoluteAngle){
+    return -getArmEncoder1()+absoluteAngle.getAsDouble();
   }
   
   public void setArm1(double speed){
@@ -87,9 +91,9 @@ public class Arm extends SubsystemBase {
     // System.out.println(Math.cos(getArmEncoder1()) + " " + (getArmEncoder1()+getArmEncoder2()));
 
     // TODO: uncomment this when we stop being a defence bot
-    // joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.07) * Math.cos(getArmEncoder1())));
+    joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.04) * Math.cos(getArmEncoder1())));
 
-    joint1.set(actualSpeed*ArmConstants.kArm1MaxSpeed);
+    // joint1.set(actualSpeed*ArmConstants.kArm1MaxSpeed);
   }
 
   //add gravity compensator like arm1
@@ -98,9 +102,16 @@ public class Arm extends SubsystemBase {
     double actualSpeed = MathUtil.clamp(speed, -1, 1);
 
     // TODO: uncomment this when we stop being a defence bot
-    // joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.14) * Math.cos(getArmEncoder1()+getArmEncoder2() + Math.toRadians(30))));
 
-    joint2.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm2MaxSpeed);
+    if (getArmEncoder1() >= Math.toRadians(-10)) {
+      joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.14) * Math.cos(getArmEncoder1()+getArmEncoder2() + Math.toRadians(45))));
+    } else {
+      joint2.set(actualSpeed*ArmConstants.kArm2MaxSpeed);
+    }
+
+    
+
+    // joint2.set(MathUtil.clamp(speed, -1, 1)*ArmConstants.kArm2MaxSpeed);
   }
 
   // public void setArm0(double speed){
@@ -112,7 +123,11 @@ public class Arm extends SubsystemBase {
   }
 
   public double getArmEncoder2() {
-    return encoder2.getPosition() / (-1.548524953789279 * (20.0/3));
+    return encoder2.getPosition() / (-1.548524953789279 * (5.0 / 2));
+  }
+
+  public double getAbsoluteArmAngle() {
+    return getArmEncoder1() + getArmEncoder2();
   }
 
   /**

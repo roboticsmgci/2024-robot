@@ -235,12 +235,12 @@ public final class Constants {
    public static final class PresetConstants {
     
     // Intake (A)
-    public static final double joint1Intake = Math.toRadians(-33);
-    public static final double joint2Intake = Math.toRadians(-20);
+    public static final double joint1Intake = -0.616043;
+    public static final double joint2Intake = 0;
 
     // Speaker (B)
-    public static final double joint1Speaker = Math.toRadians(0);
-    public static final double joint2Speaker = Math.toRadians(-60);
+    public static final double joint1Speaker = -0.36043;
+    public static final double joint2Speaker = 0.5;
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;
@@ -272,8 +272,8 @@ public final class Constants {
     public static final double kArm2Length = Units.inchesToMeters(17);
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(17.5));
     //redo
-    public static final double kArm1Initial = Math.toRadians(-33.3);
-    public static final double kArm2Initial = Math.toRadians(90);
+    public static final double kArm1Initial = Math.toRadians(-30);
+    public static final double kArm2Initial = Math.toRadians(120);
     public static final double kArm1MaxSpeed = 1.0;
     public static final double kArm2MaxSpeed = 1.0;
 
