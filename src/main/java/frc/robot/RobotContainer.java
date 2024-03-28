@@ -291,6 +291,7 @@ public class RobotContainer {
     for (int i = 0; i < FieldConstants.kEndPoses.length; i++) {
       m_endPosChooser.addOption("End " + (i+1), FieldConstants.kEndPoses[i]);
     }
+    m_endPosChooser.addOption("Don't move", null);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Delay Time Chooser", m_delayTimeChooser);
@@ -318,6 +319,8 @@ public class RobotContainer {
       Optional<Alliance> alliance = DriverStation.getAlliance();
       if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red)) {
         startPos = mirrorPose(startPos);
+      }
+      if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red) && endPos!=null) {
         endPos = mirrorPose(endPos);
       }
 

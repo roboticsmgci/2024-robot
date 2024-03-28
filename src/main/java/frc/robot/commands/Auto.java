@@ -66,7 +66,7 @@ public class Auto extends SequentialCommandGroup {
     }
     System.out.println("go to pose"+startPos);
     //preload
-    this.addCommands(shootNote(m_arm, m_inout, m_swerve.getPose()));
+    this.addCommands(setupIntake(m_arm, m_inout) ,shootNote(m_arm, m_inout, m_swerve.getPose()));
     System.out.println("start done");
   }
 
@@ -120,7 +120,9 @@ public class Auto extends SequentialCommandGroup {
 
   public void setEndPos(Pose2d endPos){
     System.out.println("go to pose"+endPos);
+    if(endPos!=null){
     this.addCommands(m_swerve.driveToPose(endPos));
+    }
   }
 
   //Intake a note

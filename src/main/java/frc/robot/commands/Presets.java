@@ -45,7 +45,7 @@ public final class Presets {
 
   public static Command AutoSpeakerPreset(Arm arm, Inout inout, Pose2d drivePose){
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, 
-    ()->Math.PI-arm.getArmEncoder1()-
+    ()->-
       RobotContainer.calcShooterAngle(drivePose, arm.getInoutPos(), 
       DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
           ? new Translation3d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)
@@ -59,7 +59,7 @@ public final class Presets {
 
   public static Command AutoTrapPreset(Arm arm, Inout inout, Pose2d drivePose){
     return new ArmSet(arm, () -> PresetConstants.joint1Trap, 
-    ()->Math.PI-arm.getArmEncoder1()-
+    ()->-
       RobotContainer.calcShooterAngle(drivePose, arm.getInoutPos(), 
       DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
       //find a trap location or nearest trap?

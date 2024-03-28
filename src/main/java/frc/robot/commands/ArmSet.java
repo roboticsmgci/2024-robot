@@ -53,9 +53,9 @@ public class ArmSet extends Command {
     // System.out.println("command running");
     double arm1Power, arm2Power;
 
-    if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getAbsoluteArmAngle()) > Math.toRadians(90)) {
+    if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getAbsoluteArmAngle()) > Math.toRadians(70)) {
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), 0);
-      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(90) - m_arm.getArmEncoder1());
+      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(90));
     } else {
       
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble());
@@ -68,6 +68,7 @@ public class ArmSet extends Command {
     // System.out.println(test);
     // m_arm.setArm1(m_limiter1.calculate(m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble())));
     // System.out.println("test: " + test);
+    //use 0.5 when arm stops skipping
     m_arm.setArm1(-MathUtil.clamp(arm1Power, -0.5, 0.5));
 
     m_arm.setArm2(-MathUtil.clamp(arm2Power, -0.5, 0.5));

@@ -73,13 +73,13 @@ public class Arm extends SubsystemBase {
   public Pose2d getArmPos(){
     return new Pose2d(ArmConstants.kArmBase.getX(), 
       ArmConstants.kArmBase.getY(), 
-      new Rotation2d(getArmEncoder2()));
+      new Rotation2d(getArmEncoder1()));
   }
 
   public Pose2d getInoutPos(){
     return new Pose2d(ArmConstants.kArmBase.getX()+ArmConstants.kArm2Length*Math.cos(getArmEncoder2()), 
       ArmConstants.kArmBase.getY()+ArmConstants.kArm2Length*Math.sin(getArmEncoder2()), 
-      new Rotation2d(getArmEncoder1()+getArmEncoder2()));
+      new Rotation2d(getArmEncoder2()));
   }
 
   public double getRelativeAngle(DoubleSupplier absoluteAngle){
@@ -103,11 +103,11 @@ public class Arm extends SubsystemBase {
 
     // TODO: uncomment this when we stop being a defence bot
 
-    if (getArmEncoder1() >= Math.toRadians(-20)) {
-      joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.14) * Math.cos(getArmEncoder1()+getArmEncoder2() + Math.toRadians(45))));
-    } else {
-      joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.05) * Math.cos(getArmEncoder1()+getArmEncoder2() + Math.toRadians(45))));
-    }
+    // if (getArmEncoder1() >= Math.toRadians(-20)) {
+      joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.05) * Math.cos(getArmEncoder2()+ Math.toRadians(56))));
+    // } else {
+    //   joint2.set((actualSpeed*ArmConstants.kArm2MaxSpeed) + ((-0.05) * Math.cos(getArmEncoder1() + Math.toRadians(45))));
+    // }
 
     
 

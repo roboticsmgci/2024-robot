@@ -154,7 +154,7 @@ public final class Constants {
      */
     public static final double kCIMMultiplier = 1;
 
-    public static final double kShooterTargetSpeed = 3000;
+    public static final double kShooterTargetSpeed = 1500;
   }
 
   public final static class FieldConstants {
@@ -235,22 +235,22 @@ public final class Constants {
    public static final class PresetConstants {
     
     // Intake (A)
-    public static final double joint1Intake = -0.616043;
-    public static final double joint2Intake = 0;
+    public static final double joint1Intake = -0.5;
+    public static final double joint2Intake = -0.8;
 
     // Speaker (B)
     public static final double joint1Speaker = 0;
-    public static final double joint2Speaker = -0.1;
+    public static final double joint2Speaker = -0.6;
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;
     public static final double joint2Initial = ArmConstants.kArm2Initial;
 
-    public static final double joint1Amp = 3.1415;
-    public static final double joint2Amp = -2.169;
+    public static final double joint1Amp = 3.1415/2;
+    public static final double joint2Amp = 1;
 
-    public static final double joint1Trap = 3.1415;
-    public static final double joint2Trap = -2.169;
+    public static final double joint1Trap = 3.1415/2;
+    public static final double joint2Trap = -1;
    }
 
   public static class CANConstants {
@@ -273,7 +273,7 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(17.5));
     //redo
     public static final double kArm1Initial = Math.toRadians(-30);
-    public static final double kArm2Initial = Math.toRadians(120);
+    public static final double kArm2Initial = Math.toRadians(90);
     public static final double kArm1MaxSpeed = 1.0;
     public static final double kArm2MaxSpeed = 1.0;
 
