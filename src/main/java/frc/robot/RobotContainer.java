@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.FieldConstants;
@@ -190,17 +191,14 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kSlowSpeed)))
         .onFalse(Commands.runOnce(() -> m_drive.setSlowFactor(DriverConstants.kDefaultSpeed)));
     
-    m_driverController.povDown()
-      .onTrue(Commands.runOnce(() -> m_drive.resetOdometry(new Pose2d(8.257198, 4.132412, m_drive.getHeading()))));
+    m_driverController.povUp()
+      .onTrue(Commands.runOnce(() -> m_drive.resetOdometry(new Pose2d(getReflectedPose(FieldConstants.kStartPoses[1]).getX(), FieldConstants.kStartPoses[1].getY(), m_drive.getHeading()))));
 
     // Forces the robot to face a speaker while the right stick is pressed.
     // (use down button since stick is easy to release accidentally)
     m_controller.getButton(1)
         .onTrue(Commands.runOnce(() -> m_drive
-            .setTarget(DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
-                    ? new Translation2d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY)
-                    : new Translation2d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY)),
+            .setTarget(new Translation2d(getReflectedPose(FieldConstants.kBlueSpeaker).getX(), FieldConstants.kBlueSpeakerY)),
             m_drive))
         .onFalse(Commands.runOnce(() -> m_drive.setTarget(null), m_drive));
     
@@ -209,7 +207,7 @@ public class RobotContainer {
         m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.15, () -> 0));
 
     // Intake
-    m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.15));
+    m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.33));
 
     // Shoot (slow when amp preset is pressed)
     m_armController.rightBumper().and(m_armController.x()).whileTrue(new Shoot(m_inout, 0.3, 0));
@@ -218,10 +216,8 @@ public class RobotContainer {
     
     // m_armController.rightBumper().whileTrue(new Shoot(m_inout, 1, InoutConstants.kWarmupTime));
 
-    // Reset gyro
-    m_armController.leftStick().and(m_armController.rightStick()).onTrue(Commands.runOnce(() -> m_arm.setArmEncoders(90, 0)));
-    // DriverConstants
-    // MathUtil.applyDeadband(crad, crad)
+    // Reset arm encoders
+    m_armController.povUp().onTrue(Commands.runOnce(() -> m_arm.setArmEncoders(PresetConstants.joint1Intake, PresetConstants.joint2Intake)));
 
     // m_armController.leftBumper().and(m_armController.rightBumper()).whileTrue(new InoutDrive(
     //   m_inout,
@@ -291,7 +287,7 @@ public class RobotContainer {
     for (int i = 0; i < FieldConstants.kEndPoses.length; i++) {
       m_endPosChooser.addOption("End " + (i+1), FieldConstants.kEndPoses[i]);
     }
-    m_endPosChooser.addOption("Don't move", null);
+    m_endPosChooser.setDefaultOption("Don't move", null);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Delay Time Chooser", m_delayTimeChooser);
@@ -316,12 +312,10 @@ public class RobotContainer {
       Pose2d startPos = m_startPosChooser.getSelected();
       Pose2d endPos = m_endPosChooser.getSelected();
 
-      Optional<Alliance> alliance = DriverStation.getAlliance();
-      if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red)) {
-        startPos = mirrorPose(startPos);
-      }
-      if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red) && endPos!=null) {
-        endPos = mirrorPose(endPos);
+      startPos = getReflectedPose(startPos);
+      
+      if (endPos!=null) {
+        endPos = getReflectedPose(endPos);
       }
 
       Auto generatedAuto = new Auto(m_drive, m_arm, m_inout);
@@ -344,7 +338,16 @@ public class RobotContainer {
   }
 
   private Pose2d mirrorPose(Pose2d pose) {
-    return new Pose2d(Units.inchesToMeters(651.75) - pose.getX(), pose.getY(), new Rotation2d(Math.toRadians(180)-pose.getRotation().getRadians()));
+    return new Pose2d(Units.inchesToMeters(651.75) - pose.getX(), pose.getY(), new Rotation2d(Math.PI-pose.getRotation().getRadians()));
+  }
+
+  public Pose2d getReflectedPose(Pose2d pose){
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get().equals(DriverStation.Alliance.Red)) {
+        return mirrorPose(pose);
+      }else{
+        return pose;
+      }
   }
 
   /**
@@ -369,17 +372,23 @@ public class RobotContainer {
   }
 
   public static double calcShooterAngle(Pose2d drivePose, Pose2d inoutPos, Translation3d target){
-    //drivePos it the center of the robot
-    //inout is the relative position of the joint? shooter?
-    double shooterX = drivePose.getX()+Math.cos(drivePose.getRotation().getRadians())*inoutPos.getX();
-    double shooterY = drivePose.getY()+Math.sin(drivePose.getRotation().getRadians())*inoutPos.getX();
-    double shooterZ = inoutPos.getY();
+    if(Math.signum(drivePose.getRotation().getCos())==-Math.signum(target.getX()-drivePose.getX())){
+      //drivePos it the center of the robot
+      //inout is the relative position of the joint? shooter?
+      double robotTargetY = drivePose.getY()-drivePose.getX()*drivePose.getRotation().getTan();
+      double robotTargetX = drivePose.getRotation().getCos();
 
-    double deltaX = target.getX() - shooterX;
-    double deltaY = target.getY() - shooterY;
-    double deltaZ = target.getZ() - shooterZ;
+      double shooterX = drivePose.getX()+drivePose.getRotation().getCos()*inoutPos.getX();
+      double shooterY = drivePose.getY()+drivePose.getRotation().getSin()*inoutPos.getX();
+      double shooterZ = inoutPos.getY();
 
-    return Math.atan(deltaZ/Math.hypot(deltaX, deltaY));
+      double deltaX = target.getX() - shooterX;
+      double deltaY = target.getY() - shooterY;
+      double deltaZ = target.getZ() - shooterZ;
 
+      //target line instead of point
+      return Math.atan(deltaZ/Math.hypot(deltaX, deltaY));
+    }
+    return PresetConstants.joint2Speaker;
   }
 }

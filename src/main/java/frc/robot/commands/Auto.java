@@ -127,7 +127,8 @@ public class Auto extends SequentialCommandGroup {
 
   //Intake a note
   public static Command intakeNote(Arm arm, Inout inout) {
-    return Presets.IntakePreset(arm, inout).withTimeout(1);
+    return Commands.parallel(Presets.IntakePreset(arm, inout).withTimeout(1), 
+    new InoutDrive(inout, ()->0.3, ()->0));
   }
 
   //Set the arm position and warm up shooter

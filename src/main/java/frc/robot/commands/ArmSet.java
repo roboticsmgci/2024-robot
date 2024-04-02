@@ -17,6 +17,7 @@ public class ArmSet extends Command {
   private double m_finishedTime = -1;
 
   private final PIDController m_armSpeedPID1 = new PIDController(1.0/2, 0.01, 0);
+  //consider changing: add kd, reduce kp, or reduce cap since it still skips ruining auto
   private final PIDController m_armSpeedPID2 = new PIDController(1.0, 0.05, 0);
 
   /**
@@ -55,7 +56,7 @@ public class ArmSet extends Command {
 
     if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getAbsoluteArmAngle()) > Math.toRadians(70)) {
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), 0);
-      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(90));
+      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(80));
     } else {
       
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble());

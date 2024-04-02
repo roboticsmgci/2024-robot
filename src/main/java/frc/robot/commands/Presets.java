@@ -26,8 +26,8 @@ public final class Presets {
 
   public static Command IntakePreset(Arm arm, Inout inout){
     return Commands.parallel(
-      new ArmSet(arm, ()->PresetConstants.joint1Intake, ()->PresetConstants.joint2Intake),
-      new IntakeSpeed(inout, 0.3)
+      new ArmSet(arm, ()->PresetConstants.joint1Intake, ()->PresetConstants.joint2Intake)//,
+      //new IntakeSpeed(inout, 0.3)
     );
   }
 
@@ -45,9 +45,9 @@ public final class Presets {
 
   public static Command AutoSpeakerPreset(Arm arm, Inout inout, Pose2d drivePose){
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, 
-    ()->-
+    ()->
       RobotContainer.calcShooterAngle(drivePose, arm.getInoutPos(), 
-      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
           ? new Translation3d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)
           : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ))
     );
@@ -59,7 +59,7 @@ public final class Presets {
 
   public static Command AutoTrapPreset(Arm arm, Inout inout, Pose2d drivePose){
     return new ArmSet(arm, () -> PresetConstants.joint1Trap, 
-    ()->-
+    ()->
       RobotContainer.calcShooterAngle(drivePose, arm.getInoutPos(), 
       DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
       //find a trap location or nearest trap?

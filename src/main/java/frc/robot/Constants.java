@@ -162,13 +162,13 @@ public final class Constants {
      * The x-coordinate of the center of the blue speaker.
      */
     //9
-    public static final double kBlueSpeakerX = Units.inchesToMeters(0);
+    public static final double kBlueSpeakerX = Units.inchesToMeters(9);
 
     /**
      * The y-coordinate of the center of the blue speaker.
      */
     //218.64
-    public static final double kBlueSpeakerY = Units.inchesToMeters(0);
+    public static final double kBlueSpeakerY = Units.inchesToMeters(218.64);
 
     /**
      * The x-coordinate of the center of the red speaker.
@@ -187,6 +187,8 @@ public final class Constants {
      */
 
      public static final double kSpeakerZ = Units.inchesToMeters(69.23);
+
+     public static final Pose2d kBlueSpeaker = new Pose2d(kBlueSpeakerX, kBlueSpeakerY, new Rotation2d());
     
     public static final Pose2d[] kStartPoses = {
       new Pose2d(0.71, 6.68, new Rotation2d(Math.toRadians(60.00))),
@@ -235,10 +237,11 @@ public final class Constants {
    public static final class PresetConstants {
     
     // Intake (A)
-    public static final double joint1Intake = -0.5;
-    public static final double joint2Intake = -0.8;
+    public static final double joint1Intake = Math.toRadians(-30);
+    public static final double joint2Intake = Math.toRadians(-68);
 
     // Speaker (B)
+    //may have to be retested since other constants have changed
     public static final double joint1Speaker = 0;
     public static final double joint2Speaker = -0.6;
 
@@ -269,11 +272,11 @@ public final class Constants {
     public static final double kArm1GearRatio = 1.0/16.0*32.0/16.0*64.0/32.0;
     public static final double kArm2GearRatio = 64.0/24.0*1.0/80.0;
     public static final double kShooterLength = Units.inchesToMeters(2);
-    public static final double kArm2Length = Units.inchesToMeters(17);
+    public static final double kArm1Length = Units.inchesToMeters(17);
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(17.5));
     //redo
     public static final double kArm1Initial = Math.toRadians(-30);
-    public static final double kArm2Initial = Math.toRadians(90);
+    public static final double kArm2Initial = Math.toRadians(80);
     public static final double kArm1MaxSpeed = 1.0;
     public static final double kArm2MaxSpeed = 1.0;
 

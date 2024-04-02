@@ -77,8 +77,8 @@ public class Arm extends SubsystemBase {
   }
 
   public Pose2d getInoutPos(){
-    return new Pose2d(ArmConstants.kArmBase.getX()+ArmConstants.kArm2Length*Math.cos(getArmEncoder2()), 
-      ArmConstants.kArmBase.getY()+ArmConstants.kArm2Length*Math.sin(getArmEncoder2()), 
+    return new Pose2d(ArmConstants.kArmBase.getX()+ArmConstants.kArm1Length*Math.cos(getArmEncoder2()), 
+      ArmConstants.kArmBase.getY()+ArmConstants.kArm1Length*Math.sin(getArmEncoder2()), 
       new Rotation2d(getArmEncoder2()));
   }
 
