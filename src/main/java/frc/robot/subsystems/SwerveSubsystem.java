@@ -276,7 +276,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // - currentPose.getX()));
     // }
     return Math.toDegrees(
-        Math.atan2(targetLocation.getY() - currentPose.getY(), targetLocation.getX() - currentPose.getX()));
+      //flipped since shooter points to back of robot
+        Math.atan2(-targetLocation.getY() + currentPose.getY(), -targetLocation.getX() + currentPose.getX()));
 
   }
 

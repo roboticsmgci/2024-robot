@@ -84,6 +84,11 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/Start Pos Chooser": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
