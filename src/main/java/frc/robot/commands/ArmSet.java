@@ -58,9 +58,18 @@ public class ArmSet extends Command {
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), 0);
       arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(80));
     } else {
-      
-      arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble());
-      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble());
+      double setpoint1 = m_target1.getAsDouble();
+      double setpoint2 = m_target2.getAsDouble();
+
+      if (setpoint2 < Math.toRadians(30)) {
+        setpoint2 += Math.toRadians(30);
+      }
+
+      // arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), m_target1.getAsDouble());
+      arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), setpoint1);
+
+      // arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble());
+      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), setpoint2);
     }
 
     // System.out.println(m_arm.getArmEncoder2() + " " + m_target2.getAsDouble() + " " + arm2Power);

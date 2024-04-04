@@ -202,11 +202,11 @@ public final class Constants {
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(218.625), new Rotation2d()),
       new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
       //fill in, not currently used though
-      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
-      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
-      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
-      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d()),
-      new Pose2d(Units.inchesToMeters(120) - 0.321, Units.inchesToMeters(275.625), new Rotation2d())
+      new Pose2d(Units.inchesToMeters(57*12+1.625) - 0.321, Units.inchesToMeters(47.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(57*12+1.625) - 0.321, Units.inchesToMeters(104.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(57*12+1.625) - 0.321, Units.inchesToMeters(161.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(57*12+1.625) - 0.321, Units.inchesToMeters(218.625), new Rotation2d()),
+      new Pose2d(Units.inchesToMeters(57*12+1.625) - 0.321, Units.inchesToMeters(275.625), new Rotation2d())
     };
 
     public static final Pose2d[] kEndPoses = {
@@ -238,19 +238,19 @@ public final class Constants {
     
     // Intake (A)
     public static final double joint1Intake = Math.toRadians(-30);
-    public static final double joint2Intake = Math.toRadians(-38);
+    public static final double joint2Intake = Math.toRadians(-68);
 
     // Speaker (B)
     //may have to be retested since other constants have changed
     public static final double joint1Speaker = 0;
-    public static final double joint2Speaker = Math.toRadians(-5);
+    public static final double joint2Speaker = Math.toRadians(-45);
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;
     public static final double joint2Initial = ArmConstants.kArm2Initial;
 
-    public static final double joint1Amp = 3.1415/2;
-    public static final double joint2Amp = Math.toRadians(45);
+    public static final double joint1Amp = 0;
+    public static final double joint2Amp = Math.toRadians(-2);
 
     public static final double joint1Trap = 3.1415/2;
     public static final double joint2Trap = -1;
