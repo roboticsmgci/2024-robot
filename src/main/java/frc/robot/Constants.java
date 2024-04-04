@@ -223,7 +223,7 @@ public final class Constants {
     public static final String[] kNotePaths = {
       "None",
       "1-1", "1-4", "1-5",
-      "2-1", "2-2", "2-3",
+      "2-1", "2-2", "2-3", "2-6",
       "3-3", "3-7", "3-7 (fast)", "3-8", "3-8 (fast)"
     };
   }
@@ -277,7 +277,7 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(17.5));
     //redo
     public static final double kArm1Initial = Math.toRadians(-30);
-    public static final double kArm2Initial = Math.toRadians(70);
+    public static final double kArm2Initial = Math.toRadians(80);
     public static final double kArm1MaxSpeed = 1.0;
     public static final double kArm2MaxSpeed = 1.0;
 

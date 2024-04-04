@@ -204,7 +204,7 @@ public class RobotContainer {
     
     // Outtake
     // m_armController.leftTrigger().whileTrue(new IntakeSpeed(m_inout, -0.3));
-        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.15, () -> -0.075));
+        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.25, () -> -0.075));
 
     // Intake
     m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.33));
@@ -307,6 +307,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem)
+
+    // return AutoBuilder.followPath(PathPlannerPath.fromPathFile("2-6"));
 
     if (autoChooser.getSelected().equals(m_dummyGeneratedAuto)) {
       Pose2d startPos = m_startPosChooser.getSelected();
