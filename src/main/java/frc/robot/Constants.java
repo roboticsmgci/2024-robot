@@ -69,7 +69,7 @@ public final class Constants {
      * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kSlowSpeed = 0.1;
+    public static final double kSlowSpeed = 0.25;
   }
 
   public static class DrivetrainConstants {
@@ -154,7 +154,7 @@ public final class Constants {
      */
     public static final double kCIMMultiplier = 1;
 
-    public static final double kShooterTargetSpeed = 1500;
+    public static final double kShooterTargetSpeed = 1000;
   }
 
   public final static class FieldConstants {
@@ -219,7 +219,7 @@ public final class Constants {
   public static final class AutonConstants {
 
     public static final PIDConstants kTranslationPID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants kAnglePID = new PIDConstants(0.4, 0, 0.01);
+    public static final PIDConstants kAnglePID = new PIDConstants(0.1, 0, 0.01);
     public static final String[] kNotePaths = {
       "None",
       "1-1", "1-4", "1-5",
@@ -243,7 +243,7 @@ public final class Constants {
     // Speaker (B)
     //may have to be retested since other constants have changed
     public static final double joint1Speaker = 0;
-    public static final double joint2Speaker = -0.6;
+    public static final double joint2Speaker = Math.toRadians(-5);
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;

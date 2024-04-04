@@ -143,7 +143,7 @@ public class Auto extends SequentialCommandGroup {
     return Commands.parallel(
       armSet,
       Commands.sequence(
-        Commands.deadline(new WaitCommand(0.1), new InoutDrive(inout, ()->-0.1, ()->0)),
+       new InoutDrive(inout, ()->-0.2, ()->-0.1).withTimeout(0.1),
         new InoutDrive(inout, ()->0, ()->1)
       )
     ).until(()->(armSet.atSetpoint()&&inout.getShooterSpeed()>=InoutConstants.kShooterTargetSpeed));
@@ -152,9 +152,7 @@ public class Auto extends SequentialCommandGroup {
   //Lower arm and stop shooter
   public static Command setupIntake(Arm arm){
     ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake);//, 0) (time)
-    return Commands.parallel(
-      armSet
-    ).until(()->armSet.atSetpoint());
+    return armSet.until(()->armSet.atSetpoint());
   }
 
   //Shoot a note from the subwoofer
@@ -167,9 +165,7 @@ public class Auto extends SequentialCommandGroup {
         new WaitCommand(0.5),
         new InoutDrive(inout, ()->1, ()->1),
         Presets.AutoSpeakerPreset(arm, inout, position)
-      ),
-      Commands.runOnce(()->inout.setIntake(0), inout),
-      Commands.runOnce(()->inout.setShooter(0), inout)
+      )
     );
   }
 

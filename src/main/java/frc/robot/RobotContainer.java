@@ -204,7 +204,7 @@ public class RobotContainer {
     
     // Outtake
     // m_armController.leftTrigger().whileTrue(new IntakeSpeed(m_inout, -0.3));
-        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.15, () -> 0));
+        m_armController.leftTrigger().whileTrue(new InoutDrive(m_inout, () -> -0.15, () -> -0.075));
 
     // Intake
     m_armController.rightTrigger().whileTrue(new IntakeSpeed(m_inout, 0.33));
