@@ -238,7 +238,7 @@ public final class Constants {
     
     // Intake (A)
     public static final double joint1Intake = Math.toRadians(-30);
-    public static final double joint2Intake = Math.toRadians(-68);
+    public static final double joint2Intake = Math.toRadians(-38);
 
     // Speaker (B)
     //may have to be retested since other constants have changed
