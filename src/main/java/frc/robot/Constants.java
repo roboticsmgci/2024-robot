@@ -238,12 +238,12 @@ public final class Constants {
     
     // Intake (A)
     public static final double joint1Intake = Math.toRadians(-30);
-    public static final double joint2Intake = Math.toRadians(-68);
+    public static final double joint2Intake = Math.toRadians(-38);
 
     // Speaker (B)
     //may have to be retested since other constants have changed
     public static final double joint1Speaker = 0;
-    public static final double joint2Speaker = Math.toRadians(-45);
+    public static final double joint2Speaker = Math.toRadians(-15);
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;
