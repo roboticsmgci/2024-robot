@@ -63,7 +63,7 @@ public class ArmSet extends Command {
       arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), m_target2.getAsDouble());
     }
 
-    System.out.println(m_arm.getArmEncoder2() + " " + m_target2.getAsDouble() + " " + arm2Power);
+    // System.out.println(m_arm.getArmEncoder2() + " " + m_target2.getAsDouble() + " " + arm2Power);
 
     // System.out.println(m_arm.getArmEncoder1() + " " + m_target1.getAsDouble());
     // System.out.println(test);

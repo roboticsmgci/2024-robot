@@ -66,7 +66,7 @@ public class Auto extends SequentialCommandGroup {
     }
     System.out.println("go to pose"+startPos);
     //preload
-    this.addCommands(setupIntake(m_arm, m_inout) ,shootNote(m_arm, m_inout, m_swerve.getPose()));
+    this.addCommands(setupIntake(m_arm) ,shootNote(m_arm, m_inout, m_swerve.getPose()));
     System.out.println("start done");
   }
 
@@ -99,22 +99,28 @@ public class Auto extends SequentialCommandGroup {
     //composition but there isnt actually a command in the composition that required the swerve so maybe it wouldve worked
     //Lower arm while driving for far notes, or else lower arm first
     //1 note paths are formatted s-n (startposid-noteid)
-    if(path.charAt(0)!='2'&&path.charAt(2)>=4){
-      this.addCommands(
-        Commands.parallel(
-          //Intake is an event part of the path
-          AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
-          setupIntake(m_arm, m_inout)
-        ),
-        shootNote(m_arm, m_inout, m_swerve.getPose())
-      );
-    }else{
+    // if(path.charAt(0)!='2'&&path.charAt(2)>=4){
+    //   this.addCommands(
+    //     Commands.parallel(
+    //       //Intake is an event part of the path
+    //       AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
+    //       setupIntake(m_arm)
+    //     ),
+    //     shootNote(m_arm, m_inout, m_swerve.getPose())
+    //   );
+    // }else{
+    // this.addCommands(
+    //   setupIntake(m_arm),
+    //   AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
+    //   shootNote(m_arm, m_inout, m_swerve.getPose())
+    //   );
+    // }
+
     this.addCommands(
-      setupIntake(m_arm, m_inout),
+      setupIntake(m_arm),
       AutoBuilder.followPath(PathPlannerPath.fromPathFile(path)),
       shootNote(m_arm, m_inout, m_swerve.getPose())
       );
-    }
   }
 
 
@@ -127,8 +133,8 @@ public class Auto extends SequentialCommandGroup {
 
   //Intake a note
   public static Command intakeNote(Arm arm, Inout inout) {
-    return Commands.parallel(Presets.IntakePreset(arm, inout).withTimeout(1), 
-    new InoutDrive(inout, ()->0.3, ()->0));
+    return Commands.parallel(Presets.IntakePreset(arm, inout), 
+    new InoutDrive(inout, ()->0.3, ()->0)).withTimeout(1);
   }
 
   //Set the arm position and warm up shooter
@@ -144,11 +150,10 @@ public class Auto extends SequentialCommandGroup {
   }
 
   //Lower arm and stop shooter
-  public static Command setupIntake(Arm arm, Inout inout){
+  public static Command setupIntake(Arm arm){
     ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake);//, 0) (time)
     return Commands.parallel(
-      armSet,
-      new InoutDrive(inout, ()->0, ()->0)
+      armSet
     ).until(()->armSet.atSetpoint());
   }
 

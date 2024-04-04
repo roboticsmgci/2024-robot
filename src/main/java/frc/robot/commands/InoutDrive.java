@@ -27,6 +27,7 @@ public class InoutDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("running");
     m_inout.setIntake(m_intake.getAsDouble());
     m_inout.setShooter(m_shooter.getAsDouble());
   }
