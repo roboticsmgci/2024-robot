@@ -24,7 +24,7 @@ public final class Presets {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
 
-  public static Command IntakePreset(Arm arm, Inout inout){
+  public static Command IntakePreset(Arm arm){
     return Commands.parallel(
       new ArmSet(arm, ()->PresetConstants.joint1Intake, ()->PresetConstants.joint2Intake)//,
       //new IntakeSpeed(inout, 0.3)
@@ -43,6 +43,8 @@ public final class Presets {
     return new ArmSet(arm, () -> PresetConstants.joint1Initial, () -> PresetConstants.joint2Initial);
   }
 
+
+  // TODO: update drive pose
   public static Command AutoSpeakerPreset(Arm arm, Inout inout, Pose2d drivePose){
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, 
     ()->

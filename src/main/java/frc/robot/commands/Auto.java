@@ -133,13 +133,13 @@ public class Auto extends SequentialCommandGroup {
 
   //Intake a note
   public static Command intakeNote(Arm arm, Inout inout) {
-    return Commands.parallel(Presets.IntakePreset(arm, inout), 
+    return Commands.parallel(Presets.IntakePreset(arm), 
     new InoutDrive(inout, ()->0.3, ()->0)).withTimeout(2);
   }
 
   //Set the arm position and warm up shooter
   public static Command setupShot(Arm arm, Inout inout, Pose2d position){
-    ArmSet armSet = (ArmSet) Presets.AutoSpeakerPreset(arm, inout, position);//, 0) (time)
+    ArmSet armSet = (ArmSet) Presets.SpeakerPreset(arm, inout);//, 0) (time)
     return Commands.parallel(
       armSet,
       Commands.sequence(
@@ -164,7 +164,7 @@ public class Auto extends SequentialCommandGroup {
       Commands.deadline(
         new WaitCommand(0.5),
         new InoutDrive(inout, ()->1, ()->1),
-        Presets.AutoSpeakerPreset(arm, inout, position)
+        Presets.SpeakerPreset(arm, inout)
       )
     );
   }

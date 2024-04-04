@@ -235,7 +235,7 @@ public class RobotContainer {
 
     m_armController.x().whileTrue(Presets.AmpPreset(m_arm)); 
     //amp, trap, autoaim shooter (there arent enough so either make fixed speaker or trap seperate from the others (eg dpad or something uncommon))
-    m_armController.y().whileTrue(Presets.IntakePreset(m_arm, m_inout));
+    m_armController.y().whileTrue(Presets.IntakePreset(m_arm));
     
     // Initial
     m_armController.povDown().whileTrue(Presets.InitialPreset(m_arm, m_inout));
@@ -372,7 +372,7 @@ public class RobotContainer {
   }
 
   public static double calcShooterAngle(Pose2d drivePose, Pose2d inoutPos, Translation3d target){
-    if(Math.signum(drivePose.getRotation().getCos())==-Math.signum(target.getX()-drivePose.getX())){
+    //if(Math.signum(drivePose.getRotation().getCos())==-Math.signum(target.getX()-drivePose.getX())){
       //drivePos it the center of the robot
       //inout is the relative position of the joint? shooter?
       // double robotTargetY = drivePose.getY()-drivePose.getX()*drivePose.getRotation().getTan();
@@ -388,7 +388,7 @@ public class RobotContainer {
 
       //target line instead of point
       return Math.atan(deltaZ/Math.hypot(deltaX, deltaY));
-    }
-    return PresetConstants.joint2Speaker;
+    //}
+    //return PresetConstants.joint2Speaker;
   }
 }

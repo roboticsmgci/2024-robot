@@ -91,7 +91,10 @@ public class Arm extends SubsystemBase {
     // System.out.println(Math.cos(getArmEncoder1()) + " " + (getArmEncoder1()+getArmEncoder2()));
 
     // TODO: uncomment this when we stop being a defence bot
-    joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.04) * Math.cos(getArmEncoder1())));
+    if (getArmEncoder1() <= Math.toRadians(45)) {
+      joint1.set((actualSpeed*ArmConstants.kArm1MaxSpeed) + ((-0.04) * Math.cos(getArmEncoder1())));
+    }
+    
 
     // joint1.set(actualSpeed*ArmConstants.kArm1MaxSpeed);
   }

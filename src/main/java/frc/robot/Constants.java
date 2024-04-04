@@ -249,7 +249,8 @@ public final class Constants {
     public static final double joint1Initial = ArmConstants.kArm1Initial;
     public static final double joint2Initial = ArmConstants.kArm2Initial;
 
-    public static final double joint1Amp = 0;
+    // High speaker (anti defense)
+    public static final double joint1Amp = 0.48;
     public static final double joint2Amp = Math.toRadians(-32);
 
     public static final double joint1Trap = 3.1415/2;
