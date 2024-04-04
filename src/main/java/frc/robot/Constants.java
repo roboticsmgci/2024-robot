@@ -219,7 +219,7 @@ public final class Constants {
   public static final class AutonConstants {
 
     public static final PIDConstants kTranslationPID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants kAnglePID = new PIDConstants(0.1, 0, 0.01);
+    public static final PIDConstants kAnglePID = new PIDConstants(0.4, 0, 0.01);
     public static final String[] kNotePaths = {
       "None",
       "1-1", "1-4", "1-5",
@@ -229,7 +229,7 @@ public final class Constants {
   }
 
   public static final class PIDValues {
-    public static final double kPLockTargetRotSpeed = 0.2;
+    public static final double kPLockTargetRotSpeed = 0.1;
     public static final double kILockTargetRotSpeed = 0;
     public static final double kDLockTargetRotSpeed = 0;
   }
@@ -250,7 +250,7 @@ public final class Constants {
     public static final double joint2Initial = ArmConstants.kArm2Initial;
 
     public static final double joint1Amp = 3.1415/2;
-    public static final double joint2Amp = 1;
+    public static final double joint2Amp = Math.toRadians(45);
 
     public static final double joint1Trap = 3.1415/2;
     public static final double joint2Trap = -1;

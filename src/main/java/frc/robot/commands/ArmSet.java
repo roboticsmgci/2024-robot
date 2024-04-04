@@ -18,7 +18,7 @@ public class ArmSet extends Command {
 
   private final PIDController m_armSpeedPID1 = new PIDController(1.0/2, 0.01, 0);
   //consider changing: add kd, reduce kp, or reduce cap since it still skips ruining auto
-  private final PIDController m_armSpeedPID2 = new PIDController(1.0, 0.05, 0);
+  private final PIDController m_armSpeedPID2 = new PIDController(0.7, 0.05, 0.1);
 
   /**
    * Gradually adjust speed? TODO: add this in
