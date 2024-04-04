@@ -238,19 +238,19 @@ public final class Constants {
     
     // Intake (A)
     public static final double joint1Intake = Math.toRadians(-30);
-    public static final double joint2Intake = Math.toRadians(-38);
+    public static final double joint2Intake = Math.toRadians(-68);
 
     // Speaker (B)
     //may have to be retested since other constants have changed
     public static final double joint1Speaker = 0;
-    public static final double joint2Speaker = Math.toRadians(-15);
+    public static final double joint2Speaker = Math.toRadians(-45);
 
     // Start
     public static final double joint1Initial = ArmConstants.kArm1Initial;
     public static final double joint2Initial = ArmConstants.kArm2Initial;
 
     public static final double joint1Amp = 0;
-    public static final double joint2Amp = Math.toRadians(-2);
+    public static final double joint2Amp = Math.toRadians(-32);
 
     public static final double joint1Trap = 3.1415/2;
     public static final double joint2Trap = -1;

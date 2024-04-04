@@ -375,8 +375,8 @@ public class RobotContainer {
     if(Math.signum(drivePose.getRotation().getCos())==-Math.signum(target.getX()-drivePose.getX())){
       //drivePos it the center of the robot
       //inout is the relative position of the joint? shooter?
-      double robotTargetY = drivePose.getY()-drivePose.getX()*drivePose.getRotation().getTan();
-      double robotTargetX = drivePose.getRotation().getCos();
+      // double robotTargetY = drivePose.getY()-drivePose.getX()*drivePose.getRotation().getTan();
+      // double robotTargetX = drivePose.getRotation().getCos();
 
       double shooterX = drivePose.getX()+drivePose.getRotation().getCos()*inoutPos.getX();
       double shooterY = drivePose.getY()+drivePose.getRotation().getSin()*inoutPos.getX();
