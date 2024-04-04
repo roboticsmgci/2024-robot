@@ -253,8 +253,9 @@ public final class Constants {
     public static final double joint1Amp = 0.48;
     public static final double joint2Amp = Math.toRadians(-32);
 
-    public static final double joint1Trap = 3.1415/2;
-    public static final double joint2Trap = -1;
+    // Feeder
+    public static final double joint1Trap = Math.toRadians(5);
+    public static final double joint2Trap = Math.toRadians(-5);
    }
 
   public static class CANConstants {
