@@ -1,13 +1,12 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.Arm;
-
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.Arm;
 
 public class ArmSet extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -54,9 +53,9 @@ public class ArmSet extends Command {
     // System.out.println("command running");
     double arm1Power, arm2Power;
 
-    if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getAbsoluteArmAngle()) > Math.toRadians(70)) {
+    if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getArmEncoder2()) > Math.toRadians(70)) {
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), 0);
-      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(80));
+      arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(90));
     } else {
       double setpoint1 = m_target1.getAsDouble();
       double setpoint2 = m_target2.getAsDouble();
