@@ -69,11 +69,13 @@ public class Inout extends SubsystemBase {
 
     m_intake.setIdleMode(IdleMode.kBrake);
     m_intakeBottom.setIdleMode(IdleMode.kBrake);
+    // m_intakeBottom.setIdleMode(IdleMode.kCoast);
+
     m_shooter.setIdleMode(IdleMode.kCoast);
     m_shooterBottom.setIdleMode(IdleMode.kCoast);
     // -3415.680998 39.142824
-    m_intake.setSmartCurrentLimit(65);
-    m_intakeBottom.setSmartCurrentLimit(65);
+    m_intake.setSmartCurrentLimit(40);
+    m_intakeBottom.setSmartCurrentLimit(40);
 
     // m_intakeBottom.setInverted(true);
 

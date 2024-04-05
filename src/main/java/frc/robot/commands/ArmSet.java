@@ -53,7 +53,7 @@ public class ArmSet extends Command {
     // System.out.println("command running");
     double arm1Power, arm2Power;
 
-    if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getArmEncoder2()) > Math.toRadians(70)) {
+    if (m_arm.getArmEncoder1() < Math.toRadians(-20) && (m_arm.getArmEncoder2()) > Math.toRadians(60)) {
       arm1Power = m_armSpeedPID1.calculate(m_arm.getArmEncoder1(), 0);
       arm2Power = m_armSpeedPID2.calculate(m_arm.getArmEncoder2(), Math.toRadians(90));
     } else {

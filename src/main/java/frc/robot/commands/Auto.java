@@ -152,7 +152,7 @@ public class Auto extends SequentialCommandGroup {
   //Lower arm and stop shooter
   public static Command setupIntake(Arm arm){
     ArmSet armSet = new ArmSet(arm, () -> PresetConstants.joint1Intake, () -> PresetConstants.joint2Intake);//, 0) (time)
-    return armSet.until(()->armSet.atSetpoint()).withTimeout(3);
+    return armSet.until(()->armSet.atSetpoint()).withTimeout(2);
   }
 
   //Shoot a note from the subwoofer
