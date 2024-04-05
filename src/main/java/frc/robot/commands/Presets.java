@@ -54,7 +54,7 @@ public final class Presets {
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, 
     ()->
       RobotContainer.calcShooterAngle(swerve.getPose(), arm.getInoutPos(), 
-      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
       //why is this flipped
           ? new Translation3d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)
           : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ))
@@ -65,7 +65,7 @@ public final class Presets {
     return new ArmSet(arm, () -> PresetConstants.joint1SpeakerHigh, 
     ()->
       RobotContainer.calcShooterAngle(swerve.getPose(), arm.getInoutPos(), 
-      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
       //why is this flipped
           ? new Translation3d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)
           : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ))
