@@ -139,7 +139,7 @@ public class Auto extends SequentialCommandGroup {
 
   //Set the arm position and warm up shooter
   public static Command setupShot(Arm arm, Inout inout, Pose2d position){
-    ArmSet armSet = (ArmSet) Presets.SpeakerPreset(arm, inout);//, 0) (time)
+    ArmSet armSet = (ArmSet) Presets.SpeakerPreset(arm);//, 0) (time)
     return Commands.parallel(
       armSet,
       Commands.sequence(
@@ -164,7 +164,7 @@ public class Auto extends SequentialCommandGroup {
       Commands.deadline(
         new WaitCommand(0.5),
         new InoutDrive(inout, ()->1, ()->1),
-        Presets.SpeakerPreset(arm, inout)
+        Presets.SpeakerPreset(arm)
       )
     );
   }
