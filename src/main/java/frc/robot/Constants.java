@@ -250,12 +250,16 @@ public final class Constants {
     public static final double joint2Initial = ArmConstants.kArm2Initial;
 
     // High speaker (anti defense)
-    public static final double joint1Amp = 0.48;
-    public static final double joint2Amp = Math.toRadians(-32);
+    public static final double joint1SpeakerHigh = 0.48;
+    public static final double joint2SpeakerHigh = Math.toRadians(-32);
+
+    // amp
+    public static final double joint1Amp = Math.toRadians(45);
+    public static final double joint2Amp = Math.toRadians(-45);
 
     // Feeder
-    public static final double joint1Trap = Math.toRadians(5);
-    public static final double joint2Trap = Math.toRadians(-5);
+    public static final double joint1Feed = Math.toRadians(5);
+    public static final double joint2Feed = Math.toRadians(-5);
    }
 
   public static class CANConstants {

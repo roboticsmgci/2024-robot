@@ -227,18 +227,21 @@ public class RobotContainer {
 
     
     
-    m_armController.leftBumper().whileTrue(Presets.SpeakerPreset(m_arm, m_inout));
+    m_armController.leftBumper().whileTrue(Presets.SpeakerPreset(m_arm));
 
-    m_armController.a().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive.getPose()));
+    m_armController.a().whileTrue(Presets.SpeakerHighPreset(m_arm));
     
-    m_armController.b().whileTrue(Presets.TrapPreset(m_arm));
+    m_armController.b().whileTrue(Presets.FeedPreset(m_arm));
 
     m_armController.x().whileTrue(Presets.AmpPreset(m_arm)); 
     //amp, trap, autoaim shooter (there arent enough so either make fixed speaker or trap seperate from the others (eg dpad or something uncommon))
     m_armController.y().whileTrue(Presets.IntakePreset(m_arm));
     
     // Initial
-    m_armController.povDown().whileTrue(Presets.InitialPreset(m_arm, m_inout));
+    m_armController.povDown().whileTrue(Presets.InitialPreset(m_arm));
+
+    m_armController.povLeft().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive));
+    m_armController.povLeft().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive));
 
     // m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 
