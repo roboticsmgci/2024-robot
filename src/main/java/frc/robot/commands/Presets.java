@@ -4,20 +4,18 @@
 
 package frc.robot.commands;
 
-import frc.robot.RobotContainer;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.PresetConstants;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Inout;
-import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.PresetConstants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Inout;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public final class Presets {
   /** Example static factory for an autonomous command. */
@@ -52,23 +50,26 @@ public final class Presets {
   // TODO: update drive pose
   public static Command AutoSpeakerPreset(Arm arm, Inout inout, SwerveSubsystem swerve){
     return new ArmSet(arm, () -> PresetConstants.joint1Speaker, 
-    ()->
-      RobotContainer.calcShooterAngle(swerve.getPose(), arm.getInoutPos(), 
+    ()-> {
+      double test = MathUtil.clamp(-RobotContainer.calcShooterAngle(swerve.getPose(), arm.getInoutPos(), 
       DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
       //why is this flipped
           ? new Translation3d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)
-          : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ))
-    );
+          : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ)), PresetConstants.joint2Speaker, 0);
+      
+      System.out.println(test);
+      return test;
+  });
   }
 
   public static Command AutoSpeakerHighPreset(Arm arm, Inout inout, SwerveSubsystem swerve){
     return new ArmSet(arm, () -> PresetConstants.joint1SpeakerHigh, 
     ()->
-      RobotContainer.calcShooterAngle(swerve.getPose(), arm.getInoutPos(), 
+      MathUtil.clamp(-RobotContainer.calcShooterAngle(swerve.getPose(), arm.getInoutPos(), 
       DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
       //why is this flipped
           ? new Translation3d(FieldConstants.kRedSpeakerX, FieldConstants.kRedSpeakerY, FieldConstants.kSpeakerZ)
-          : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ))
+          : new Translation3d(FieldConstants.kBlueSpeakerX, FieldConstants.kBlueSpeakerY, FieldConstants.kSpeakerZ)), PresetConstants.joint2Speaker, 0)
     );
   }
 

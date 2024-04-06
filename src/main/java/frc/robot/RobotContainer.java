@@ -240,8 +240,10 @@ public class RobotContainer {
     // Initial
     m_armController.povDown().whileTrue(Presets.InitialPreset(m_arm));
 
+    // m_armController.povLeft().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive));
     m_armController.povLeft().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive));
-    m_armController.povLeft().whileTrue(Presets.AutoSpeakerPreset(m_arm, m_inout, m_drive));
+    m_armController.povRight().whileTrue(Presets.AutoSpeakerHighPreset(m_arm, m_inout, m_drive));
+
 
     // m_armController.y().whileTrue(new IntakeSpeed(m_inout, -0.3));
 

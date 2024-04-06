@@ -254,7 +254,7 @@ public final class Constants {
     public static final double joint2SpeakerHigh = Math.toRadians(-32);
 
     // amp
-    public static final double joint1Amp = Math.toRadians(45);
+    public static final double joint1Amp = Math.toRadians(35);
     public static final double joint2Amp = Math.toRadians(-45);
 
     // Feeder
@@ -282,7 +282,8 @@ public final class Constants {
     public static final Translation2d kArmBase = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(17.5));
     //redo
     public static final double kArm1Initial = Math.toRadians(-30);
-    public static final double kArm2Initial = Math.toRadians(68);
+    // public static final double kArm2Initial = Math.toRadians(68);
+    public static final double kArm2Initial = Math.toRadians(90);
     public static final double kArm1MaxSpeed = 1.0;
     public static final double kArm2MaxSpeed = 1.0;
 

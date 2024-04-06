@@ -66,7 +66,7 @@ public class Auto extends SequentialCommandGroup {
     }
     System.out.println("go to pose"+startPos);
     //preload
-    this.addCommands(setupIntake(m_arm) ,shootNote(m_arm, m_inout, m_swerve.getPose()));
+    this.addCommands(new ArmSet(m_arm, () -> 0, () -> Math.toRadians(90)).withTimeout(2) ,shootNote(m_arm, m_inout, m_swerve.getPose()));
     System.out.println("start done");
   }
 
@@ -134,7 +134,7 @@ public class Auto extends SequentialCommandGroup {
   //Intake a note
   public static Command intakeNote(Arm arm, Inout inout) {
     return Commands.parallel(Presets.IntakePreset(arm), 
-    new InoutDrive(inout, ()->0.5, ()->0)).withTimeout(2);
+    new InoutDrive(inout, ()->0.5, ()->0)).withTimeout(2.5);
   }
 
   //Set the arm position and warm up shooter
