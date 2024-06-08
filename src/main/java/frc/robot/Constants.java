@@ -63,13 +63,13 @@ public final class Constants {
      * The multiplier for the default driving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kDefaultSpeed = 1;
+    public static final double kDefaultSpeed = 0.25;
 
     /**
      * The multiplier for the slower ddriving speed, between 0-1. 1 means maximum
      * speed.
      */
-    public static final double kSlowSpeed = 0.25;
+    public static final double kSlowSpeed = 0.1;
   }
 
   public static class DrivetrainConstants {
